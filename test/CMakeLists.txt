@@ -1,0 +1,3 @@
+add_executable(cmark_renderer_test renderer_test.cpp)
+
+target_link_libraries(cmark_renderer_test gtest_main cmark_renderer)
