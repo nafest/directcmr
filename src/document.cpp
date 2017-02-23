@@ -49,6 +49,9 @@ document document::fromString(const std::string &string) {
 
     cmark_node_free(document_root);
 
+    // propagate styling information down the tree, starting
+    // with the default style
+    elem->propagate_style();
     return document(elem);
 }
 

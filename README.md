@@ -10,3 +10,4 @@ and text nodes.
 - Since only a limited set of fonts is required, figure out a
   way to store these fonts globally (e.g. in a map)
 - implement the font/style propagation for the types above
+    - styles are propageted. -> fonts have been choosen (from a font_chache?) according to this style

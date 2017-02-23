@@ -1,44 +1,12 @@
 #pragma once
 
+#include "paragraph_state.h"
 #include "renderer.h"
 #include "style.h"
 #include "utils.h"
 
 #include <string>
 #include <vector>
-
-class paragraph_state {
-  public:
-    paragraph_state(int paragraph_width)
-        : m_posx(0), m_posy(0), m_line_height(0), m_width(paragraph_width) {}
-
-    void advance(extents text_extents) noexcept {
-        if (text_extents.width + m_posx < m_width) {
-            // fits in the current line
-            m_posx += text_extents.width;
-            m_line_height = std::max(m_line_height, text_extents.height);
-        } else {
-            // advance to the next line
-            m_posy += m_line_height;
-            m_line_height = text_extents.height;
-            m_posx = text_extents.width;
-        }
-    }
-
-    void add_space(int space_width) noexcept { m_posx += space_width; }
-
-    int get_posx() const noexcept { return m_posx; }
-    int get_posy() const noexcept { return m_posy; }
-    int get_line_height() const noexcept { return m_line_height; }
-
-    void set_paragraph_width(int width) noexcept { m_width = width; }
-
-  private:
-    int m_posx;
-    int m_posy;
-    int m_line_height;
-    int m_width;
-};
 
 class element {
   public:
@@ -51,13 +19,15 @@ class element {
         m_children = children;
     }
 
+    std::vector<element *> &children() noexcept { return m_children; }
+
     void set_type(const std::string &type) noexcept { m_type = type; }
 
     void set_literal(const std::string &literal) noexcept {
         m_literal = literal;
     }
 
-    virtual void propagate_style(style st) noexcept {
+    virtual void propagate_style(style st = style()) noexcept {
         // the default implementation just passes the element's style to
         // all its child elements
         m_style = st;
@@ -65,6 +35,8 @@ class element {
             child->propagate_style(m_style);
         }
     }
+
+    style get_style() const noexcept { return m_style; }
 
     void set_font(font *font) noexcept { m_font = font; }
 
@@ -109,10 +81,10 @@ class text_element : public element {
 
 class emph_element : public element {
   public:
-      virtual void propagate_style(style st) noexcept override {
-         st.set_emph(true);
-         element::propagate_style(st); 
-      }
+    virtual void propagate_style(style st) noexcept override {
+        st.set_emph(true);
+        element::propagate_style(st);
+    }
 };
 
 class heading_element : public element {
