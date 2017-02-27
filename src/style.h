@@ -21,3 +21,14 @@ class style {
     bool m_emph;
     bool m_strong;
 };
+
+inline bool operator<(const style &lhs, const style &rhs) {
+    if (lhs.get_heading_level() < rhs.get_heading_level())
+        return true;
+    if (!lhs.get_emph() && rhs.get_emph())
+        return true;
+    if (!lhs.get_strong() && rhs.get_strong())
+        return true;
+
+    return false;
+}

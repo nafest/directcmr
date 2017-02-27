@@ -8,8 +8,10 @@ class text_element_test : public ::testing::Test {
 
   protected:
     virtual void SetUp() override {
-        fnt = frndr.create_font("courier", "bold", 10);
-        text.set_font(fnt);
+        style st;
+        st.set_strong(true);
+        text.propagate_style(st);
+
         // the fake renderer estimates a constant width of
         // 10 for each character:
         // 30 + 10 + 40 + 10 + 30 + 10 + 50

@@ -42,7 +42,7 @@ document document::fromString(const std::string &string) {
     cmark_node *document_root = cmark_parse_document(
         string.c_str(), string.length(), CMARK_OPT_DEFAULT);
 
-    element *elem = new element();
+    element *elem = new document_element();
 
     auto child_elements = transform_children(document_root);
     elem->set_children(child_elements);
@@ -59,4 +59,8 @@ document document::fromFile(const std::string &file_name) {
     return document::fromString("### Heading *bold* Heading\nHello *world*");
 }
 
-int document::layout(int width) { return 0; }
+int document::layout(int width) {
+    return m_root_element->layout(m_renderer, width);
+}
+
+void document::render() { m_root_element->render(m_renderer); }
