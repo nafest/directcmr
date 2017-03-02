@@ -4,7 +4,20 @@
 
 #include <iostream>
 
-class fake_font : public font {};
+class font_params {
+  public:
+    font_params() = default;
+    font_params(const std::string &family, const std::string &style, int size)
+        : m_family(family), m_style(style), m_size(size) {}
+    std::string m_family;
+    std::string m_style;
+    int m_size;
+};
+
+class fake_font : public font {
+  public:
+    font_params m_font_params;
+};
 
 class fake_renderer : public renderer {
   public:
@@ -20,12 +33,17 @@ class fake_renderer : public renderer {
     virtual font *create_font(const std::string &family,
                               const std::string &style, int size) override {
         fake_font *fnt = new fake_font();
+        fnt->m_font_params = font_params(family, style, size);
         fnt->set_line_height(size + 2);
         return fnt;
     }
 
     virtual void draw_string(const std::string &text, const position &pos,
-                             font *fnt) override {
+                             font *fnt_in) override {
+        fake_font *fnt = static_cast<fake_font *>(fnt_in);
+        std::cout << "[" << fnt->m_font_params.m_family << ", "
+                  << fnt->m_font_params.m_style << ", "
+                  << fnt->m_font_params.m_size << "]";
         std::cout << "(" << pos.x << ", " << pos.y << ") " << text << std::endl;
     }
 };

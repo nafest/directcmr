@@ -109,6 +109,9 @@ class text_element : public element {
             element *elem = new word_element();
             elem->set_literal(word);
             elem->set_position(top_left);
+            // word elements need to be aware of the style
+            // of their parent
+            elem->propagate_style(m_style);
             word_children.push_back(elem);
         }
         set_children(word_children);
