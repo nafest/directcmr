@@ -92,7 +92,6 @@ class text_element : public element {
     virtual void add_to_leaf_block(renderer *rndr,
                                    paragraph_state &pstate) override {
         auto words = split_string(m_literal);
-        std::cout << words.size() << std::endl;
         std::vector<element *> word_children;
 
         auto space_extents = rndr->string_extents(get_font(rndr), " ");
