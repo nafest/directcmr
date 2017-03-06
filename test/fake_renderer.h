@@ -16,6 +16,14 @@ class font_params {
 };
 
 class fake_font : public font {
+    virtual float get_line_height() const noexcept override {
+        return m_font_params.m_size + 2;
+    }
+
+    virtual float get_ascent() const noexcept override {
+        return m_font_params.m_size - 2;
+    }
+
   public:
     font_params m_font_params;
 };
@@ -34,6 +42,7 @@ class draw_string_action {
 
 class fake_renderer : public renderer {
   public:
+    virtual void prepare_canvas(int width, int height) override {}
     virtual extents string_extents(const font *fnt,
                                    const std::string &string) override {
         extents ext;
@@ -47,7 +56,6 @@ class fake_renderer : public renderer {
                               const std::string &style, int size) override {
         fake_font *fnt = new fake_font();
         fnt->m_font_params = font_params(family, style, size);
-        fnt->set_line_height(size + 2);
         return fnt;
     }
 

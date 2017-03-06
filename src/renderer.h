@@ -34,19 +34,15 @@ class font {
     font() = default;
     virtual ~font() = default;
 
-    void set_line_height(int line_height) noexcept {
-        m_line_height = line_height;
-    }
+    virtual float get_line_height() const noexcept = 0;
 
-    int get_line_height() const noexcept { return m_line_height; }
-
-  private:
-    int m_line_height;
+    virtual float get_ascent() const noexcept = 0;
 };
 
 // abstract class for the interface of a renderer
 class renderer {
   public:
+    virtual void prepare_canvas(int width, int height) = 0;
     virtual extents string_extents(const font *fnt,
                                    const std::string &string) = 0;
     virtual font *create_font(const std::string &family,

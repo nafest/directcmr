@@ -60,7 +60,11 @@ document document::fromFile(const std::string &file_name) {
 }
 
 int document::layout(int width) {
+    m_layout_width = width;
     return m_root_element->layout(m_renderer, width);
 }
 
-void document::render() { m_root_element->render(m_renderer); }
+void document::render(int height) {
+    m_renderer->prepare_canvas(m_layout_width, height);
+    m_root_element->render(m_renderer);
+}

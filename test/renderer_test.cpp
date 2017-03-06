@@ -9,7 +9,7 @@ TEST(Renderer, RenderSimple) {
     document d = document::fromString("Hello *world*");
     d.set_renderer(&rndr);
     d.layout(100);
-    d.render();
+    d.render(100);
 
     EXPECT_EQ(2, rndr.m_draw_string_calls.size());
     EXPECT_EQ(0, rndr.m_draw_string_calls[0].m_pos.x);

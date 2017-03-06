@@ -4,8 +4,9 @@
 
 class paragraph_state {
   public:
-    paragraph_state(float paragraph_width)
-        : m_posx(0), m_posy(0), m_line_height(0), m_width(paragraph_width) {}
+    paragraph_state(float paragraph_width, float top_offset = 0.f)
+        : m_posx(0), m_posy(top_offset), m_line_height(0),
+          m_width(paragraph_width) {}
 
     void advance(extents text_extents) noexcept {
         if (text_extents.width + m_posx < m_width) {
@@ -34,5 +35,3 @@ class paragraph_state {
     float m_line_height;
     float m_width;
 };
-
-

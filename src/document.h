@@ -17,7 +17,7 @@ class document {
     // render the document
     int layout(int width);
 
-    void render();
+    void render(int height);
 
     element *get_root_element() const noexcept { return m_root_element.get(); }
 
@@ -26,4 +26,5 @@ class document {
     std::unique_ptr<element> m_root_element;
     renderer *m_renderer; // referenced renderer implementation,
                           // the document does not own the renderer
+    int m_layout_width;
 };
