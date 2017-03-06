@@ -5,9 +5,9 @@
 #include "style.h"
 #include "utils.h"
 
+#include <iostream>
 #include <string>
 #include <vector>
-#include <iostream>
 
 class element {
   public:
@@ -42,7 +42,7 @@ class element {
 
     font *get_font(renderer *rndr) { return rndr->font_for_style(m_style); }
 
-    virtual int layout(renderer *rndr, int width) { return 0; }
+    virtual float layout(renderer *rndr, float width) { return 0; }
     virtual void render(renderer *rndr, position pos = {0, 0}) {
         for (auto child : m_children)
             child->render(rndr, pos + m_pos);
@@ -69,8 +69,8 @@ class element {
 
 class document_element : public element {
   public:
-    virtual int layout(renderer *rndr, int width) {
-        int cumul_height = 0;
+    virtual float layout(renderer *rndr, float width) {
+        float cumul_height = 0;
         for (auto child : m_children) {
             child->set_position({0, cumul_height});
             cumul_height += child->layout(rndr, width);
@@ -141,7 +141,7 @@ class heading_element : public element {
         element::propagate_style(st);
     }
 
-    int layout(renderer *rndr, int width) override {
+    float layout(renderer *rndr, float width) override {
         // handle this like a paragraph
 
         paragraph_state pstate(width);
@@ -159,7 +159,7 @@ class heading_element : public element {
 
 class paragraph_element : public element {
   public:
-    int layout(renderer *rndr, int width) override {
+    float layout(renderer *rndr, float width) override {
         // a paragraph is a leaf block, i.e. it may not
         // contain other blocks. Only text and inline
         // elements

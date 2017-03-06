@@ -5,18 +5,21 @@
 #include <map>
 #include <string>
 
-struct extents {
-    int width;
-    int height;
+class extents {
+  public:
+    extents() : width(0.f), height(0.f) {}
+    extents(float w, float h) : width(w), height(h) {}
+    float width;
+    float height;
 };
 
 class position {
   public:
     position() : x(0), y(0) {}
-    position(int x_, int y_) : x(x_), y(y_) {}
+    position(float x_, float y_) : x(x_), y(y_) {}
 
-    int x;
-    int y;
+    float x;
+    float y;
 
     position operator+(const position &rhs) {
         return position(x + rhs.x, y + rhs.y);
@@ -52,7 +55,8 @@ class renderer {
     virtual int default_size() const noexcept { return 10; }
     font *font_for_style(const style &st);
 
-    virtual void draw_string(const std::string& text, const position& pos, font *fnt) = 0;
+    virtual void draw_string(const std::string &text, const position &pos,
+                             font *fnt) = 0;
 
   private:
     std::map<style, font *> m_cached_fonts;

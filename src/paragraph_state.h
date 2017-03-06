@@ -4,7 +4,7 @@
 
 class paragraph_state {
   public:
-    paragraph_state(int paragraph_width)
+    paragraph_state(float paragraph_width)
         : m_posx(0), m_posy(0), m_line_height(0), m_width(paragraph_width) {}
 
     void advance(extents text_extents) noexcept {
@@ -20,19 +20,19 @@ class paragraph_state {
         }
     }
 
-    void add_space(int space_width) noexcept { m_posx += space_width; }
+    void add_space(float space_width) noexcept { m_posx += space_width; }
 
-    int get_posx() const noexcept { return m_posx; }
-    int get_posy() const noexcept { return m_posy; }
-    int get_line_height() const noexcept { return m_line_height; }
+    float get_posx() const noexcept { return m_posx; }
+    float get_posy() const noexcept { return m_posy; }
+    float get_line_height() const noexcept { return m_line_height; }
 
-    void set_paragraph_width(int width) noexcept { m_width = width; }
+    void set_paragraph_width(float width) noexcept { m_width = width; }
 
   private:
-    int m_posx;
-    int m_posy;
-    int m_line_height;
-    int m_width;
+    float m_posx;
+    float m_posy;
+    float m_line_height;
+    float m_width;
 };
 
 
