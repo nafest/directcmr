@@ -3,13 +3,12 @@
 #include "document.h"
 #include "fake_renderer.h"
 
-
 TEST(Renderer, RenderSimple) {
     fake_renderer rndr;
     document d = document::fromString("Hello *world*");
     d.set_renderer(&rndr);
     d.layout(100);
-    d.render(100);
+    d.render(position(0, 0), 100);
 
     EXPECT_EQ(2, rndr.m_draw_string_calls.size());
     EXPECT_EQ(0, rndr.m_draw_string_calls[0].m_pos.x);

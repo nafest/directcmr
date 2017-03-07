@@ -67,7 +67,7 @@ int document::layout(int width) {
     return m_root_element->layout(m_renderer, width);
 }
 
-void document::render(int height) {
+void document::render(position origin, int height) {
     m_renderer->prepare_canvas(m_layout_width, height);
-    m_root_element->render(m_renderer);
+    m_root_element->render(m_renderer, origin);
 }
