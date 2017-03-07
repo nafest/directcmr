@@ -3,8 +3,8 @@ add_executable(skia_cmark
    skia_renderer.cpp
    skia_renderer.h)
 
-set(SKIA_PATH /Users/stefan/Projects/3rdparty/skia/skia_current/skia)
-set(SKIA_OUT /out/Static)
+#set(SKIA_PATH /Users/stefan/Projects/3rdparty/skia/skia_current/skia)
+#set(SKIA_OUT /out/Static)
 
 target_include_directories(skia_cmark PRIVATE
     ${cmark_renderer_SOURCE_DIR}/src
