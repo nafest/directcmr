@@ -12,8 +12,11 @@ class skia_font : public font {
         if (style == "Bold" || style == "BoldItalic")
             weight = SkFontStyle::kBold_Weight;
 
-        SkFontStyle font_style{weight, SkFontStyle::kNormal_Width,
-                               SkFontStyle::kUpright_Slant};
+        SkFontStyle::Slant slant = SkFontStyle::kUpright_Slant;
+        if (style == "Italic" || style == "BoldItalic")
+            slant = SkFontStyle::kItalic_Slant;
+
+        SkFontStyle font_style{weight, SkFontStyle::kNormal_Width, slant};
 
         m_typeface.reset(fmgr->matchFamilyStyle(family.c_str(), font_style));
 
