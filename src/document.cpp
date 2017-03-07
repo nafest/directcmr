@@ -21,6 +21,9 @@ std::vector<element *> transform_children(cmark_node *node) {
         case CMARK_NODE_EMPH:
             elem = new emph_element();
             break;
+        case CMARK_NODE_STRONG:
+            elem = new strong_element();
+            break;
         case CMARK_NODE_HEADING:
             elem = new heading_element(cmark_node_get_heading_level(child));
             break;

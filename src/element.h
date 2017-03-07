@@ -131,6 +131,14 @@ class emph_element : public element {
     }
 };
 
+class strong_element : public emph_element {
+  public:
+    virtual void propagate_style(style st) noexcept override {
+        st.set_strong(true);
+        element::propagate_style(st);
+    }
+};
+
 class heading_element : public element {
   public:
     heading_element(int heading_level)
