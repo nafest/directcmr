@@ -8,16 +8,16 @@ class paragraph_state {
         : m_posx(0), m_posy(top_offset), m_line_height(0),
           m_width(paragraph_width) {}
 
-    void advance(extents text_extents) noexcept {
-        if (text_extents.width + m_posx < m_width) {
+    void advance(vec2 text_extents) noexcept {
+        if (text_extents.x() + m_posx < m_width) {
             // fits in the current line
-            m_posx += text_extents.width;
-            m_line_height = std::max(m_line_height, text_extents.height);
+            m_posx += text_extents.x();
+            m_line_height = std::max(m_line_height, text_extents.y());
         } else {
             // advance to the next line
             m_posy += m_line_height;
-            m_line_height = text_extents.height;
-            m_posx = text_extents.width;
+            m_line_height = text_extents.y();
+            m_posx = text_extents.x();
         }
     }
 

@@ -17,7 +17,7 @@ class document {
     // render the document
     int layout(int width);
 
-    void render(position origin, int height);
+    void render(vec2 origin, int height);
 
     element *get_root_element() const noexcept { return m_root_element.get(); }
 

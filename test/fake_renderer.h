@@ -31,25 +31,21 @@ class fake_font : public font {
 class draw_string_action {
   public:
     draw_string_action() = default;
-    draw_string_action(const std::string &text, const position &pos,
+    draw_string_action(const std::string &text, const vec2 &pos,
                        const font_params &font)
         : m_text(text), m_pos(pos), m_font(font) {}
 
     font_params m_font;
     std::string m_text;
-    position m_pos;
+    vec2 m_pos;
 };
 
 class fake_renderer : public renderer {
   public:
     virtual void prepare_canvas(int width, int height) override {}
-    virtual extents string_extents(const font *fnt,
-                                   const std::string &string) override {
-        extents ext;
-        ext.height = 15;
-        ext.width = string.length() * 10;
-
-        return ext;
+    virtual vec2 string_extents(const font *fnt,
+                                const std::string &string) override {
+        return vec2(string.length() * 10.f, 15.f);
     }
 
     virtual font *create_font(const std::string &family,
@@ -59,7 +55,7 @@ class fake_renderer : public renderer {
         return fnt;
     }
 
-    virtual void draw_string(const std::string &text, const position &pos,
+    virtual void draw_string(const std::string &text, const vec2 &pos,
                              font *fnt_in) override {
         fake_font *fnt = static_cast<fake_font *>(fnt_in);
         m_draw_string_calls.push_back(

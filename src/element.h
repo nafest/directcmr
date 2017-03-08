@@ -24,6 +24,7 @@ class element {
     std::vector<element *> &children() noexcept { return m_children; }
 
     void set_type(const std::string &type) noexcept { m_type = type; }
+    std::string get_type() const noexcept { return m_type; }
 
     void set_literal(const std::string &literal) noexcept {
         m_literal = literal;
@@ -43,13 +44,14 @@ class element {
     font *get_font(renderer *rndr) { return rndr->font_for_style(m_style); }
 
     virtual float layout(renderer *rndr, float width) { return 0; }
-    virtual void render(renderer *rndr, position pos = {0, 0}) {
+    virtual void render(renderer *rndr, vec2 pos = {0, 0}) {
         for (auto child : m_children)
             child->render(rndr, pos + m_pos);
     }
     virtual void add_to_leaf_block(renderer *rndr, paragraph_state &pstate) {}
 
-    void set_position(const position &pos) noexcept { m_pos = pos; }
+    void set_position(const vec2 &pos) noexcept { m_pos = pos; }
+    vec2 get_position() const noexcept { return m_pos; }
 
   protected:
     // an element owns its child elements
@@ -64,7 +66,7 @@ class element {
     style m_style;
 
     // position relative to the origin of the parent
-    position m_pos;
+    vec2 m_pos;
 };
 
 class document_element : public element {
@@ -82,7 +84,7 @@ class document_element : public element {
 
 class word_element : public element {
   public:
-    virtual void render(renderer *rndr, position pos) override {
+    virtual void render(renderer *rndr, vec2 pos) override {
         rndr->draw_string(m_literal, pos + m_pos, get_font(rndr));
     }
 };
@@ -97,10 +99,10 @@ class text_element : public element {
         auto space_extents = rndr->string_extents(get_font(rndr), " ");
 
         for (auto word : words) {
-            position top_left{pstate.get_posx(), pstate.get_posy()};
+            vec2 top_left{pstate.get_posx(), pstate.get_posy()};
             auto extents = rndr->string_extents(get_font(rndr), word);
             pstate.advance(extents);
-            pstate.add_space(space_extents.width);
+            pstate.add_space(space_extents.x());
 
             // Store the individual words with their layouted
             // position (top/left), such that these computations

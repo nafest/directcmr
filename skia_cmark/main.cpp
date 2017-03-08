@@ -6,10 +6,11 @@
 
 int main(int argc, const char *argv[]) {
     skia_renderer rndr;
-    document d = document::fromString("Hello **strong** *world*");
+    rndr.set_float_param("list_margin", 10.0);
+    document d = document::fromString("Hello **strong** *world*\n- Item1\n- Item2");
     d.set_renderer(&rndr);
     std::cout << "layout height: " << d.layout(100) << std::endl;
-    d.render(position(0, 0), 400);
+    d.render(vec2(0, 0), 400);
     rndr.dump_canvas("dump.png");
     return 0;
 }

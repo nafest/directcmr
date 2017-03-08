@@ -1,6 +1,8 @@
 #include "document.h"
 #include "cmark.h"
 #include "element.h"
+#include "item_element.h"
+#include "list_element.h"
 
 #include <iostream>
 #include <vector>
@@ -26,6 +28,12 @@ std::vector<element *> transform_children(cmark_node *node) {
             break;
         case CMARK_NODE_HEADING:
             elem = new heading_element(cmark_node_get_heading_level(child));
+            break;
+        case CMARK_NODE_LIST:
+            elem = new list_element();
+            break;
+        case CMARK_NODE_ITEM:
+            elem = new item_element();
             break;
         default:
             elem = new element();
@@ -67,7 +75,7 @@ int document::layout(int width) {
     return m_root_element->layout(m_renderer, width);
 }
 
-void document::render(position origin, int height) {
+void document::render(vec2 origin, int height) {
     m_renderer->prepare_canvas(m_layout_width, height);
     m_root_element->render(m_renderer, origin);
 }

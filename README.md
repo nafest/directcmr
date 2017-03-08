@@ -11,4 +11,5 @@ and text nodes.
 - the document API must be extended, such that the origin can be passed to render()
 - it should be possible to provide an external canvas
 - cleanup/split element.h
+- add a mechanism to store parameters with the renderer
 - add lists

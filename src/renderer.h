@@ -1,30 +1,10 @@
 #pragma once
 
+#include "geom.h"
 #include "style.h"
 
 #include <map>
 #include <string>
-
-class extents {
-  public:
-    extents() : width(0.f), height(0.f) {}
-    extents(float w, float h) : width(w), height(h) {}
-    float width;
-    float height;
-};
-
-class position {
-  public:
-    position() : x(0), y(0) {}
-    position(float x_, float y_) : x(x_), y(y_) {}
-
-    float x;
-    float y;
-
-    position operator+(const position &rhs) {
-        return position(x + rhs.x, y + rhs.y);
-    }
-};
 
 // class representing a font. Implementations of renderer
 // may subclass it to extend it with render backend specific
@@ -42,18 +22,30 @@ class font {
 // abstract class for the interface of a renderer
 class renderer {
   public:
+    virtual float get_float_param(const std::string &param_name) const
+        noexcept {
+        auto elem = m_float_params.find(param_name);
+        if (elem == m_float_params.end())
+            return 0.f;
+        return elem->second;
+    }
+
+    virtual void set_float_param(const std::string &param_name,
+                                 float value) noexcept {
+        m_float_params[param_name] = value;
+    }
     virtual void prepare_canvas(int width, int height) = 0;
-    virtual extents string_extents(const font *fnt,
-                                   const std::string &string) = 0;
+    virtual vec2 string_extents(const font *fnt, const std::string &string) = 0;
     virtual font *create_font(const std::string &family,
                               const std::string &style, int size) = 0;
     virtual std::string default_family() const noexcept { return "Arial"; }
     virtual int default_size() const noexcept { return 10; }
     font *font_for_style(const style &st);
 
-    virtual void draw_string(const std::string &text, const position &pos,
+    virtual void draw_string(const std::string &text, const vec2 &pos,
                              font *fnt) = 0;
 
   private:
     std::map<style, font *> m_cached_fonts;
+    std::map<std::string, float> m_float_params;
 };
