@@ -45,6 +45,8 @@ class renderer {
     virtual void draw_string(const std::string &text, const vec2 &pos,
                              font *fnt) = 0;
 
+    virtual void draw_list_marker(const rect &marker_rect) = 0;
+
   private:
     std::map<style, font *> m_cached_fonts;
     std::map<std::string, float> m_float_params;

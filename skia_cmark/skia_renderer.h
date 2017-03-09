@@ -19,6 +19,8 @@ class skia_renderer : public renderer {
     virtual void draw_string(const std::string &text, const vec2 &pos,
                              font *fnt_in) override;
 
+    virtual void draw_list_marker(const rect &marker_rect) override;
+
     void dump_canvas(const std::string &file_name);
 
   private:

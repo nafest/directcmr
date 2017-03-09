@@ -16,6 +16,10 @@ class vec2 {
         return vec2(m_x + rhs.x(), m_y + rhs.y());
     }
 
+    bool operator==(const vec2 &rhs) const {
+        return m_x == rhs.x() && m_y == rhs.y();
+    }
+
     float &x() noexcept { return m_x; }
     const float &x() const noexcept { return m_x; }
 
@@ -30,6 +34,8 @@ class vec2 {
 class rect {
   public:
     rect() = default;
+    rect(const vec2 &top_left, const vec2 &bottom_right)
+        : m_top_left(top_left), m_bottom_right(bottom_right) {}
     rect(float top, float left, float bottom, float right)
         : m_top_left({top, left}), m_bottom_right({bottom, right}) {}
 

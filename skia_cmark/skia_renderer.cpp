@@ -77,3 +77,14 @@ void skia_renderer::draw_string(const std::string &text, const vec2 &pos,
     m_canvas->drawText(text.c_str(), text.size(), pos.x(), pos.y(),
                        fnt->paint());
 }
+
+void skia_renderer::draw_list_marker(const rect &marker_rect) {
+    float cx = marker_rect.top_left().x() + 0.5 * marker_rect.width();
+    float cy = marker_rect.top_left().y() + 0.5 * marker_rect.height();
+    float radius = 0.2 * std::min(marker_rect.width(), marker_rect.height());
+    SkPaint paint;
+    paint.setColor(SK_ColorBLACK);
+    paint.setAntiAlias(true);
+    paint.setStyle(SkPaint::kStrokeAndFill_Style);
+    m_canvas->drawCircle(cx, cy, radius, paint);
+}
