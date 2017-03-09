@@ -24,6 +24,7 @@ class skia_font : public font {
         m_paint.setTextSize(size);
         m_paint.setAntiAlias(true);
         m_paint.setColor(SK_ColorBLACK);
+        m_paint.getFontMetrics(&m_metrics);
     }
 
     vec2 string_extents(const std::string &text) const {
@@ -34,17 +35,18 @@ class skia_font : public font {
 
     SkPaint &paint() { return m_paint; }
 
-    virtual float get_line_height() const noexcept override { return 0.f; }
+    virtual float get_line_height() const noexcept override {
+        return -m_metrics.fAscent + m_metrics.fDescent + m_metrics.fLeading;
+    }
 
     virtual float get_ascent() const noexcept override {
-        SkPaint::FontMetrics metrics;
-        m_paint.getFontMetrics(&metrics);
-        return -metrics.fAscent;
+        return -m_metrics.fAscent;
     }
 
   private:
     sk_sp<SkTypeface> m_typeface;
     SkPaint m_paint;
+    SkPaint::FontMetrics m_metrics;
 };
 
 void skia_renderer::prepare_canvas(int width, int height) {

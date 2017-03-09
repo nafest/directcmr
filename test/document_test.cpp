@@ -44,8 +44,8 @@ TEST(document, list_layouting_is_correct) {
     fake_renderer frndr;
     document d = document::fromString("- Item1\n- Item2");
     d.set_renderer(&frndr);
-    d.layout(400);
-
+    auto height = d.layout(400);
+    EXPECT_EQ(2*d.get_root_element()->get_font(&frndr)->get_line_height(), height);
     auto e = d.get_root_element();
     auto list = e->children()[0];
     EXPECT_STREQ("list", list->get_type().c_str());
