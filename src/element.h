@@ -43,7 +43,19 @@ class element {
 
     font *get_font(renderer *rndr) { return rndr->font_for_style(m_style); }
 
-    virtual float layout(renderer *rndr, float width) { return 0; }
+    // layout the element and all its subelements to fit the given width.
+    // Returns the height required to render the element
+    virtual float layout(renderer *rndr, float width) {
+        // on default return the cumulated height of all child elements
+        float cumul_height = 0;
+        for (auto child : m_children) {
+            child->set_position({0, cumul_height});
+            cumul_height += child->layout(rndr, width);
+        }
+
+        return cumul_height;
+    }
+
     virtual void render(renderer *rndr, vec2 pos = {0, 0}) {
         for (auto child : m_children)
             child->render(rndr, pos + m_pos);
@@ -154,7 +166,8 @@ class heading_element : public element {
     float layout(renderer *rndr, float width) override {
         // handle this like a paragraph
 
-        paragraph_state pstate(width, get_font(rndr)->get_ascent());
+        paragraph_state pstate(width, get_font(rndr)->get_line_height(),
+                               get_font(rndr)->get_ascent());
 
         for (auto child : m_children) {
             child->add_to_leaf_block(rndr, pstate);
@@ -177,12 +190,13 @@ class paragraph_element : public element {
         // basically we have to start at the top left of
         // the block and subsequently add all child elements
         // also keep track of the height of the current line
-        paragraph_state pstate(width, get_font(rndr)->get_ascent());
-
+        paragraph_state pstate(width, get_font(rndr)->get_line_height(),
+                               get_font(rndr)->get_ascent());
         for (auto child : m_children) {
             child->add_to_leaf_block(rndr, pstate);
         }
 
-        return pstate.get_posy() + pstate.get_line_height();
+        return pstate.get_posy() + pstate.get_line_height() -
+               get_font(rndr)->get_ascent();
     }
 };

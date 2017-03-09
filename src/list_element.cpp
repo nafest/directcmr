@@ -1,4 +1,5 @@
 #include "list_element.h"
+#include <iostream>
 
 float list_element::layout(renderer *rndr, float width) {
     auto margin = rndr->get_float_param("list_margin");

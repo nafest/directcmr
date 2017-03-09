@@ -45,7 +45,8 @@ class fake_renderer : public renderer {
     virtual void prepare_canvas(int width, int height) override {}
     virtual vec2 string_extents(const font *fnt,
                                 const std::string &string) override {
-        return vec2(string.length() * 10.f, 15.f);
+        const fake_font* ffnt = static_cast<const fake_font*>(fnt);
+        return vec2(string.length() * 10.f, ffnt->m_font_params.m_size);
     }
 
     virtual font *create_font(const std::string &family,
