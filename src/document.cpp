@@ -1,8 +1,14 @@
 #include "document.h"
 #include "cmark.h"
+#include "document_element.h"
 #include "element.h"
+#include "emph_element.h"
+#include "heading_element.h"
 #include "item_element.h"
 #include "list_element.h"
+#include "paragraph_element.h"
+#include "strong_element.h"
+#include "text_element.h"
 
 #include <iostream>
 #include <vector>

@@ -1,4 +1,5 @@
 #include "element.h"
+#include "text_element.h"
 #include "fake_renderer.h"
 #include "gtest/gtest.h"
 
