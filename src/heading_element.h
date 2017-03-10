@@ -2,6 +2,8 @@
 
 #include "element.h"
 
+#include <iostream>
+
 class heading_element : public element {
   public:
     heading_element(int heading_level)
@@ -15,14 +17,18 @@ class heading_element : public element {
     float layout(renderer *rndr, float width) override {
         // handle this like a paragraph
 
-        paragraph_state pstate(width, get_font(rndr)->get_line_height(),
-                               get_font(rndr)->get_ascent());
+        auto fnt = get_font(rndr);
+
+        paragraph_state pstate(width, fnt->get_line_height(),
+                               fnt->get_ascent());
 
         for (auto child : m_children) {
             child->add_to_leaf_block(rndr, pstate);
         }
 
-        return pstate.get_posy() + pstate.get_line_height();
+        int height =
+            pstate.get_posy() + pstate.get_line_height() - fnt->get_ascent();
+        return height;
     }
 
   private:

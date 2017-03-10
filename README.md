@@ -12,4 +12,4 @@ and text nodes.
 - it should be possible to provide an external canvas
 - cleanup/split element.h
 - add a mechanism to store parameters with the renderer
-- add lists
+- there is a problem if a single word is wider than the layout width

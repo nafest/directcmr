@@ -17,6 +17,8 @@ font *renderer::font_for_style(const style &st) {
     std::string family_str = default_family();
 
     int size = default_size();
+    if (st.get_heading_level() > 0)
+        size = heading_size(st.get_heading_level());
 
     auto font = create_font(family_str, style_str, size);
     m_cached_fonts[st] = font;
