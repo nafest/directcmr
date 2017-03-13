@@ -37,7 +37,8 @@ TEST(document, layouting_of_a_single_line_is_correct) {
     fake_renderer frndr;
     document d = document::fromString("Hello World");
     d.set_renderer(&frndr);
-    EXPECT_EQ(d.get_root_element()->get_font(&frndr)->get_line_height(), d.layout(400));
+    EXPECT_EQ(d.get_root_element()->get_font(&frndr)->get_line_height(),
+              d.layout(400));
 }
 
 TEST(document, layouting_of_a_single_heading_is_correct) {
@@ -50,16 +51,23 @@ TEST(document, layouting_of_a_single_heading_is_correct) {
     EXPECT_EQ(fnt->get_line_height(), d.layout(400));
 }
 
-
 TEST(document, list_layouting_is_correct) {
     fake_renderer frndr;
+    frndr.set_float_param("list_margin", 5.f);
     document d = document::fromString("- Item1\n- Item2");
     d.set_renderer(&frndr);
     auto height = d.layout(400);
-    EXPECT_EQ(2*d.get_root_element()->get_font(&frndr)->get_line_height(), height);
+    EXPECT_EQ(2 * d.get_root_element()->get_font(&frndr)->get_line_height(),
+              height);
     auto e = d.get_root_element();
     auto list = e->children()[0];
     EXPECT_STREQ("list", list->get_type().c_str());
     auto item1 = list->children()[0];
     EXPECT_STREQ("item", item1->get_type().c_str());
+    auto item2 = list->children()[1];
+
+    auto indent = frndr.get_float_param("list_margin");
+
+    EXPECT_EQ(indent, item1->get_position().x());
+    EXPECT_EQ(indent, item2->get_position().x());
 }
