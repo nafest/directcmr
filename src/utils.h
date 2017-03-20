@@ -5,28 +5,88 @@
 #include <strstream>
 #include <vector>
 
-std::vector<std::string> split_string(const std::string &in,
-                                      const char split_char = ' ');
-
 int num_lines(const std::string &text);
 
-template <char S> class splitter {
+class line {
+  public:
+    static void first_token(const std::string &text, size_t &start,
+                            size_t &end) {
+        end = text.find('\n', start);
+    }
+
+    static void next_token(
+        const std::string &text, size_t &start,
+        size_t &end) { // after the last token, set m_start to std::string::npos
+        if (end == std::string::npos) {
+            start = std::string::npos;
+        } else {
+            start = end + 1;
+            end = text.find('\n', start);
+        }
+    }
+};
+
+class word {
+  public:
+    static void first_token(const std::string &text, size_t &start,
+                            size_t &end) {
+        if (text.size() == 0) {
+            start = end = std::string::npos;
+            return;
+        }
+        end = text.find(' ', start);
+        if (end == std::string::npos) { // just a single word ..
+            return;
+        }
+
+        auto len = end - start;
+        while (len == 0) {
+            start = end + 1;
+            end = text.find(' ', start);
+            if (end == std::string::npos) {
+                len = text.size() - start;
+                if (len == 0)
+                    start = std::string::npos;
+                return;
+            }
+            len = end - start;
+        }
+    }
+
+    static void next_token(
+        const std::string &text, size_t &start,
+        size_t &end) { // after the last token, set m_start to std::string::npos
+        if (end == std::string::npos) {
+            start = std::string::npos;
+        } else {
+            size_t len = 0;
+            do {
+                start = end + 1;
+                end = text.find(' ', start);
+                if (end == std::string::npos) {
+                    len = text.size() - start;
+                    if (len == 0)
+                        start = std::string::npos;
+                    return;
+                }
+                len = end - start;
+            } while (len == 0);
+        }
+    }
+};
+
+template <typename T> class splitter {
   public:
     class iterator {
       public:
         iterator() : m_start(std::string::npos), m_end(std::string::npos) {}
         iterator(const std::string &text) : m_text(text), m_start(0) {
-            m_end = m_text.find(S, m_start);
+            T::first_token(m_text, m_start, m_end);
         }
 
         iterator &operator++() {
             // after the last token, set m_start to std::string::npos
-            if (m_end == std::string::npos) {
-                m_start = std::string::npos;
-            } else {
-                m_start = m_end + 1;
-                m_end = m_text.find(S, m_start);
-            }
+            T::next_token(m_text, m_start, m_end);
             return *this;
         }
 
@@ -59,4 +119,5 @@ template <char S> class splitter {
     std::string m_text;
 };
 
-using line_splitter = splitter<'\n'>;
+using line_splitter = splitter<line>;
+using word_splitter = splitter<word>;

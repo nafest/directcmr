@@ -13,12 +13,13 @@ class text_element : public element {
   public:
     virtual void add_to_leaf_block(renderer *rndr,
                                    paragraph_state &pstate) override {
-        auto words = split_string(m_literal);
+        word_splitter splitter(m_literal);
+
         std::vector<element *> word_children;
 
         auto space_extents = rndr->string_extents(get_font(rndr), " ");
 
-        for (auto word : words) {
+        for (auto word : splitter) {
             vec2 top_left{pstate.get_posx(), pstate.get_posy()};
             auto extents = rndr->string_extents(get_font(rndr), word);
             pstate.advance(extents);
