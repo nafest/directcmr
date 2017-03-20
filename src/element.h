@@ -30,6 +30,8 @@ class element {
         m_literal = literal;
     }
 
+    std::string get_literal() const noexcept { return m_literal; }
+
     virtual void propagate_style(style st = style()) noexcept {
         // the default implementation just passes the element's style to
         // all its child elements

@@ -9,7 +9,7 @@
 class document {
   public:
     static document fromFile(const std::string &file_name);
-    static document fromString(const std::string &string);
+    static document fromString(const std::string &string, bool be_verbose = false);
 
     void set_renderer(renderer *renderer) { m_renderer = renderer; }
     // layout the common mark document to a canvas with

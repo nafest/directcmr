@@ -24,6 +24,10 @@ class fake_font : public font {
         return m_font_params.m_size - 2;
     }
 
+    virtual std::string get_family() const noexcept override {
+        return m_font_params.m_family;
+    }
+
   public:
     font_params m_font_params;
 };

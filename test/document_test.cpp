@@ -71,3 +71,34 @@ TEST(document, list_layouting_is_correct) {
     EXPECT_EQ(indent, item1->get_position().x());
     EXPECT_EQ(indent, item2->get_position().x());
 }
+
+TEST(document, code_layout_is_correct) {
+    fake_renderer frndr;
+    frndr.set_float_param("code_margin", 10.f);
+    document d = document::fromString("    code;");
+    d.set_renderer(&frndr);
+    auto height = d.layout(400);
+    EXPECT_EQ(d.get_root_element()->get_font(&frndr)->get_line_height(),
+              height);
+    auto root = d.get_root_element();
+    auto code = root->children()[0];
+    EXPECT_STREQ("code_block", code->get_type().c_str());
+
+    EXPECT_EQ(10.0, code->get_position().x());
+}
+
+TEST(document, code_font_is_propagated) {
+    fake_renderer frndr;
+    frndr.set_float_param("code_margin", 10.f);
+    document d = document::fromString("    code;");
+    d.set_renderer(&frndr);
+    auto height = d.layout(400);
+    EXPECT_EQ(d.get_root_element()->get_font(&frndr)->get_line_height(),
+              height);
+    auto root = d.get_root_element();
+    auto code = root->children()[0];
+    fake_font *fnt = static_cast<fake_font *>(code->get_font(&frndr));
+    ASSERT_NE(nullptr, fnt);
+    EXPECT_STREQ(frndr.get_string_param("code_block.font").c_str(),
+                 fnt->m_font_params.m_family.c_str());
+}

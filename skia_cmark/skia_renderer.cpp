@@ -5,7 +5,7 @@
 
 class skia_font : public font {
   public:
-    skia_font(const std::string &family, const std::string &style, int size) {
+    skia_font(const std::string &family, const std::string &style, int size) : m_family(family) {
         sk_sp<SkFontMgr> fmgr = SkFontMgr::RefDefault();
 
         int weight = SkFontStyle::kNormal_Weight;
@@ -43,10 +43,15 @@ class skia_font : public font {
         return -m_metrics.fAscent;
     }
 
+    virtual std::string get_family() const noexcept override {
+        return m_family;
+    }
+
   private:
     sk_sp<SkTypeface> m_typeface;
     SkPaint m_paint;
     SkPaint::FontMetrics m_metrics;
+    std::string m_family;
 };
 
 void skia_renderer::prepare_canvas(int width, int height) {

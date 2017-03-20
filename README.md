@@ -7,6 +7,8 @@ For the first implementation only support header, emph, paragraph,
 and text nodes.
 
 ### Next Steps
+- complete code node implementation
+- move to the github fork of cmake
 - integrate skia via external project -> mostly working, needs windows alternative and some cleanup
 - the document API must be extended, such that the origin can be passed to render()
 - it should be possible to provide an external canvas

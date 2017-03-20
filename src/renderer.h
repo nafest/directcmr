@@ -17,11 +17,15 @@ class font {
     virtual float get_line_height() const noexcept = 0;
 
     virtual float get_ascent() const noexcept = 0;
+
+    virtual std::string get_family() const noexcept = 0;
 };
 
 // abstract class for the interface of a renderer
 class renderer {
   public:
+    renderer();
+
     virtual float get_float_param(const std::string &param_name) const
         noexcept {
         auto elem = m_float_params.find(param_name);
@@ -34,12 +38,26 @@ class renderer {
                                  float value) noexcept {
         m_float_params[param_name] = value;
     }
+
+    virtual std::string get_string_param(const std::string &param_name) const
+        noexcept {
+        auto elem = m_string_params.find(param_name);
+        if (elem == m_string_params.end())
+            return "";
+        return elem->second;
+    }
+
+    virtual void set_string_param(const std::string &param_name,
+                                  const std::string &value) noexcept {
+        m_string_params[param_name] = value;
+    }
+
     virtual void prepare_canvas(int width, int height) = 0;
     virtual vec2 string_extents(const font *fnt, const std::string &string) = 0;
     virtual font *create_font(const std::string &family,
                               const std::string &style, int size) = 0;
     virtual std::string default_family() const noexcept { return "Arial"; }
-    virtual int default_size() const noexcept { return 10; }
+    virtual int default_size() const noexcept { return 14; }
     virtual int heading_size(int heading_level) {
         int size = default_size();
         for (int i = 6; i >= heading_level; i--)
@@ -58,4 +76,5 @@ class renderer {
   private:
     std::map<style, font *> m_cached_fonts;
     std::map<std::string, float> m_float_params;
+    std::map<std::string, std::string> m_string_params;
 };

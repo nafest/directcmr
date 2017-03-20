@@ -1,5 +1,6 @@
 #include "document.h"
 #include "cmark.h"
+#include "code_block_element.h"
 #include "document_element.h"
 #include "element.h"
 #include "emph_element.h"
@@ -13,7 +14,7 @@
 #include <iostream>
 #include <vector>
 
-std::vector<element *> transform_children(cmark_node *node) {
+std::vector<element *> transform_children(cmark_node *node, bool be_verbose) {
     std::vector<element *> child_elements;
     auto child = cmark_node_first_child(node);
     while (child) {
@@ -41,13 +42,29 @@ std::vector<element *> transform_children(cmark_node *node) {
         case CMARK_NODE_ITEM:
             elem = new item_element();
             break;
+        case CMARK_NODE_CODE_BLOCK: {
+            elem = new code_block_element();
+            std::string literal = cmark_node_get_literal(child);
+            // code blocks seem all to be ended with an extra
+            // line break, remove it.
+            literal.pop_back();
+            elem->set_literal(literal);
+            break;
+        }
         default:
             elem = new element();
             std::cout << "unsupported element kind "
                       << cmark_node_get_type_string(child) << std::endl;
         }
+        if (be_verbose) {
+
+            std::cout << "add: " << cmark_node_get_type_string(child);
+            if (cmark_node_get_literal(child))
+                std::cout << " " << cmark_node_get_literal(child);
+            std::cout << std::endl;
+        }
         child_elements.push_back(elem);
-        elem->set_children(transform_children(child));
+        elem->set_children(transform_children(child, be_verbose));
         elem->set_type(cmark_node_get_type_string(child));
 
         child = cmark_node_next(child);
@@ -55,13 +72,13 @@ std::vector<element *> transform_children(cmark_node *node) {
     return child_elements;
 }
 
-document document::fromString(const std::string &string) {
+document document::fromString(const std::string &string, bool be_verbose) {
     cmark_node *document_root = cmark_parse_document(
         string.c_str(), string.length(), CMARK_OPT_DEFAULT);
 
     element *elem = new document_element();
 
-    auto child_elements = transform_children(document_root);
+    auto child_elements = transform_children(document_root, be_verbose);
     elem->set_children(child_elements);
 
     cmark_node_free(document_root);

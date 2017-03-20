@@ -1,3 +1,4 @@
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
 add_library(cmark_renderer STATIC
     document.cpp document.h
     renderer.cpp
