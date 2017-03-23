@@ -78,7 +78,9 @@ TEST(document, code_layout_is_correct) {
     document d = document::fromString("    code;");
     d.set_renderer(&frndr);
     auto height = d.layout(400);
-    EXPECT_EQ(d.get_root_element()->get_font(&frndr)->get_line_height(),
+    EXPECT_EQ(d.get_root_element()->get_font(&frndr)->get_line_height() +
+                  frndr.get_float_param("code_block.margin_top") +
+                  frndr.get_float_param("code_block.margin_bottom"),
               height);
     auto root = d.get_root_element();
     auto code = root->children()[0];
@@ -93,7 +95,9 @@ TEST(document, code_font_is_propagated) {
     document d = document::fromString("    code;");
     d.set_renderer(&frndr);
     auto height = d.layout(400);
-    EXPECT_EQ(d.get_root_element()->get_font(&frndr)->get_line_height(),
+    EXPECT_EQ(d.get_root_element()->get_font(&frndr)->get_line_height() +
+                  frndr.get_float_param("code_block.margin_top") +
+                  frndr.get_float_param("code_block.margin_bottom"),
               height);
     auto root = d.get_root_element();
     auto code = root->children()[0];

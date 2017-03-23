@@ -6,7 +6,9 @@ renderer::renderer() {
   // set some default parameters
   set_string_param("font", "Arial");
   set_string_param("code_block.font", "Menlo");
-  set_float_param("code_block.margin", 10.f);
+  set_float_param("code_block.margin_left", 10.f);
+  set_float_param("code_block.margin_top", 5.f);
+  set_float_param("code_block.margin_bottom", 5.f);
 }
 
 font *renderer::font_for_style(const style &st) {
