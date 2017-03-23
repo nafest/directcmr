@@ -1,5 +1,6 @@
 #include "document.h"
 #include "cmark.h"
+#include "cmark_extension_api.h"
 #include "code_block_element.h"
 #include "document_element.h"
 #include "element.h"
@@ -8,8 +9,11 @@
 #include "item_element.h"
 #include "list_element.h"
 #include "paragraph_element.h"
+#include "registry.h"
 #include "strong_element.h"
 #include "text_element.h"
+
+#include "../extensions/core-extensions.h"
 
 #include <iostream>
 #include <vector>
@@ -73,15 +77,35 @@ std::vector<element *> transform_children(cmark_node *node, bool be_verbose) {
 }
 
 document document::fromString(const std::string &string, bool be_verbose) {
-    cmark_node *document_root = cmark_parse_document(
-        string.c_str(), string.length(), CMARK_OPT_DEFAULT);
+    cmark_register_plugin(core_extensions_registration);
+    int options = CMARK_OPT_DEFAULT;
+#if DEBUG
+    auto parser = cmark_parser_new(options);
+#else
+    auto parser =
+        cmark_parser_new_with_mem(options, cmark_get_arena_mem_allocator());
+#endif
+    auto syntax_extension = cmark_find_syntax_extension("table");
+    if (!syntax_extension) {
+        fprintf(stderr, "Unknown extension table\n");
+    }
+    cmark_parser_attach_syntax_extension(parser, syntax_extension);
+    cmark_parser_feed(parser, string.c_str(), string.length());
+    auto document_root = cmark_parser_finish(parser);
 
     element *elem = new document_element();
 
     auto child_elements = transform_children(document_root, be_verbose);
     elem->set_children(child_elements);
 
+#if DEBUG
+    cmark_parser_free(parser);
+
     cmark_node_free(document_root);
+#else
+    cmark_arena_reset();
+#endif
+    cmark_release_plugins();
 
     // propagate styling information down the tree, starting
     // with the default style
