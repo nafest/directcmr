@@ -18,7 +18,10 @@ class leaf_block_element : public element {
             child->add_to_leaf_block(rndr, pstate);
         }
 
-        return pstate.get_posy() + pstate.get_line_height() -
-               get_font(rndr)->get_ascent();
+        // add the line height for the last line only, if at least
+        // one word has been added to the last line
+        return pstate.get_posy() + pstate.get_posy() > 0.f
+                   ? pstate.get_line_height()
+                   : 0.f - get_font(rndr)->get_ascent();
     }
 };

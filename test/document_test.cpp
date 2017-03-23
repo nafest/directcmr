@@ -51,9 +51,21 @@ TEST(document, layouting_of_a_single_heading_is_correct) {
     EXPECT_EQ(fnt->get_line_height(), d.layout(400));
 }
 
+TEST(document, layouting_of_to_large_single_word_is_correct) {
+    fake_renderer frndr;
+    document d = document::fromString("# HelloWorld");
+    d.set_renderer(&frndr);
+    style st;
+    st.set_heading_level(1);
+    auto fnt = frndr.font_for_style(st);
+    // the height of the layout must not span two lines, even
+    // though the 50 pixels are not enough to fit the heading
+    EXPECT_EQ(fnt->get_line_height(), d.layout(50));
+}
+
 TEST(document, list_layouting_is_correct) {
     fake_renderer frndr;
-    frndr.set_float_param("list_margin", 5.f);
+    frndr.set_float_param("list.margin_left", 5.f);
     document d = document::fromString("- Item1\n- Item2");
     d.set_renderer(&frndr);
     auto height = d.layout(400);
@@ -66,7 +78,7 @@ TEST(document, list_layouting_is_correct) {
     EXPECT_STREQ("item", item1->get_type().c_str());
     auto item2 = list->children()[1];
 
-    auto indent = frndr.get_float_param("list_margin");
+    auto indent = frndr.get_float_param("list.margin_left");
 
     EXPECT_EQ(indent, item1->get_position().x());
     EXPECT_EQ(indent, item2->get_position().x());
@@ -74,7 +86,7 @@ TEST(document, list_layouting_is_correct) {
 
 TEST(document, code_layout_is_correct) {
     fake_renderer frndr;
-    frndr.set_float_param("code_margin", 10.f);
+    frndr.set_float_param("code_block.margin_left", 10.f);
     document d = document::fromString("    code;");
     d.set_renderer(&frndr);
     auto height = d.layout(400);
@@ -91,7 +103,7 @@ TEST(document, code_layout_is_correct) {
 
 TEST(document, code_font_is_propagated) {
     fake_renderer frndr;
-    frndr.set_float_param("code_margin", 10.f);
+    frndr.set_float_param("code_block.margin_left", 10.f);
     document d = document::fromString("    code;");
     d.set_renderer(&frndr);
     auto height = d.layout(400);

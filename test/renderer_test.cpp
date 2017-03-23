@@ -5,7 +5,7 @@
 
 TEST(Renderer, RenderSimple) {
     fake_renderer rndr;
-    rndr.set_float_param("list_margin", 5.f);
+    rndr.set_float_param("list.margin_left", 5.f);
     document d = document::fromString("Hello *world*");
     d.set_renderer(&rndr);
     d.layout(100);
@@ -20,7 +20,7 @@ TEST(Renderer, RenderSimple) {
 
 TEST(Renderer, RenderList) {
     fake_renderer rndr;
-    rndr.set_float_param("list_margin", 5.f);
+    rndr.set_float_param("list.margin_left", 5.f);
     document d = document::fromString("- Item1\n- Item2");
     d.set_renderer(&rndr);
     d.layout(100);

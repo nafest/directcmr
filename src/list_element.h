@@ -5,7 +5,7 @@
 class list_element : public element {
   public:
     float layout(renderer *rndr, float width) override {
-        auto margin = rndr->get_float_param("list_margin");
+        auto margin = rndr->get_float_param("list.margin_left");
         float offset = 0.f;
         for (auto child : m_children) {
             child->set_position(vec2(margin, offset));
@@ -19,7 +19,7 @@ class list_element : public element {
             auto child_pos = child->get_position();
             child_pos = child_pos + pos + m_pos;
             vec2 marker_top_left(child_pos.x() -
-                                     rndr->get_float_param("list_margin"),
+                                     rndr->get_float_param("list.margin_left"),
                                  child_pos.y());
             vec2 marker_bottom_right(
                 child_pos.x(),

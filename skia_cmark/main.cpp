@@ -11,10 +11,11 @@ int main(int argc, const char *argv[]) {
     // document d = document::fromString("# Header\n## Level2\nHello **strong**
     // *world*\n- Item1\n- Item2\n\nblub\n    Hello to some code();\n
     // return;", true);
-    document d = document::fromString("# Header\n## Level2\nHello **strong** "
-                                      "*world*\n\n    Hello to some code();\n  "
-                                      "  return;\nback to paragraph",
-                                      true);
+    document d = document::fromString(
+        "# Header\n## Level2\nHello **strong** "
+        "*world*\n\n    Hello to some code();\n  "
+        "  return;\nback to paragraph\n- List Item 1\n- List Item 2",
+        true);
     // document d = document::fromString("    Hello to some code();");
     d.set_renderer(&rndr);
     std::cout << "layout height: " << d.layout(400) << std::endl;
