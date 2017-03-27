@@ -25,6 +25,8 @@ class skia_font : public font {
         m_paint.setAntiAlias(true);
         m_paint.setColor(SK_ColorBLACK);
         m_paint.getFontMetrics(&m_metrics);
+
+        m_xwidth = string_extents("X").x();
     }
 
     vec2 string_extents(const std::string &text) const {
@@ -43,6 +45,10 @@ class skia_font : public font {
         return -m_metrics.fAscent;
     }
 
+    virtual float get_x_width() const noexcept override {
+        return m_xwidth;
+    }
+
     virtual std::string get_family() const noexcept override {
         return m_family;
     }
@@ -51,6 +57,7 @@ class skia_font : public font {
     sk_sp<SkTypeface> m_typeface;
     SkPaint m_paint;
     SkPaint::FontMetrics m_metrics;
+    float m_xwidth;
     std::string m_family;
 };
 

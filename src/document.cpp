@@ -40,9 +40,13 @@ std::vector<element *> transform_children(cmark_node *node, bool be_verbose) {
         case CMARK_NODE_HEADING:
             elem = new heading_element(cmark_node_get_heading_level(child));
             break;
-        case CMARK_NODE_LIST:
-            elem = new list_element();
+        case CMARK_NODE_LIST: {
+            auto type = cmark_node_get_list_type(child) == CMARK_ORDERED_LIST
+                            ? list_element::list_element_type::ordered
+                            : list_element::list_element_type::unordered;
+            elem = new list_element(type);
             break;
+        }
         case CMARK_NODE_ITEM:
             elem = new item_element();
             break;

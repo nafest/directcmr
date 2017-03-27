@@ -18,6 +18,8 @@ class font {
 
     virtual float get_ascent() const noexcept = 0;
 
+    virtual float get_x_width() const noexcept = 0;
+
     virtual std::string get_family() const noexcept = 0;
 };
 

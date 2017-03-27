@@ -11,7 +11,7 @@ renderer::renderer() {
   set_float_param("code_block.margin_top", 5.f);
   set_float_param("code_block.margin_bottom", 5.f);
 
-  set_float_param("list.margin_left", 10.0f);
+  set_float_param("list.margin_left", 15.0f);
 }
 
 font *renderer::font_for_style(const style &st) {
