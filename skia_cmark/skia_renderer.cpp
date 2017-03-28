@@ -27,12 +27,14 @@ class skia_font : public font {
         m_paint.getFontMetrics(&m_metrics);
 
         m_xwidth = string_extents("X").x();
+        m_space_width = string_extents(" ").x();
     }
 
     vec2 string_extents(const std::string &text) const {
         SkRect bounds;
-        m_paint.measureText(text.c_str(), text.length(), &bounds);
-        return vec2(bounds.width(), bounds.height());
+
+        auto vertical_size  = m_paint.measureText(text.c_str(), text.length(), &bounds);
+        return vec2(vertical_size, bounds.height());
     }
 
     SkPaint &paint() { return m_paint; }
@@ -49,6 +51,10 @@ class skia_font : public font {
         return m_xwidth;
     }
 
+    virtual float get_space_width() const noexcept override {
+        return m_space_width;
+    }
+
     virtual std::string get_family() const noexcept override {
         return m_family;
     }
@@ -58,6 +64,7 @@ class skia_font : public font {
     SkPaint m_paint;
     SkPaint::FontMetrics m_metrics;
     float m_xwidth;
+    float m_space_width;
     std::string m_family;
 };
 

@@ -13,7 +13,7 @@ int main(int argc, const char *argv[]) {
     // return;", true);
     document d = document::fromString(
         "# Header\n## Level2\nHello **strong** "
-        "*world*\n\n    Hello to some code();\n  "
+        "*world* `void main() {}`\n\n    Hello to some code(); main() {}\n  "
         "  return;\nback to paragraph\n1. List Item 1\n2. List Item 2",
         true);
     // document d = document::fromString("    Hello to some code();");

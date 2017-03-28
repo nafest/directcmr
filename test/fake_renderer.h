@@ -28,6 +28,13 @@ class fake_font : public font {
         return m_font_params.m_size / 2;
     }
 
+    virtual float get_space_width() const noexcept override {
+        int char_width = 10.f;
+        if (m_font_params.m_family == "Menlo")
+            char_width = 12.f;
+        return char_width;
+    }
+
     virtual std::string get_family() const noexcept override {
         return m_font_params.m_family;
     }
@@ -62,7 +69,10 @@ class fake_renderer : public renderer {
     virtual vec2 string_extents(const font *fnt,
                                 const std::string &string) override {
         const fake_font *ffnt = static_cast<const fake_font *>(fnt);
-        return vec2(string.length() * 10.f, ffnt->m_font_params.m_size);
+        int char_width = 10.f;
+        if (ffnt->m_font_params.m_family == "Menlo")
+            char_width = 12.f;
+        return vec2(string.length() * char_width, ffnt->m_font_params.m_size);
     }
 
     virtual font *create_font(const std::string &family,

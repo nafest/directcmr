@@ -14,8 +14,13 @@ class leaf_block_element : public element {
         // also keep track of the height of the current line
         paragraph_state pstate(width, get_font(rndr)->get_line_height(),
                                get_font(rndr)->get_ascent());
+        // to use the correct space widths, add the spaces around
+        // child elements in this element, e.g. otherwise there would be
+        // a too wide space after an inline code span
+        auto space_extents = get_font(rndr)->get_space_width();
         for (auto child : m_children) {
             child->add_to_leaf_block(rndr, pstate);
+            pstate.add_space(space_extents);
         }
 
         // add the line height for the last line only, if at least

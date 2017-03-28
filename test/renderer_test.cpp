@@ -37,3 +37,25 @@ TEST(Renderer, RenderList) {
     EXPECT_EQ(vec2(0.f, fnt->get_line_height()), mrect2.top_left());
     EXPECT_EQ(vec2(5.f, 2 * fnt->get_line_height()), mrect2.bottom_right());
 }
+
+TEST(Renderer, RenderCodeSpan) {
+    fake_renderer rndr;
+    document d = document::fromString("foo `void main` bar");
+
+    // the font width of normal text is 10px per character, while
+    // it is 12px for code spans.
+    // hence the strings should start at:
+    // 3*10+10 4*12+12 4*12+10
+    // 0 40 100 158
+
+    d.set_renderer(&rndr);
+    d.layout(500);
+    d.render(vec2(0, 0), 500);
+
+    EXPECT_EQ(4, rndr.m_draw_string_calls.size());
+    EXPECT_EQ(0, rndr.m_draw_string_calls[0].m_pos.x());
+    EXPECT_STREQ("foo", rndr.m_draw_string_calls[0].m_text.c_str());
+    EXPECT_EQ(40, rndr.m_draw_string_calls[1].m_pos.x());
+    EXPECT_EQ(100, rndr.m_draw_string_calls[2].m_pos.x());
+    EXPECT_EQ(158, rndr.m_draw_string_calls[3].m_pos.x());
+}

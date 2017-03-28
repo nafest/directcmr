@@ -2,6 +2,7 @@
 #include "cmark.h"
 #include "cmark_extension_api.h"
 #include "code_block_element.h"
+#include "code_element.h"
 #include "document_element.h"
 #include "element.h"
 #include "emph_element.h"
@@ -50,6 +51,13 @@ std::vector<element *> transform_children(cmark_node *node, bool be_verbose) {
         case CMARK_NODE_ITEM:
             elem = new item_element();
             break;
+        case CMARK_NODE_CODE:
+            elem = new code_element();
+            if (cmark_node_get_literal(child)) {
+                elem->children().push_back(
+                    new text_element(cmark_node_get_literal(child)));
+            }
+            break;
         case CMARK_NODE_CODE_BLOCK: {
             elem = new code_block_element();
             std::string literal = cmark_node_get_literal(child);
@@ -65,14 +73,13 @@ std::vector<element *> transform_children(cmark_node *node, bool be_verbose) {
                       << cmark_node_get_type_string(child) << std::endl;
         }
         if (be_verbose) {
-
             std::cout << "add: " << cmark_node_get_type_string(child);
             if (cmark_node_get_literal(child))
                 std::cout << " " << cmark_node_get_literal(child);
             std::cout << std::endl;
         }
         child_elements.push_back(elem);
-        elem->set_children(transform_children(child, be_verbose));
+        elem->append_children(transform_children(child, be_verbose));
         elem->set_type(cmark_node_get_type_string(child));
 
         child = cmark_node_next(child);
@@ -100,7 +107,7 @@ document document::fromString(const std::string &string, bool be_verbose) {
     element *elem = new document_element();
 
     auto child_elements = transform_children(document_root, be_verbose);
-    elem->set_children(child_elements);
+    elem->append_children(child_elements);
 
 #if DEBUG
     cmark_parser_free(parser);

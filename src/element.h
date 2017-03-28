@@ -17,8 +17,8 @@ class element {
             delete child;
     }
 
-    void set_children(const std::vector<element *> &children) {
-        m_children = children;
+    void append_children(const std::vector<element *> &children) {
+        m_children.insert(m_children.end(), children.begin(), children.end());
     }
 
     std::vector<element *> &children() noexcept { return m_children; }

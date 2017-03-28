@@ -30,7 +30,7 @@ class text_element_test : public ::testing::Test {
 
 TEST_F(text_element_test, add_to_leaf_node_is_correct) {
     text.add_to_leaf_block(&frndr, pstate);
-    EXPECT_EQ(190, pstate.get_posx());
+    EXPECT_EQ(180, pstate.get_posx());
     EXPECT_EQ(0, pstate.get_posy());
     EXPECT_EQ(text.get_font(&frndr)->get_line_height(), pstate.get_line_height());
 }
@@ -38,7 +38,7 @@ TEST_F(text_element_test, add_to_leaf_node_is_correct) {
 TEST_F(text_element_test, add_to_leaf_node_is_correct_with_wrap) {
     pstate.set_paragraph_width(100);
     text.add_to_leaf_block(&frndr, pstate);
-    EXPECT_EQ(100, pstate.get_posx());
+    EXPECT_EQ(90, pstate.get_posx());
     EXPECT_EQ(text.get_font(&frndr)->get_line_height(), pstate.get_posy());
     EXPECT_EQ(text.get_font(&frndr)->get_line_height(), pstate.get_line_height());
 }
