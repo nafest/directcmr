@@ -3,6 +3,20 @@
 #include "document.h"
 #include "fake_renderer.h"
 
+TEST(Renderer, string_param_fallback) {
+    fake_renderer rndr;
+    rndr.set_string_param("bar", "42");
+
+    EXPECT_STREQ("42", rndr.get_string_param("foo.bar").c_str());
+}
+
+TEST(Renderer, float_param_fallback) {
+    fake_renderer rndr;
+    rndr.set_float_param("bar", 42.f);
+
+    EXPECT_EQ(42.f, rndr.get_float_param("foo.bar"));
+}
+
 TEST(Renderer, RenderSimple) {
     fake_renderer rndr;
     rndr.set_float_param("list.margin_left", 5.f);

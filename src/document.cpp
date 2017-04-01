@@ -1,8 +1,10 @@
-#include "document.h"
 #include "cmark.h"
 #include "cmark_extension_api.h"
+
+#include "blockquote_element.h"
 #include "code_block_element.h"
 #include "code_element.h"
+#include "document.h"
 #include "document_element.h"
 #include "element.h"
 #include "emph_element.h"
@@ -67,6 +69,13 @@ std::vector<element *> transform_children(cmark_node *node, bool be_verbose) {
             elem->set_literal(literal);
             break;
         }
+        case CMARK_NODE_BLOCK_QUOTE:
+            elem = new blockquote_element();
+            break;
+        case CMARK_NODE_SOFTBREAK:
+            // since we don't output HTML, softbreaks can be ignored
+            elem = nullptr;
+            break;
         default:
             elem = new element();
             std::cout << "unsupported element kind "
@@ -78,9 +87,11 @@ std::vector<element *> transform_children(cmark_node *node, bool be_verbose) {
                 std::cout << " " << cmark_node_get_literal(child);
             std::cout << std::endl;
         }
-        child_elements.push_back(elem);
-        elem->append_children(transform_children(child, be_verbose));
-        elem->set_type(cmark_node_get_type_string(child));
+        if (elem) {
+            child_elements.push_back(elem);
+            elem->append_children(transform_children(child, be_verbose));
+            elem->set_type(cmark_node_get_type_string(child));
+        }
 
         child = cmark_node_next(child);
     }

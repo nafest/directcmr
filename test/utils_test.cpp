@@ -106,3 +106,26 @@ TEST(word_splitter, first_token_with_single_word) {
     EXPECT_EQ(0, start);
     EXPECT_EQ(std::string::npos, end);
 }
+
+TEST(string_to_color, valid_string) {
+    color c = string_to_color("#010203ff");
+    EXPECT_EQ(1, c.r);
+    EXPECT_EQ(2, c.g);
+    EXPECT_EQ(3, c.b);
+    EXPECT_EQ(255, c.a);
+}
+
+TEST(string_to_color, invalid_string) {
+    color c = string_to_color("");
+    EXPECT_EQ(0, c.r);
+    EXPECT_EQ(0, c.g);
+    EXPECT_EQ(0, c.b);
+    EXPECT_EQ(255, c.a);
+}
+TEST(string_to_color, invalid_string2) {
+    color c = string_to_color("invalid_color");
+    EXPECT_EQ(0, c.r);
+    EXPECT_EQ(0, c.g);
+    EXPECT_EQ(0, c.b);
+    EXPECT_EQ(255, c.a);
+}

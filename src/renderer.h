@@ -25,6 +25,12 @@ class font {
     virtual std::string get_family() const noexcept = 0;
 };
 
+struct color {
+    color(float _r, float _g, float _b, float _a)
+        : r(_r), g(_g), b(_b), a(_a) {}
+    float r, g, b, a;
+};
+
 // abstract class for the interface of a renderer
 class renderer {
   public:
@@ -33,8 +39,13 @@ class renderer {
     virtual float get_float_param(const std::string &param_name) const
         noexcept {
         auto elem = m_float_params.find(param_name);
-        if (elem == m_float_params.end())
+        if (elem == m_float_params.end()) {
+            auto dot_pos = param_name.find(".");
+            if (dot_pos != std::string::npos) {
+                return get_float_param(param_name.substr(dot_pos + 1));
+            }
             return 0.f;
+        }
         return elem->second;
     }
 
@@ -46,8 +57,13 @@ class renderer {
     virtual std::string get_string_param(const std::string &param_name) const
         noexcept {
         auto elem = m_string_params.find(param_name);
-        if (elem == m_string_params.end())
+        if (elem == m_string_params.end()) {
+            auto dot_pos = param_name.find(".");
+            if (dot_pos != std::string::npos) {
+                return get_string_param(param_name.substr(dot_pos + 1));
+            }
             return "";
+        }
         return elem->second;
     }
 
@@ -73,9 +89,10 @@ class renderer {
     font *font_for_style(const style &st);
 
     virtual void draw_string(const std::string &text, const vec2 &pos,
-                             font *fnt) = 0;
+                             font *fnt, const color &col) = 0;
 
     virtual void draw_list_marker(const rect &marker_rect) = 0;
+    virtual void draw_rect(const rect &marker_rect) = 0;
 
   private:
     std::map<style, font *> m_cached_fonts;

@@ -35,7 +35,7 @@ class code_block_element : public leaf_block_element {
         current_pos.y() += fnt->get_ascent();
         for (auto &line : line_splitter(m_literal)) {
             std::string ln = line;
-            rndr->draw_string(ln, current_pos, fnt);
+            rndr->draw_string(ln, current_pos, fnt, get_color(rndr));
             current_pos.y() += fnt->get_line_height();
         }
     }

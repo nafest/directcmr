@@ -59,10 +59,11 @@ class list_element : public element {
                 marker_top_left.x() =
                     child_pos.x() -
                     (num_char + 0.5f) * child->get_font(rndr)->get_x_width();
-                std::ostrstream order_stream;
+                std::stringstream order_stream;
                 order_stream << cnt << ".";
                 std::string order = order_stream.str();
-                rndr->draw_string(order, marker_top_left, get_font(rndr));
+                rndr->draw_string(order, marker_top_left, get_font(rndr),
+                                  get_color(rndr));
                 cnt++;
             }
             child->render(rndr, pos + m_pos);

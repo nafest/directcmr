@@ -14,7 +14,7 @@ int main(int argc, const char *argv[]) {
     document d = document::fromString(
         "# Header\n## Level2\nHello **strong** "
         "*world* `void main() {}`\n\n    Hello to some code(); main() {}\n  "
-        "  return;\nback to paragraph\n1. List Item 1\n2. List Item 2",
+        "  return;\nback to paragraph\n1. List Item 1\n2. List Item 2\n\n> This is a\n> Block quote\n\n>     with some code();",
         true);
     // document d = document::fromString("    Hello to some code();");
     d.set_renderer(&rndr);

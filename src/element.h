@@ -45,6 +45,14 @@ class element {
 
     font *get_font(renderer *rndr) { return rndr->font_for_style(m_style); }
 
+    color get_color(renderer *rndr)
+    {
+        if (get_style().get_blockquote())
+            return string_to_color(rndr->get_string_param("blockquote.color"));
+
+        return string_to_color(rndr->get_string_param("color"));
+    }
+
     // layout the element and all its subelements to fit the given width.
     // Returns the height required to render the element
     virtual float layout(renderer *rndr, float width) {

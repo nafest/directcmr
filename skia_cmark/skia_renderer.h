@@ -14,12 +14,14 @@ class skia_renderer : public renderer {
                               const std::string &style, int size) override;
 
     virtual vec2 string_extents(const font *fnt,
-                                   const std::string &string) override;
+                                const std::string &string) override;
 
     virtual void draw_string(const std::string &text, const vec2 &pos,
-                             font *fnt_in) override;
+                             font *fnt_in, const color& col) override;
 
     virtual void draw_list_marker(const rect &marker_rect) override;
+
+    virtual void draw_rect(const rect &marker_rect) override;
 
     void dump_canvas(const std::string &file_name);
 

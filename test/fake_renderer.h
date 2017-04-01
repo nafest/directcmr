@@ -47,12 +47,13 @@ class draw_string_action {
   public:
     draw_string_action() = default;
     draw_string_action(const std::string &text, const vec2 &pos,
-                       const font_params &font)
-        : m_text(text), m_pos(pos), m_font(font) {}
+                       const font_params &font, const color &col)
+        : m_text(text), m_pos(pos), m_font(font), m_color(col) {}
 
     font_params m_font;
     std::string m_text;
     vec2 m_pos;
+    color m_color;
 };
 
 class draw_marker_action {
@@ -83,16 +84,19 @@ class fake_renderer : public renderer {
     }
 
     virtual void draw_string(const std::string &text, const vec2 &pos,
-                             font *fnt_in) override {
+                             font *fnt_in, const color &col) override {
         fake_font *fnt = static_cast<fake_font *>(fnt_in);
         m_draw_string_calls.push_back(
-            draw_string_action(text, pos, fnt->m_font_params));
+            draw_string_action(text, pos, fnt->m_font_params, col));
     }
 
     virtual void draw_list_marker(const rect &marker_rect) override {
         m_draw_marker_calls.push_back(draw_marker_action(marker_rect));
     }
 
+    virtual void draw_rect(const rect &marker_rect) override {
+        m_draw_marker_calls.push_back(draw_marker_action(marker_rect));
+    }
     std::vector<draw_string_action> m_draw_string_calls;
     std::vector<draw_marker_action> m_draw_marker_calls;
 };

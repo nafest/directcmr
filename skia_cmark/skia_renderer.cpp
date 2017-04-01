@@ -5,7 +5,8 @@
 
 class skia_font : public font {
   public:
-    skia_font(const std::string &family, const std::string &style, int size) : m_family(family) {
+    skia_font(const std::string &family, const std::string &style, int size)
+        : m_family(family) {
         sk_sp<SkFontMgr> fmgr = SkFontMgr::RefDefault();
 
         int weight = SkFontStyle::kNormal_Weight;
@@ -33,7 +34,8 @@ class skia_font : public font {
     vec2 string_extents(const std::string &text) const {
         SkRect bounds;
 
-        auto vertical_size  = m_paint.measureText(text.c_str(), text.length(), &bounds);
+        auto vertical_size =
+            m_paint.measureText(text.c_str(), text.length(), &bounds);
         return vec2(vertical_size, bounds.height());
     }
 
@@ -47,9 +49,7 @@ class skia_font : public font {
         return -m_metrics.fAscent;
     }
 
-    virtual float get_x_width() const noexcept override {
-        return m_xwidth;
-    }
+    virtual float get_x_width() const noexcept override { return m_xwidth; }
 
     virtual float get_space_width() const noexcept override {
         return m_space_width;
@@ -91,8 +91,9 @@ vec2 skia_renderer::string_extents(const font *fnt, const std::string &string) {
 }
 
 void skia_renderer::draw_string(const std::string &text, const vec2 &pos,
-                                font *fnt_in) {
+                                font *fnt_in, const color &col) {
     skia_font *fnt = static_cast<skia_font *>(fnt_in);
+    fnt->paint().setColor(SkColorSetARGBMacro(col.a, col.r, col.g, col.b));
     m_canvas->drawText(text.c_str(), text.size(), pos.x(), pos.y(),
                        fnt->paint());
 }
@@ -106,4 +107,14 @@ void skia_renderer::draw_list_marker(const rect &marker_rect) {
     paint.setAntiAlias(true);
     paint.setStyle(SkPaint::kStrokeAndFill_Style);
     m_canvas->drawCircle(cx, cy, radius, paint);
+}
+void skia_renderer::draw_rect(const rect &marker_rect) {
+    SkPaint paint;
+    paint.setColor(SK_ColorBLACK);
+    paint.setAntiAlias(true);
+    paint.setStyle(SkPaint::kStrokeAndFill_Style);
+    SkRect rect = SkRect::MakeLTRB(
+        marker_rect.top_left().x(), marker_rect.top_left().y(),
+        marker_rect.bottom_right().x(), marker_rect.bottom_right().y());
+    m_canvas->drawRect(rect, paint);
 }
