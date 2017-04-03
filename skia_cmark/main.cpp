@@ -5,18 +5,14 @@
 #include <iostream>
 
 int main(int argc, const char *argv[]) {
+    if (argc < 2) {
+        std::cout << "no file given." << std::endl;
+        return 1;
+    }
     skia_renderer rndr;
 
     rndr.set_float_param("list_margin", 10.0);
-    // document d = document::fromString("# Header\n## Level2\nHello **strong**
-    // *world*\n- Item1\n- Item2\n\nblub\n    Hello to some code();\n
-    // return;", true);
-    document d = document::fromString(
-        "# Header\n## Level2\nHello **strong** "
-        "*world* `void main() {}`\n\n    Hello to some code(); main() {}\n  "
-        "  return;\nback to paragraph\n1. List Item 1\n2. List Item 2\n\n> This is a\n> Block quote\n\n>     with some code();",
-        true);
-    // document d = document::fromString("    Hello to some code();");
+    document d = document::from_file(argv[1], true);
     d.set_renderer(&rndr);
     std::cout << "layout height: " << d.layout(400) << std::endl;
     d.render(vec2(0, 0), 400);

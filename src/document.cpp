@@ -18,6 +18,7 @@
 
 #include "../extensions/core-extensions.h"
 
+#include <fstream>
 #include <iostream>
 #include <vector>
 
@@ -98,7 +99,7 @@ std::vector<element *> transform_children(cmark_node *node, bool be_verbose) {
     return child_elements;
 }
 
-document document::fromString(const std::string &string, bool be_verbose) {
+cmark_parser *init_parser() {
     cmark_register_plugin(core_extensions_registration);
     int options = CMARK_OPT_DEFAULT;
 #if DEBUG
@@ -112,14 +113,11 @@ document document::fromString(const std::string &string, bool be_verbose) {
         fprintf(stderr, "Unknown extension table\n");
     }
     cmark_parser_attach_syntax_extension(parser, syntax_extension);
-    cmark_parser_feed(parser, string.c_str(), string.length());
-    auto document_root = cmark_parser_finish(parser);
 
-    element *elem = new document_element();
+    return parser;
+}
 
-    auto child_elements = transform_children(document_root, be_verbose);
-    elem->append_children(child_elements);
-
+void destroy_parser(cmark_parser *parser) {
 #if DEBUG
     cmark_parser_free(parser);
 
@@ -128,6 +126,18 @@ document document::fromString(const std::string &string, bool be_verbose) {
     cmark_arena_reset();
 #endif
     cmark_release_plugins();
+}
+
+document document::from_string(const std::string &string, bool be_verbose) {
+    auto parser = init_parser();
+
+    cmark_parser_feed(parser, string.c_str(), string.length());
+    auto document_root = cmark_parser_finish(parser);
+    element *elem = new document_element();
+    auto child_elements = transform_children(document_root, be_verbose);
+
+    destroy_parser(parser);
+    elem->append_children(child_elements);
 
     // propagate styling information down the tree, starting
     // with the default style
@@ -135,8 +145,32 @@ document document::fromString(const std::string &string, bool be_verbose) {
     return document(elem);
 }
 
-document document::fromFile(const std::string &file_name) {
-    return document::fromString("### Heading *bold* Heading\nHello *world*");
+document document::from_file(const std::string &file_name, bool be_verbose) {
+    std::ifstream in_file(file_name);
+
+    if (!in_file) {
+        std::cout << "Could not open " << file_name << std::endl;
+        return document(nullptr);
+    }
+
+    auto parser = init_parser();
+
+    std::string line;
+    while (std::getline(in_file, line)) {
+        line += '\n';
+        cmark_parser_feed(parser, line.c_str(), line.length());
+    }
+
+    auto document_root = cmark_parser_finish(parser);
+    element *elem = new document_element();
+    auto child_elements = transform_children(document_root, be_verbose);
+    destroy_parser(parser);
+    elem->append_children(child_elements);
+
+    // propagate styling information down the tree, starting
+    // with the default style
+    elem->propagate_style();
+    return document(elem);
 }
 
 int document::layout(int width) {

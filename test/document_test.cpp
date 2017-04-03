@@ -2,13 +2,8 @@
 #include "fake_renderer.h"
 #include "gtest/gtest.h"
 
-TEST(document, create_document) {
-    document d = document::fromFile("foo.md");
-    EXPECT_TRUE(true);
-}
-
 TEST(document, emph_style_is_propagated) {
-    document d = document::fromString("Hello *world*");
+    document d = document::from_string("Hello *world*");
     element *e = d.get_root_element();
     element *paragraph = e->children()[0];
     element *hello = paragraph->children()[0];
@@ -20,7 +15,7 @@ TEST(document, emph_style_is_propagated) {
 }
 
 TEST(document, strong_style_is_propagated) {
-    document d = document::fromString("Hello **world**");
+    document d = document::from_string("Hello **world**");
     element *e = d.get_root_element();
     element *paragraph = e->children()[0];
     element *hello = paragraph->children()[0];
@@ -35,7 +30,7 @@ TEST(document, strong_style_is_propagated) {
 
 TEST(document, layouting_of_a_single_line_is_correct) {
     fake_renderer frndr;
-    document d = document::fromString("Hello World");
+    document d = document::from_string("Hello World");
     d.set_renderer(&frndr);
     EXPECT_EQ(d.get_root_element()->get_font(&frndr)->get_line_height(),
               d.layout(400));
@@ -43,7 +38,7 @@ TEST(document, layouting_of_a_single_line_is_correct) {
 
 TEST(document, layouting_of_a_single_heading_is_correct) {
     fake_renderer frndr;
-    document d = document::fromString("# Hello World");
+    document d = document::from_string("# Hello World");
     d.set_renderer(&frndr);
     style st;
     st.set_heading_level(1);
@@ -53,7 +48,7 @@ TEST(document, layouting_of_a_single_heading_is_correct) {
 
 TEST(document, layouting_of_to_large_single_word_is_correct) {
     fake_renderer frndr;
-    document d = document::fromString("# HelloWorld");
+    document d = document::from_string("# HelloWorld");
     d.set_renderer(&frndr);
     style st;
     st.set_heading_level(1);
@@ -66,7 +61,7 @@ TEST(document, layouting_of_to_large_single_word_is_correct) {
 TEST(document, list_layouting_is_correct) {
     fake_renderer frndr;
     frndr.set_float_param("list.margin_left", 5.f);
-    document d = document::fromString("- Item1\n- Item2");
+    document d = document::from_string("- Item1\n- Item2");
     d.set_renderer(&frndr);
     auto height = d.layout(400);
     EXPECT_EQ(2 * d.get_root_element()->get_font(&frndr)->get_line_height(),
@@ -87,7 +82,7 @@ TEST(document, list_layouting_is_correct) {
 TEST(document, code_layout_is_correct) {
     fake_renderer frndr;
     frndr.set_float_param("code_block.margin_left", 10.f);
-    document d = document::fromString("    code;");
+    document d = document::from_string("    code;");
     d.set_renderer(&frndr);
     auto height = d.layout(400);
     EXPECT_EQ(d.get_root_element()->get_font(&frndr)->get_line_height() +
@@ -104,7 +99,7 @@ TEST(document, code_layout_is_correct) {
 TEST(document, code_font_is_propagated) {
     fake_renderer frndr;
     frndr.set_float_param("code_block.margin_left", 10.f);
-    document d = document::fromString("    code;");
+    document d = document::from_string("    code;");
     d.set_renderer(&frndr);
     auto height = d.layout(400);
     EXPECT_EQ(d.get_root_element()->get_font(&frndr)->get_line_height() +

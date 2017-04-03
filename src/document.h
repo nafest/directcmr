@@ -8,8 +8,8 @@
 // representing the markdown document
 class document {
   public:
-    static document fromFile(const std::string &file_name);
-    static document fromString(const std::string &string, bool be_verbose = false);
+    static document from_file(const std::string &file_name, bool be_verbose = false);
+    static document from_string(const std::string &string, bool be_verbose = false);
 
     void set_renderer(renderer *renderer) { m_renderer = renderer; }
     // layout the common mark document to a canvas with

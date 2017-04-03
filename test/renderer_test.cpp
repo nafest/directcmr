@@ -20,7 +20,7 @@ TEST(Renderer, float_param_fallback) {
 TEST(Renderer, RenderSimple) {
     fake_renderer rndr;
     rndr.set_float_param("list.margin_left", 5.f);
-    document d = document::fromString("Hello *world*");
+    document d = document::from_string("Hello *world*");
     d.set_renderer(&rndr);
     d.layout(100);
     d.render(vec2(0, 0), 100);
@@ -35,7 +35,7 @@ TEST(Renderer, RenderSimple) {
 TEST(Renderer, RenderList) {
     fake_renderer rndr;
     rndr.set_float_param("list.margin_left", 5.f);
-    document d = document::fromString("- Item1\n- Item2");
+    document d = document::from_string("- Item1\n- Item2");
     d.set_renderer(&rndr);
     d.layout(100);
     d.render(vec2(0, 0), 100);
@@ -54,7 +54,7 @@ TEST(Renderer, RenderList) {
 
 TEST(Renderer, RenderCodeSpan) {
     fake_renderer rndr;
-    document d = document::fromString("foo `void main` bar");
+    document d = document::from_string("foo `void main` bar");
 
     // the font width of normal text is 10px per character, while
     // it is 12px for code spans.
