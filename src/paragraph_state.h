@@ -10,14 +10,19 @@ class paragraph_state {
         : m_posx(0), m_posy(top_offset), m_line_height(line_height),
           m_width(paragraph_width) {}
 
-    void advance(vec2 text_extents) noexcept {
-        if (text_extents.x() + m_posx < m_width) {
+    bool advance(vec2 text_extents) noexcept {
+        if (text_extents.x() + m_posx <= m_width ||
+            // don't wrap the first word to the next line if it is wider than
+            // the available paragraph width
+            m_posx == 0.f) {
             // fits in the current line
             m_posx += text_extents.x();
+            return true;
         } else {
             // advance to the next line
             m_posy += m_line_height;
             m_posx = text_extents.x();
+            return false;
         }
     }
 

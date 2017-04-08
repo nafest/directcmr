@@ -118,3 +118,11 @@ void skia_renderer::draw_rect(const rect &marker_rect) {
         marker_rect.bottom_right().x(), marker_rect.bottom_right().y());
     m_canvas->drawRect(rect, paint);
 }
+
+void skia_renderer::draw_line(const vec2 &from, const vec2 &to,
+                              const color &col, float line_width) {
+    SkPaint paint;
+    paint.setColor(SkColorSetARGBMacro(col.a, col.r, col.g, col.b));
+    paint.setStrokeWidth(line_width);
+    m_canvas->drawLine(from.x(), from.y(), to.x(), to.y(), paint);
+}

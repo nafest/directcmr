@@ -28,3 +28,5 @@ target_link_libraries(skia_cmark
     cmark_renderer
     ${SKIA_PATH}${SKIA_OUT}/libskia.a)
 
+add_dependencies(skia_cmark libskia)
+

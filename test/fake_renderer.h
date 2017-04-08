@@ -97,6 +97,9 @@ class fake_renderer : public renderer {
     virtual void draw_rect(const rect &marker_rect) override {
         m_draw_marker_calls.push_back(draw_marker_action(marker_rect));
     }
+
+    void draw_line(const vec2 &from, const vec2 &to,
+                                  const color &col, float line_width) override {}
     std::vector<draw_string_action> m_draw_string_calls;
     std::vector<draw_marker_action> m_draw_marker_calls;
 };

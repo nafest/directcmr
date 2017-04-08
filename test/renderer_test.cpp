@@ -22,7 +22,7 @@ TEST(Renderer, RenderSimple) {
     rndr.set_float_param("list.margin_left", 5.f);
     document d = document::from_string("Hello *world*");
     d.set_renderer(&rndr);
-    d.layout(100);
+    d.layout(200);
     d.render(vec2(0, 0), 100);
 
     EXPECT_EQ(2, rndr.m_draw_string_calls.size());

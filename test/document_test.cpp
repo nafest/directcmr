@@ -2,6 +2,11 @@
 #include "fake_renderer.h"
 #include "gtest/gtest.h"
 
+TEST(document, return_document_for_invalid_file_name) {
+    document d = document::from_file("definitily_not_there");
+    EXPECT_NE(nullptr, d.get_root_element());
+}
+
 TEST(document, emph_style_is_propagated) {
     document d = document::from_string("Hello *world*");
     element *e = d.get_root_element();

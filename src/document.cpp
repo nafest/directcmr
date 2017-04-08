@@ -14,6 +14,7 @@
 #include "paragraph_element.h"
 #include "registry.h"
 #include "strong_element.h"
+#include "table_element.h"
 #include "text_element.h"
 
 #include "../extensions/core-extensions.h"
@@ -77,10 +78,25 @@ std::vector<element *> transform_children(cmark_node *node, bool be_verbose) {
             // since we don't output HTML, softbreaks can be ignored
             elem = nullptr;
             break;
-        default:
-            elem = new element();
-            std::cout << "unsupported element kind "
-                      << cmark_node_get_type_string(child) << std::endl;
+        default: {
+            auto type_string = cmark_node_get_type_string(child);
+            // elements created by cmark extensions such as tables
+            // cannot be identified with a type constant, we
+            // have to use the type string here
+            if (!strcmp(type_string, "table")) {
+                elem = new table_element();
+            } else if (!strcmp(type_string, "table_header")) {
+                elem = new table_header_element();
+            } else if (!strcmp(type_string, "table_row")) {
+                elem = new table_row_element();
+            } else if (!strcmp(type_string, "table_cell")) {
+                elem = new table_cell_element();
+            } else {
+                elem = new element();
+                std::cout << "unsupported element kind "
+                          << cmark_node_get_type_string(child) << std::endl;
+            }
+        }
         }
         if (be_verbose) {
             std::cout << "add: " << cmark_node_get_type_string(child);
@@ -149,8 +165,8 @@ document document::from_file(const std::string &file_name, bool be_verbose) {
     std::ifstream in_file(file_name);
 
     if (!in_file) {
-        std::cout << "Could not open " << file_name << std::endl;
-        return document(nullptr);
+        std::cerr << "Could not open " << file_name << "." << std::endl;
+        return document(new document_element());
     }
 
     auto parser = init_parser();

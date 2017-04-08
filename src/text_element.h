@@ -17,6 +17,26 @@ class text_element : public element {
     text_element(const std::string &literal) : element() {
         m_literal = literal;
     }
+
+    // return the width of the widest word
+    virtual float min_width(renderer *rndr) override {
+        word_splitter splitter(m_literal);
+
+        float min_width = 0.f;
+
+        for (auto word : splitter) {
+            auto extents = rndr->string_extents(get_font(rndr), word);
+            min_width = std::max<float>(min_width, extents.x());
+        }
+
+        return min_width;
+    }
+
+    virtual float preferred_width(renderer *rndr) override {
+        auto extents = rndr->string_extents(get_font(rndr), m_literal);
+        return extents.x();
+    }
+
     virtual void add_to_leaf_block(renderer *rndr,
                                    paragraph_state &pstate) override {
         word_splitter splitter(m_literal);
@@ -28,7 +48,8 @@ class text_element : public element {
         for (auto word : splitter) {
             vec2 top_left{pstate.get_posx(), pstate.get_posy()};
             auto extents = rndr->string_extents(get_font(rndr), word);
-            pstate.advance(extents);
+            if (!pstate.advance(extents))
+                top_left = vec2(0.f, pstate.get_posy());
             pstate.add_space(space_extents);
 
             // Store the individual words with their layouted
@@ -44,6 +65,7 @@ class text_element : public element {
         }
         // undo the last space
         pstate.add_space(-space_extents);
+
         append_children(word_children);
     }
 };

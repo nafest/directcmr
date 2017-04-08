@@ -26,9 +26,9 @@ class font {
 };
 
 struct color {
-    color(float _r, float _g, float _b, float _a)
+    color(unsigned char _r, unsigned char _g, unsigned char _b, unsigned char _a)
         : r(_r), g(_g), b(_b), a(_a) {}
-    float r, g, b, a;
+    unsigned char r, g, b, a;
 };
 
 // abstract class for the interface of a renderer
@@ -93,6 +93,7 @@ class renderer {
 
     virtual void draw_list_marker(const rect &marker_rect) = 0;
     virtual void draw_rect(const rect &marker_rect) = 0;
+    virtual void draw_line(const vec2 &from, const vec2 &to, const color &col, float line_width = 1.f) = 0;
 
   private:
     std::map<style, font *> m_cached_fonts;

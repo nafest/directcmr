@@ -4,6 +4,15 @@
 
 class leaf_block_element : public element {
   public:
+    virtual float preferred_width(renderer *rndr) override {
+        auto space_extents = get_font(rndr)->get_space_width();
+        float preferred_width = 0.f;
+        for (auto child : m_children) {
+            preferred_width += child->preferred_width(rndr) + space_extents;
+        }
+        return preferred_width - space_extents;
+    }
+
     virtual float layout(renderer *rndr, float width) override {
         // a paragraph is a leaf block, i.e. it may not
         // contain other blocks. Only text and inline
@@ -25,8 +34,8 @@ class leaf_block_element : public element {
 
         // add the line height for the last line only, if at least
         // one word has been added to the last line
-        return pstate.get_posy() + pstate.get_posy() > 0.f
-                   ? pstate.get_line_height()
-                   : 0.f - get_font(rndr)->get_ascent();
+        return pstate.get_posy() +
+               (pstate.get_posy() > 0.f ? pstate.get_line_height() : 0.f) -
+               get_font(rndr)->get_ascent();
     }
 };

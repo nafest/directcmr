@@ -1,3 +1,9 @@
+## cmark_renderer - directly render CommonMark
+
+cmark_renderer renders CommonMark documents without intermediate conversion to another markup language like HTML.
+Given a a simple renderer implemenation (an example implementation with Skia is
+included), cmark_renderer directly puts out rendering calls.
+
 ### Basic Approach
 - Propagate font/style to the child nodes
 - layout the document and compute the required height
@@ -13,6 +19,7 @@ and text nodes.
 - it should be possible to provide an external canvas
 - cleanup/split element.h
 - write small (Qt?) Application to show live markdown renderings, or extend skia_cmark to render files
+- get tables working
 - add missing node types
     -  CMARK_NODE_HTML_BLOCK     = CMARK_NODE_TYPE_BLOCK | 0x0006,
     -  CMARK_NODE_CUSTOM_BLOCK   = CMARK_NODE_TYPE_BLOCK | 0x0007,

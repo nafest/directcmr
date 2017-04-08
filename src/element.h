@@ -45,8 +45,7 @@ class element {
 
     font *get_font(renderer *rndr) { return rndr->font_for_style(m_style); }
 
-    color get_color(renderer *rndr)
-    {
+    color get_color(renderer *rndr) {
         if (get_style().get_blockquote())
             return string_to_color(rndr->get_string_param("blockquote.color"));
 
@@ -64,6 +63,28 @@ class element {
         }
 
         return cumul_height;
+    }
+
+    // return the minimum width required to render an element
+    // (in most cases this should be the width of the largest word)
+    virtual float min_width(renderer *rndr) {
+        float min_width = 0;
+        for (auto child : m_children) {
+            min_width = std::max<float>(min_width, child->min_width(rndr));
+        }
+        return min_width;
+    }
+
+    // return the preferred width to render an element
+    // (e.g. the width needed to render everything in a paragraph
+    //  into one line)
+    virtual float preferred_width(renderer *rndr) {
+        float preferred_width = 0;
+        for (auto child : m_children) {
+            preferred_width = std::max<float>(preferred_width, child->preferred_width(rndr));
+        }
+
+        return preferred_width;
     }
 
     virtual void render(renderer *rndr, vec2 pos = {0, 0}) {
