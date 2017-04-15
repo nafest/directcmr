@@ -18,7 +18,7 @@ class table_element : public element {
         // a table_row;
         if (m_children.size() == 0)
             return 0;
-        return m_children[0]->children().size();
+        return static_cast<int>(m_children[0]->children().size());
     }
 
     std::vector<float> min_col_widths(renderer *rndr) const {
@@ -54,8 +54,8 @@ class table_element : public element {
 
         // assign all elements the minimum width and equally
         // distribute the remaining space
-        float remaining =
-            width - std::accumulate(min_widths.begin(), min_widths.end(), 0.0);
+        auto remaining =
+            width - std::accumulate(min_widths.begin(), min_widths.end(), 0.f);
         for (int i = 0; i < num; i++)
             widths[i] = min_widths[i] + remaining / num;
 
@@ -98,7 +98,7 @@ class table_element : public element {
         std::vector<float> column_offsets(num_col + 1);
         m_grid_col.resize(num_col + 1);
         column_offsets[0] = border_width + left_margin;
-        m_grid_col[0] = 0.5 * border_width;
+        m_grid_col[0] = 0.5f * border_width;
         for (int i = 1; i < num_col + 1; i++) {
             column_offsets[i] = border_width + column_offsets[i - 1] +
                                 right_margin + m_column_widths[i - 1] +
@@ -107,7 +107,7 @@ class table_element : public element {
                             right_margin + m_grid_col[i - 1] + left_margin;
         }
 
-        m_grid_row.push_back(0.5 * border_width);
+        m_grid_row.push_back(0.5f * border_width);
         float height = 0.f;
         for (auto row : m_children) {
             float row_height = 0.f;
@@ -118,7 +118,7 @@ class table_element : public element {
                     row_height, col->layout(rndr, m_column_widths[i]));
             }
             height += row_height + top_margin + bottom_margin;
-            m_grid_row.push_back(height + 0.5 * border_width);
+            m_grid_row.push_back(height + 0.5f * border_width);
         }
 
         return height;

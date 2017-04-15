@@ -17,19 +17,19 @@ class font_params {
 
 class fake_font : public font {
     virtual float get_line_height() const noexcept override {
-        return m_font_params.m_size + 2;
+        return m_font_params.m_size + 2.f;
     }
 
     virtual float get_ascent() const noexcept override {
-        return m_font_params.m_size - 2;
+        return m_font_params.m_size - 2.f;
     }
 
     virtual float get_x_width() const noexcept override {
-        return m_font_params.m_size / 2;
+        return m_font_params.m_size / 2.f;
     }
 
     virtual float get_space_width() const noexcept override {
-        int char_width = 10.f;
+        float char_width = 10.f;
         if (m_font_params.m_family == "Menlo")
             char_width = 12.f;
         return char_width;
@@ -70,10 +70,10 @@ class fake_renderer : public renderer {
     virtual vec2 string_extents(const font *fnt,
                                 const std::string &string) override {
         const fake_font *ffnt = static_cast<const fake_font *>(fnt);
-        int char_width = 10.f;
+        float char_width = 10.f;
         if (ffnt->m_font_params.m_family == "Menlo")
             char_width = 12.f;
-        return vec2(string.length() * char_width, ffnt->m_font_params.m_size);
+        return vec2(string.length() * char_width, static_cast<float>(ffnt->m_font_params.m_size));
     }
 
     virtual font *create_font(const std::string &family,

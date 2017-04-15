@@ -20,7 +20,7 @@ class list_element : public element {
         if (m_type == list_element_type::unordered)
             return rndr->get_float_param("list.margin_left");
         else {
-            auto num_char = std::ceil(std::log10(m_children.size()));
+            auto num_char = static_cast<float>(std::ceil(std::log10(m_children.size())));
             return std::max<float>(rndr->get_float_param("list.margin_left"),
                                    get_font(rndr)->get_x_width() *
                                        (num_char + 1.f));
@@ -39,7 +39,7 @@ class list_element : public element {
 
     void render(renderer *rndr, vec2 pos) override {
         int cnt = 1;
-        auto num_char = std::ceil(std::log10(m_children.size()));
+        auto num_char = static_cast<float>(std::ceil(std::log10(m_children.size())));
         for (auto child : m_children) {
             auto child_pos = child->get_position();
             child_pos = child_pos + pos + m_pos;

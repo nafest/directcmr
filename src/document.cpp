@@ -191,7 +191,7 @@ document document::from_file(const std::string &file_name, bool be_verbose) {
 
 int document::layout(int width) {
     m_layout_width = width;
-    return m_root_element->layout(m_renderer, width);
+    return static_cast<int>(std::ceil(m_root_element->layout(m_renderer, static_cast<float>(width))));
 }
 
 void document::render(vec2 origin, int height) {

@@ -3,6 +3,8 @@
 #include "SkStream.h"
 #include "SkTypeface.h"
 
+#include <algorithm>
+
 class skia_font : public font {
   public:
     skia_font(const std::string &family, const std::string &style, int size)

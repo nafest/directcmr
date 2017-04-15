@@ -6,15 +6,15 @@ color string_to_color(const std::string &str) {
         return c;
 
     try {
-        c.r = std::strtoul(str.substr(1, 2).c_str(), nullptr, 16);
-        c.g = std::strtoul(str.substr(3, 2).c_str(), nullptr, 16);
-        c.b = std::strtoul(str.substr(5, 2).c_str(), nullptr, 16);
+        c.r = static_cast<unsigned char>(std::strtoul(str.substr(1, 2).c_str(), nullptr, 16));
+        c.g = static_cast<unsigned char>(std::strtoul(str.substr(3, 2).c_str(), nullptr, 16));
+        c.b = static_cast<unsigned char>(std::strtoul(str.substr(5, 2).c_str(), nullptr, 16));
     } catch (...) {
         return color(0, 0, 0, 255);
     }
 
     try {
-      c.a = std::strtoul(str.substr(7, 2).c_str(), nullptr, 16);
+      c.a = static_cast<unsigned char>(std::strtoul(str.substr(7, 2).c_str(), nullptr, 16));
     } catch (...) {
         c.a = 255;
     }

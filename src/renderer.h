@@ -81,7 +81,7 @@ class renderer {
     virtual int heading_size(int heading_level) {
         int size = default_size();
         for (int i = 6; i >= heading_level; i--)
-            size *= 1.3;
+            size = static_cast<int>(size*1.3f);
 
         return size;
     }

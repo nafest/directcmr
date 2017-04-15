@@ -34,14 +34,28 @@ class style {
 inline bool operator<(const style &lhs, const style &rhs) {
     if (lhs.get_heading_level() < rhs.get_heading_level())
         return true;
+    if (lhs.get_heading_level() > rhs.get_heading_level())
+        return false;
+
     if (!lhs.get_emph() && rhs.get_emph())
         return true;
+    if (lhs.get_emph() && !rhs.get_emph())
+        return false;
+
     if (!lhs.get_strong() && rhs.get_strong())
         return true;
+    if (lhs.get_strong() && !rhs.get_strong())
+        return false;
+
     if (!lhs.get_code() && rhs.get_code())
         return true;
+    if (lhs.get_code() && !rhs.get_code())
+        return false;
+
     if (!lhs.get_blockquote() && rhs.get_blockquote())
         return true;
+    if (lhs.get_blockquote() && !rhs.get_blockquote())
+        return false;
 
     return false;
 }
