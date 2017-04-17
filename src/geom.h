@@ -16,6 +16,13 @@ class vec2 {
         return vec2(m_x + rhs.x(), m_y + rhs.y());
     }
 
+    vec2& operator+=(const vec2 &rhs) {
+        m_x += rhs.x();
+        m_y += rhs.y();
+
+        return *this;
+    }
+
     bool operator==(const vec2 &rhs) const {
         return m_x == rhs.x() && m_y == rhs.y();
     }

@@ -118,21 +118,21 @@ class table_element : public element {
         // render the horizontal lines;
         float width = m_grid_col.back();
         for (auto y : m_grid_row)
-            rndr->draw_line(vec2(0, y) + pos + m_pos,
-                            vec2(width, y) + pos + m_pos, color(0, 0, 0, 255),
+            rndr->draw_line(vec2(0, y) + pos + m_rect.top_left(),
+                            vec2(width, y) + pos + m_rect.top_left(), color(0, 0, 0, 255),
                             border_width);
 
         // render the vertical lines;
         float height = m_grid_row.back();
         for (auto x : m_grid_col)
-            rndr->draw_line(vec2(x, 0) + pos + m_pos,
-                            vec2(x, height) + pos + m_pos, color(0, 0, 0, 255),
+            rndr->draw_line(vec2(x, 0) + pos + m_rect.top_left(),
+                            vec2(x, height) + pos + m_rect.top_left(), color(0, 0, 0, 255),
                             border_width);
 
         for (auto row : m_children) {
             for (int i = 0; i < num_col; i++) {
                 auto cell = row->children()[i];
-                cell->render(rndr, pos + m_pos);
+                cell->render(rndr, pos + m_rect.top_left());
             }
         }
     }

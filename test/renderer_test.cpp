@@ -59,6 +59,8 @@ TEST(Renderer, RenderCodeSpan) {
     fake_renderer rndr;
     rndr.set_float_param("margin_top", 0.f);
     rndr.set_float_param("margin_bottom", 0.f);
+    rndr.set_float_param("code.margin_left", 5.f);
+    rndr.set_float_param("code.margin_right", 6.f);
     document d = document::from_string("foo `void main` bar");
 
     // the font width of normal text is 10px per character, while
@@ -74,9 +76,9 @@ TEST(Renderer, RenderCodeSpan) {
     EXPECT_EQ(4, rndr.m_draw_string_calls.size());
     EXPECT_EQ(0, rndr.m_draw_string_calls[0].m_pos.x());
     EXPECT_STREQ("foo", rndr.m_draw_string_calls[0].m_text.c_str());
-    EXPECT_EQ(40, rndr.m_draw_string_calls[1].m_pos.x());
-    EXPECT_EQ(100, rndr.m_draw_string_calls[2].m_pos.x());
-    EXPECT_EQ(158, rndr.m_draw_string_calls[3].m_pos.x());
+    EXPECT_EQ(45, rndr.m_draw_string_calls[1].m_pos.x());
+    EXPECT_EQ(105, rndr.m_draw_string_calls[2].m_pos.x());
+    EXPECT_EQ(169, rndr.m_draw_string_calls[3].m_pos.x());
 }
 
 TEST(get_margin, nothing_set)

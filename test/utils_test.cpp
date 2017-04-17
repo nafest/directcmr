@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "renderer.h"
 #include "gtest/gtest.h"
 
 TEST(line_splitter, single) {

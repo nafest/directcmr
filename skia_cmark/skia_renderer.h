@@ -17,13 +17,17 @@ class skia_renderer : public renderer {
                                 const std::string &string) override;
 
     virtual void draw_string(const std::string &text, const vec2 &pos,
-                             font *fnt_in, const color& col) override;
+                             font *fnt_in, const color &col) override;
 
     virtual void draw_list_marker(const rect &marker_rect) override;
 
     virtual void draw_rect(const rect &marker_rect) override;
 
-    virtual void draw_line(const vec2 &from, const vec2 &to, const color &col, float line_width = 1.f) override;
+    virtual void draw_rounded_rect(const rect &rectangle, float radius,
+                                   const color &col, bool fill = true) override;
+
+    virtual void draw_line(const vec2 &from, const vec2 &to, const color &col,
+                           float line_width = 1.f) override;
 
     void dump_canvas(const std::string &file_name);
 

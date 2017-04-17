@@ -108,7 +108,8 @@ TEST(document, code_layout_is_correct) {
     auto code = root->children()[0];
     EXPECT_STREQ("code_block", code->get_type().c_str());
 
-    EXPECT_EQ(10.0, code->get_position().x());
+    // the margin is applied when rendering
+    EXPECT_EQ(0.f, code->get_position().x());
 }
 
 TEST(document, code_font_is_propagated) {

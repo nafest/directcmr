@@ -15,6 +15,9 @@ class style {
     void set_code(bool is_code_block) noexcept { m_code = is_code_block; }
     bool get_code() const noexcept { return m_code; }
 
+    void set_inline_code(bool is_inline_code) noexcept { m_inline_code = is_inline_code; }
+    bool get_inline_code() const noexcept { return m_inline_code; }
+
     void set_blockquote(bool is_blockquote) noexcept { m_blockquote = is_blockquote; }
     bool get_blockquote() const noexcept { return m_blockquote; }
 
@@ -28,6 +31,7 @@ class style {
     bool m_emph;
     bool m_strong;
     bool m_code;
+    bool m_inline_code;
     bool m_blockquote;
 };
 
@@ -50,6 +54,11 @@ inline bool operator<(const style &lhs, const style &rhs) {
     if (!lhs.get_code() && rhs.get_code())
         return true;
     if (lhs.get_code() && !rhs.get_code())
+        return false;
+
+    if (!lhs.get_inline_code() && rhs.get_inline_code())
+    return true;
+    if (lhs.get_inline_code() && !rhs.get_inline_code())
         return false;
 
     if (!lhs.get_blockquote() && rhs.get_blockquote())

@@ -1,12 +1,11 @@
 #pragma once
 
-#include "renderer.h"
-
 #include <sstream>
 #include <sstream>
 #include <string>
 #include <vector>
 
+struct color;
 color string_to_color(const std::string &str);
 
 int num_lines(const std::string &text);

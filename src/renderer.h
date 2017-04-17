@@ -2,6 +2,7 @@
 
 #include "geom.h"
 #include "style.h"
+#include "utils.h"
 
 #include <map>
 #include <string>
@@ -29,6 +30,9 @@ struct color {
     color(unsigned char _r, unsigned char _g, unsigned char _b,
           unsigned char _a)
         : r(_r), g(_g), b(_b), a(_a) {}
+    color(const std::string& color_string) {
+        *this = string_to_color(color_string);
+    }
     unsigned char r, g, b, a;
 };
 
@@ -81,7 +85,8 @@ class renderer {
         m_string_params[param_name] = value;
     }
 
-    virtual elem_margin get_margin(const std::string &element_name) const noexcept;
+    virtual elem_margin get_margin(const std::string &element_name) const
+        noexcept;
 
     virtual void prepare_canvas(int width, int height) = 0;
     virtual vec2 string_extents(const font *fnt, const std::string &string) = 0;
@@ -92,7 +97,7 @@ class renderer {
     virtual int heading_size(int heading_level) {
         int size = default_size();
         for (int i = 6; i >= heading_level; i--)
-            size = static_cast<int>(size * 1.3f);
+            size = static_cast<int>(size * 1.1f);
 
         return size;
     }
@@ -104,6 +109,8 @@ class renderer {
 
     virtual void draw_list_marker(const rect &marker_rect) = 0;
     virtual void draw_rect(const rect &marker_rect) = 0;
+    virtual void draw_rounded_rect(const rect &rectangle, float radius,
+                                   const color &col, bool fill = true) = 0;
     virtual void draw_line(const vec2 &from, const vec2 &to, const color &col,
                            float line_width = 1.f) = 0;
 

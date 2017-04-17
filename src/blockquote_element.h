@@ -19,12 +19,12 @@ class blockquote_element : public element {
         vec2 margin(rndr->get_margin("blockquote").left,
                     rndr->get_margin("blockquote").top);
 
-        rect bq_marker(pos + m_pos + vec2(0, 0),
-                       pos + m_pos + vec2(5, m_height));
+        rect bq_marker(pos + m_rect.top_left() + vec2(0, 0),
+                       pos + m_rect.top_left() + vec2(5, m_height));
 
         rndr->draw_rect(bq_marker);
         for (auto child : m_children)
-            child->render(rndr, pos + m_pos + margin);
+            child->render(rndr, pos + m_rect.top_left() + margin);
     }
     virtual void propagate_style(style st) noexcept override {
         st.set_blockquote(true);

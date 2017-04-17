@@ -1,4 +1,5 @@
 #include "skia_renderer.h"
+#include "../cmake-build-release/thirdparty/libskia-prefix/src/libskia/include/core/SkPaint.h"
 #include "SkImage.h"
 #include "SkStream.h"
 #include "SkTypeface.h"
@@ -73,6 +74,7 @@ class skia_font : public font {
 void skia_renderer::prepare_canvas(int width, int height) {
     m_surface = SkSurface::MakeRasterN32Premul(width, height);
     m_canvas = m_surface->getCanvas();
+    m_canvas->drawColor(SkColorSetARGBMacro(255, 255, 255, 255));
 }
 
 void skia_renderer::dump_canvas(const std::string &file_name) {
@@ -110,6 +112,7 @@ void skia_renderer::draw_list_marker(const rect &marker_rect) {
     paint.setStyle(SkPaint::kStrokeAndFill_Style);
     m_canvas->drawCircle(cx, cy, radius, paint);
 }
+
 void skia_renderer::draw_rect(const rect &marker_rect) {
     SkPaint paint;
     paint.setColor(SK_ColorBLACK);
@@ -119,6 +122,22 @@ void skia_renderer::draw_rect(const rect &marker_rect) {
         marker_rect.top_left().x(), marker_rect.top_left().y(),
         marker_rect.bottom_right().x(), marker_rect.bottom_right().y());
     m_canvas->drawRect(rect, paint);
+}
+
+void skia_renderer::draw_rounded_rect(const rect &rectangle, float radius,
+                                      const color &col, bool fill) {
+    SkPaint paint;
+    paint.setColor(SkColorSetARGBMacro(col.a, col.r, col.g, col.b));
+    paint.setAntiAlias(true);
+    if (fill)
+        paint.setStyle(SkPaint::kStrokeAndFill_Style);
+    else
+        paint.setStyle(SkPaint::kStroke_Style);
+    paint.setStyle(SkPaint::kStrokeAndFill_Style);
+    SkRect rect = SkRect::MakeLTRB(
+        rectangle.top_left().x(), rectangle.top_left().y(),
+        rectangle.bottom_right().x(), rectangle.bottom_right().y());
+    m_canvas->drawRoundRect(rect, radius, radius, paint);
 }
 
 void skia_renderer::draw_line(const vec2 &from, const vec2 &to,

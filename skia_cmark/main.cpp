@@ -14,7 +14,7 @@ int main(int argc, const char *argv[]) {
     rndr.set_float_param("list_margin", 10.0);
     document d = document::from_file(argv[1], true);
     d.set_renderer(&rndr);
-    std::cout << "layout height: " << d.layout(400) << std::endl;
+    std::cout << "layout height: " << d.layout(600) << std::endl;
     d.render(vec2(0, 0), 400);
     rndr.dump_canvas("dump.png");
     return 0;

@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "renderer.h"
 
 color string_to_color(const std::string &str) {
     color c(0, 0, 0, 255);

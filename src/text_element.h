@@ -6,7 +6,7 @@
 class word_element : public element {
   public:
     virtual void render(renderer *rndr, vec2 pos) override {
-        rndr->draw_string(m_literal, pos + m_pos, get_font(rndr),
+        rndr->draw_string(m_literal, pos + m_rect.top_left(), get_font(rndr),
                           get_color(rndr));
     }
 };

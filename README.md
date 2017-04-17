@@ -12,6 +12,11 @@ included), cmark_renderer directly outputs rendering calls.
 For the first implementation only support header, emph, paragraph,
 and text nodes.
 
+### Handling of positions and margins
+Every element contains its position in the coordinate system of its parent element. This
+position does not contain any margin, which must be taken into account when rendering
+the contents of an element.
+
 ### (incomplete) List of open tasks
 - the document API must be extended, such that the origin can be passed to render()
 - it should be possible to provide an external canvas
@@ -29,3 +34,8 @@ and text nodes.
     -  CMARK_NODE_LINK          = CMARK_NODE_TYPE_INLINE | 0x0009,
 - read styling form a CSS-like file
 - add a background rectangle (with rounded corners) to code blocks
+- add additional line spacing (configurable), such that the rectangle of inline code spans
+  can be increased in height
+- add basic syntax highlighting in code spans
+- handle subsequent text elements correctly (cmark splits cmark_renderer, e.g), the
+  easiest solution seems to be to fuse subsequent text elements

@@ -32,8 +32,10 @@ class paragraph_state {
     float get_posy() const noexcept { return m_posy; }
     float get_line_height() const noexcept { return m_line_height; }
     float get_left_offset() const noexcept { return m_left_offset; }
+    float get_width() const noexcept { return m_width; }
 
     void set_paragraph_width(float width) noexcept { m_width = width; }
+    void set_left_offset(float left_offset) noexcept { m_left_offset = left_offset; }
 
   private:
     float m_posx;

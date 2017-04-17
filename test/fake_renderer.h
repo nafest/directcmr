@@ -73,7 +73,8 @@ class fake_renderer : public renderer {
         float char_width = 10.f;
         if (ffnt->m_font_params.m_family == "Menlo")
             char_width = 12.f;
-        return vec2(string.length() * char_width, static_cast<float>(ffnt->m_font_params.m_size));
+        return vec2(string.length() * char_width,
+                    static_cast<float>(ffnt->m_font_params.m_size));
     }
 
     virtual font *create_font(const std::string &family,
@@ -98,8 +99,13 @@ class fake_renderer : public renderer {
         m_draw_marker_calls.push_back(draw_marker_action(marker_rect));
     }
 
-    void draw_line(const vec2 &from, const vec2 &to,
-                                  const color &col, float line_width) override {}
+    virtual void draw_rounded_rect(const rect &rectangle, float radius,
+                                   const color &col, bool fill) override {
+        m_draw_marker_calls.push_back(draw_marker_action(rectangle));
+    }
+
+    void draw_line(const vec2 &from, const vec2 &to, const color &col,
+                   float line_width) override {}
     std::vector<draw_string_action> m_draw_string_calls;
     std::vector<draw_marker_action> m_draw_marker_calls;
 };

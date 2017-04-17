@@ -1,8 +1,5 @@
-# Header
-## Level2
-### Level3
-#### Level4
-Hello **strong** *world* `void main() {}`
+## Some examples of what cmark_renderer can do
+Hello **strong** *world* `void main()` lorem ipsum dolor sit amet. lorem ipsum dolor sit amet.
 
     Hello to some code(); main() {}
     return;
@@ -12,4 +9,4 @@ back to paragraph
 
 > This is a
 > Block quote
->     with some code();
+>     with `some code();`

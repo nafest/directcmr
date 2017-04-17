@@ -47,8 +47,17 @@ class element {
     font *get_font(renderer *rndr) { return rndr->font_for_style(m_style); }
 
     color get_color(renderer *rndr) {
-        if (get_style().get_blockquote())
+        // the color of inline code spans dominates to support code spans
+        // in blockquote elements
+        if (get_style().get_inline_code()) {
+            return string_to_color(rndr->get_string_param("code.color"));
+        } else if (get_style().get_blockquote())
             return string_to_color(rndr->get_string_param("blockquote.color"));
+        else if (get_style().get_code()) {
+            return string_to_color(rndr->get_string_param("code_block.color"));
+        } else if (get_style().get_inline_code()) {
+            return string_to_color(rndr->get_string_param("code.color"));
+        }
 
         return string_to_color(rndr->get_string_param("color"));
     }
@@ -91,12 +100,12 @@ class element {
 
     virtual void render(renderer *rndr, vec2 pos = {0, 0}) {
         for (auto child : m_children)
-            child->render(rndr, pos + m_pos);
+            child->render(rndr, pos + m_rect.top_left());
     }
     virtual void add_to_leaf_block(renderer *rndr, paragraph_state &pstate) {}
 
-    void set_position(const vec2 &pos) noexcept { m_pos = pos; }
-    vec2 get_position() const noexcept { return m_pos; }
+    void set_position(const vec2 &pos) noexcept { m_rect.top_left() = pos; }
+    vec2 get_position() const noexcept { return m_rect.top_left(); }
 
   protected:
     // an element owns its child elements
@@ -110,6 +119,8 @@ class element {
 
     style m_style;
 
-    // position relative to the origin of the parent
-    vec2 m_pos;
+    // rectangle of the layouted element, margin is already excluded. In terms
+    // of the parent
+    // coordinate system. The bottom right may not be used by all elements.
+    rect m_rect;
 };

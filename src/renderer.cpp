@@ -6,15 +6,26 @@ renderer::renderer() {
     // set some default parameters
     set_string_param("font", "Arial");
     set_string_param("color", "#000000ff");
+    set_string_param("background_color", "#00000000"); // be transparent
 
     // for minimal spacing between elements:
     set_float_param("margin_top", 2.f);
     set_float_param("margin_bottom", 2.f);
 
+    set_string_param("code.font", "Menlo");
+    set_string_param("code.background_color", "#2b2b2bff");
+    set_float_param("code.border_radius", 3.f);
+    set_string_param("code.color", "#a9b7c6ff");
+    set_float_param("code.margin_left", 2.f);
+    set_float_param("code.margin_right", 2.f);
+
     set_string_param("code_block.font", "Menlo");
+    set_string_param("code_block.color", "#a9b7c6ff");
     set_float_param("code_block.margin_left", 10.f);
-    set_float_param("code_block.margin_top", 5.f);
-    set_float_param("code_block.margin_bottom", 5.f);
+    set_float_param("code_block.margin_top", 10.f);
+    set_float_param("code_block.margin_bottom", 10.f);
+    set_string_param("code_block.background_color", "#2b2b2bff");
+    set_float_param("code_block.border_radius", 3.f);
 
     set_float_param("list.margin_left", 15.0f);
 
@@ -44,6 +55,8 @@ font *renderer::font_for_style(const style &st) {
     std::string family_str;
     if (st.get_code())
         family_str = get_string_param("code_block.font");
+    else if (st.get_inline_code())
+        family_str = get_string_param("code.font");
     else
         family_str = default_family();
 
