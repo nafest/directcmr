@@ -7,7 +7,7 @@ included), cmark_renderer directly puts out rendering calls.
 ### Basic Approach
 - Propagate font/style to the child nodes
 - layout the document and compute the required height
-- render the doument
+- render the document
 
 For the first implementation only support header, emph, paragraph,
 and text nodes.
@@ -19,7 +19,8 @@ and text nodes.
 - it should be possible to provide an external canvas
 - cleanup/split element.h
 - write small (Qt?) Application to show live markdown renderings, or extend skia_cmark to render files
-- get tables working
+- cleanup table_element.h, especially `layout()` and `render()` are way too long
+- assign table columns at most their preferred width
 - add missing node types
     -  CMARK_NODE_HTML_BLOCK     = CMARK_NODE_TYPE_BLOCK | 0x0006,
     -  CMARK_NODE_CUSTOM_BLOCK   = CMARK_NODE_TYPE_BLOCK | 0x0007,

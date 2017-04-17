@@ -26,9 +26,16 @@ class font {
 };
 
 struct color {
-    color(unsigned char _r, unsigned char _g, unsigned char _b, unsigned char _a)
+    color(unsigned char _r, unsigned char _g, unsigned char _b,
+          unsigned char _a)
         : r(_r), g(_g), b(_b), a(_a) {}
     unsigned char r, g, b, a;
+};
+
+struct elem_margin {
+    elem_margin(float _left, float _top, float _right, float _bottom)
+        : top(_top), left(_left), right(_right), bottom(_bottom) {}
+    float top, left, bottom, right;
 };
 
 // abstract class for the interface of a renderer
@@ -72,6 +79,8 @@ class renderer {
         m_string_params[param_name] = value;
     }
 
+    virtual elem_margin get_margin(const std::string &element_name) const noexcept;
+
     virtual void prepare_canvas(int width, int height) = 0;
     virtual vec2 string_extents(const font *fnt, const std::string &string) = 0;
     virtual font *create_font(const std::string &family,
@@ -81,7 +90,7 @@ class renderer {
     virtual int heading_size(int heading_level) {
         int size = default_size();
         for (int i = 6; i >= heading_level; i--)
-            size = static_cast<int>(size*1.3f);
+            size = static_cast<int>(size * 1.3f);
 
         return size;
     }
@@ -93,9 +102,13 @@ class renderer {
 
     virtual void draw_list_marker(const rect &marker_rect) = 0;
     virtual void draw_rect(const rect &marker_rect) = 0;
-    virtual void draw_line(const vec2 &from, const vec2 &to, const color &col, float line_width = 1.f) = 0;
+    virtual void draw_line(const vec2 &from, const vec2 &to, const color &col,
+                           float line_width = 1.f) = 0;
 
   private:
+    float get_side_margin(const std::string &element_name,
+                          const std::string side) const noexcept;
+
     std::map<style, font *> m_cached_fonts;
     std::map<std::string, float> m_float_params;
     std::map<std::string, std::string> m_string_params;

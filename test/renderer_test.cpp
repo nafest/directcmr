@@ -73,3 +73,47 @@ TEST(Renderer, RenderCodeSpan) {
     EXPECT_EQ(100, rndr.m_draw_string_calls[2].m_pos.x());
     EXPECT_EQ(158, rndr.m_draw_string_calls[3].m_pos.x());
 }
+
+TEST(get_margin, nothing_set)
+{
+    fake_renderer  rndr;
+    EXPECT_EQ(0.f, rndr.get_margin("foo_elem").left);
+}
+
+TEST(get_margin, specific_set)
+{
+    fake_renderer  rndr;
+    rndr.set_float_param("margin", 45.f);
+    rndr.set_float_param("margin_left", 44.f);
+    rndr.set_float_param("foo_elem.margin", 43.f);
+    rndr.set_float_param("foo_elem.margin_left", 42.f);
+
+    EXPECT_EQ(42.f, rndr.get_margin("foo_elem").left);
+}
+
+TEST(get_margin, specific_elem_set)
+{
+    fake_renderer  rndr;
+    rndr.set_float_param("margin", 45.f);
+    rndr.set_float_param("margin_left", 44.f);
+    rndr.set_float_param("foo_elem.margin", 43.f);
+
+    EXPECT_EQ(43.f, rndr.get_margin("foo_elem").left);
+}
+
+TEST(get_margin, specific_general_set)
+{
+    fake_renderer  rndr;
+    rndr.set_float_param("margin", 45.f);
+    rndr.set_float_param("margin_left", 44.f);
+
+    EXPECT_EQ(44.f, rndr.get_margin("foo_elem").left);
+}
+
+TEST(get_margin, general_set)
+{
+    fake_renderer  rndr;
+    rndr.set_float_param("margin", 45.f);
+
+    EXPECT_EQ(45.f, rndr.get_margin("foo_elem").left);
+}

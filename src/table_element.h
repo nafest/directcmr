@@ -63,65 +63,56 @@ class table_element : public element {
     }
 
     virtual float layout(renderer *rndr, float width) {
-        auto num_col = num_column();
-        auto preferred_widths = preferred_col_widths(rndr);
-
-        float top_margin = 2.f;
-        float bottom_margin = 2.f;
-        float left_margin = 2.f;
-        float right_margin = 2.f;
+        // styling options required for layouting the table
+        elem_margin margin = rndr->get_margin("table_cell");
         auto border_width = rndr->get_float_param("table.border_width");
 
+        auto num_col = num_column();
         float spacing_width =
-            num_col * (left_margin + right_margin + border_width) +
+            num_col * (margin.left + margin.right + border_width) +
             border_width;
 
         // estimate the width used to render the table. If the sum of the
         // preferred widths is smaller than width use this value, otherwise
         // use width
+        auto preferred_widths = preferred_col_widths(rndr);
         float preferred_table_width =
             spacing_width + std::accumulate(preferred_widths.begin(),
                                             preferred_widths.end(), 0.f);
+        std::vector<float> column_widths(num_col);
         if (preferred_table_width < width) {
-            m_width = preferred_table_width;
-            m_column_widths = preferred_widths;
+            width = preferred_table_width;
+            column_widths = preferred_widths;
         } else {
-            m_width = width;
-
-            float netto_width = m_width - spacing_width;
-            m_column_widths =
-                distribute_width(netto_width, num_col, min_col_widths(rndr));
+            column_widths = distribute_width(width - spacing_width, num_col,
+                                             min_col_widths(rndr));
         }
 
         // given the column widths it is now possible to layout all rows
         // pre-compute the horizontal offset of all columns;
-        std::vector<float> column_offsets(num_col + 1);
         m_grid_col.resize(num_col + 1);
-        column_offsets[0] = border_width + left_margin;
         m_grid_col[0] = 0.5f * border_width;
-        for (int i = 1; i < num_col + 1; i++) {
-            column_offsets[i] = border_width + column_offsets[i - 1] +
-                                right_margin + m_column_widths[i - 1] +
-                                left_margin;
-            m_grid_col[i] = border_width + m_column_widths[i - 1] +
-                            right_margin + m_grid_col[i - 1] + left_margin;
-        }
+        for (int i = 1; i < num_col + 1; i++)
+            m_grid_col[i] = border_width + column_widths[i - 1] + margin.right +
+                            m_grid_col[i - 1] + margin.left;
 
         m_grid_row.push_back(0.5f * border_width);
-        float height = 0.f;
+        float height = rndr->get_margin("table").top;
         for (auto row : m_children) {
             float row_height = 0.f;
             for (int i = 0; i < num_col; i++) {
                 auto col = row->children()[i];
-                col->set_position(vec2(column_offsets[i], height + top_margin));
+                col->set_position(
+                    vec2(m_grid_col[i] + 0.5f * border_width + margin.left,
+                         height + margin.top));
                 row_height = std::max<float>(
-                    row_height, col->layout(rndr, m_column_widths[i]));
+                    row_height, col->layout(rndr, column_widths[i]));
             }
-            height += row_height + top_margin + bottom_margin;
+            height += row_height + margin.top + margin.bottom;
             m_grid_row.push_back(height + 0.5f * border_width);
         }
 
-        return height;
+        return height + rndr->get_margin("table").bottom;
     }
 
     virtual void render(renderer *rndr, vec2 pos = {0, 0}) {
@@ -151,8 +142,8 @@ class table_element : public element {
     }
 
   private:
-    float m_width; // actual width of the table
-    std::vector<float> m_column_widths;
+    // store the position of the grid in layout() for later use
+    // in render()
     std::vector<float> m_grid_col;
     std::vector<float> m_grid_row;
 };
