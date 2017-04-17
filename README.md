@@ -20,7 +20,6 @@ the contents of an element.
 ### (incomplete) List of open tasks
 - the document API must be extended, such that the origin can be passed to render()
 - it should be possible to provide an external canvas
-- name the output of skia_cmark based on the input file
 - extend GitHubs cmark extensions to get the alignment of the table rows
 - add missing node types
     -  CMARK_NODE_IMAGE         = CMARK_NODE_TYPE_INLINE | 0x000a,
@@ -36,6 +35,6 @@ the contents of an element.
 - add a background rectangle (with rounded corners) to code blocks
 - add additional line spacing (configurable), such that the rectangle of inline code spans
   can be increased in height
-- add basic syntax highlighting in code spans
+- add basic syntax highlighting in code blocks/spans
 - handle subsequent text elements correctly (cmark splits cmark_renderer, e.g), the
   easiest solution seems to be to fuse subsequent text elements
