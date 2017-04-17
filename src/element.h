@@ -5,10 +5,10 @@
 #include "style.h"
 #include "utils.h"
 
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
 
 class element {
   public:
@@ -73,7 +73,7 @@ class element {
         for (auto child : m_children) {
             min_width = std::max<float>(min_width, child->min_width(rndr));
         }
-        return min_width;
+        return min_width + rndr->get_margin(get_type()).vertical_margin();
     }
 
     // return the preferred width to render an element
@@ -82,10 +82,11 @@ class element {
     virtual float preferred_width(renderer *rndr) {
         float preferred_width = 0;
         for (auto child : m_children) {
-            preferred_width = std::max<float>(preferred_width, child->preferred_width(rndr));
+            preferred_width =
+                std::max<float>(preferred_width, child->preferred_width(rndr));
         }
 
-        return preferred_width;
+        return preferred_width + rndr->get_margin(get_type()).vertical_margin();
     }
 
     virtual void render(renderer *rndr, vec2 pos = {0, 0}) {

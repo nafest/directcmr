@@ -49,7 +49,7 @@ class text_element : public element {
             vec2 top_left{pstate.get_posx(), pstate.get_posy()};
             auto extents = rndr->string_extents(get_font(rndr), word);
             if (!pstate.advance(extents))
-                top_left = vec2(0.f, pstate.get_posy());
+                top_left = vec2(pstate.get_left_offset(), pstate.get_posy());
             pstate.add_space(space_extents);
 
             // Store the individual words with their layouted

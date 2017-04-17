@@ -18,6 +18,7 @@ endif()
 add_executable(cmark_renderer_test
     renderer_test.cpp
     document_test.cpp
+    fake_renderer.h
     utils_test.cpp
     element_test.cpp
     table_element_test.cpp)

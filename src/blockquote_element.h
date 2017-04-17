@@ -5,19 +5,19 @@
 class blockquote_element : public element {
   public:
     virtual float layout(renderer *rndr, float width) override {
-        width -= rndr->get_float_param("blockquote.margin_left");
+        auto margin = rndr->get_margin("blockquote");
+        width -= margin.left;
 
         m_height = element::layout(rndr, width);
 
-        m_height += rndr->get_float_param("blockquote.margin_top") +
-                    rndr->get_float_param("blockquote.margin_bottom");
+        m_height += margin.top + margin.bottom;
 
         return m_height;
     }
 
     virtual void render(renderer *rndr, vec2 pos = {0, 0}) override {
-        vec2 margin(rndr->get_float_param("blockquote.margin_left"),
-                    rndr->get_float_param("blockquote.margin_top"));
+        vec2 margin(rndr->get_margin("blockquote").left,
+                    rndr->get_margin("blockquote").top);
 
         rect bq_marker(pos + m_pos + vec2(0, 0),
                        pos + m_pos + vec2(5, m_height));

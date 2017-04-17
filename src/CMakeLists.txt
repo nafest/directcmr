@@ -16,11 +16,25 @@ else()
 endif()
 
 add_library(cmark_renderer STATIC
+    blockquote_element.h
+    code_block_element.h
+    code_element.h
     document.cpp document.h
-    renderer.cpp
+    document_element.h
     element.h
+    emph_element.h
+    geom.h
+    heading_element.h
     item_element.h
+    leaf_block_element.h
     list_element.h
+    paragraph_element.h
+    paragraph_state.h
+    renderer.cpp renderer.h
+    strong_element.h
+    style.h
+    table_element.h
+    text_element.h
     utils.cpp utils.h)
 get_target_property(CMARK_SOURCE libcmark SOURCE_DIR)
 get_target_property(CMARK_LOCATION libcmark BINARY_DIR)

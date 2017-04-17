@@ -64,13 +64,10 @@ class table_element : public element {
 
     virtual float layout(renderer *rndr, float width) {
         // styling options required for layouting the table
-        elem_margin margin = rndr->get_margin("table_cell");
         auto border_width = rndr->get_float_param("table.border_width");
 
         auto num_col = num_column();
-        float spacing_width =
-            num_col * (margin.left + margin.right + border_width) +
-            border_width;
+        float spacing_width = (num_col + 1) * border_width;
 
         // estimate the width used to render the table. If the sum of the
         // preferred widths is smaller than width use this value, otherwise
@@ -93,8 +90,8 @@ class table_element : public element {
         m_grid_col.resize(num_col + 1);
         m_grid_col[0] = 0.5f * border_width;
         for (int i = 1; i < num_col + 1; i++)
-            m_grid_col[i] = border_width + column_widths[i - 1] + margin.right +
-                            m_grid_col[i - 1] + margin.left;
+            m_grid_col[i] =
+                border_width + column_widths[i - 1] + m_grid_col[i - 1];
 
         m_grid_row.push_back(0.5f * border_width);
         float height = rndr->get_margin("table").top;
@@ -103,12 +100,11 @@ class table_element : public element {
             for (int i = 0; i < num_col; i++) {
                 auto col = row->children()[i];
                 col->set_position(
-                    vec2(m_grid_col[i] + 0.5f * border_width + margin.left,
-                         height + margin.top));
+                    vec2(m_grid_col[i] + 0.5f * border_width, height));
                 row_height = std::max<float>(
                     row_height, col->layout(rndr, column_widths[i]));
             }
-            height += row_height + margin.top + margin.bottom;
+            height += row_height;
             m_grid_row.push_back(height + 0.5f * border_width);
         }
 

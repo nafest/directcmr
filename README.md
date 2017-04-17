@@ -17,7 +17,6 @@ and text nodes.
 - it should be possible to provide an external canvas
 - name the output of skia_cmark based on the input file
 - extend GitHubs cmark extensions to get the alignment of the table rows
-- use elem_margin in all elements
 - add missing node types
     -  CMARK_NODE_IMAGE         = CMARK_NODE_TYPE_INLINE | 0x000a,
     -  CMARK_NODE_HTML_BLOCK     = CMARK_NODE_TYPE_BLOCK | 0x0006,
@@ -29,3 +28,4 @@ and text nodes.
     -  CMARK_NODE_CUSTOM_INLINE = CMARK_NODE_TYPE_INLINE | 0x0006,
     -  CMARK_NODE_LINK          = CMARK_NODE_TYPE_INLINE | 0x0009,
 - read styling form a CSS-like file
+- add a background rectangle (with rounded corners) to code blocks

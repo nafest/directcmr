@@ -13,8 +13,9 @@ class code_block_element : public leaf_block_element {
     }
 
     virtual float layout(renderer *rndr, float width) override {
-        m_pos.x() += rndr->get_float_param("code_block.margin_left");
-        m_pos.y() += rndr->get_float_param("code_block.margin_top");
+        auto margin = rndr->get_margin("code_block");
+        m_pos.x() += margin.left;
+        m_pos.y() += margin.top;
 
         // Since code blocks pay respect to line breaks
         // layouting must be implemented different to leaf_block_element
@@ -24,9 +25,7 @@ class code_block_element : public leaf_block_element {
 
         auto line_height = get_font(rndr)->get_line_height();
 
-        return line_height * num_lines(m_literal) +
-               rndr->get_float_param("code_block.margin_top") +
-               rndr->get_float_param("code_block.margin_bottom");
+        return line_height * num_lines(m_literal) + margin.top + margin.bottom;
     }
 
     virtual void render(renderer *rndr, vec2 pos) override {

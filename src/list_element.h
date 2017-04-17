@@ -18,33 +18,35 @@ class list_element : public element {
     // the ordinals, return a sufficient value
     float element_margin(renderer *rndr) {
         if (m_type == list_element_type::unordered)
-            return rndr->get_float_param("list.margin_left");
+            return rndr->get_margin("list").left;
         else {
-            auto num_char = static_cast<float>(std::ceil(std::log10(m_children.size())));
-            return std::max<float>(rndr->get_float_param("list.margin_left"),
+            auto num_char =
+                static_cast<float>(std::ceil(std::log10(m_children.size())));
+            return std::max<float>(rndr->get_margin("list").left,
                                    get_font(rndr)->get_x_width() *
                                        (num_char + 1.f));
         }
     }
 
     float layout(renderer *rndr, float width) override {
-        auto margin = element_margin(rndr);
-        float offset = 0.f;
+        auto margin_left = element_margin(rndr);
+        auto margin = rndr->get_margin("list");
+        float offset = margin.top;
         for (auto child : m_children) {
-            child->set_position(vec2(margin, offset));
-            offset += child->layout(rndr, width - margin);
+            child->set_position(vec2(margin_left, offset));
+            offset += child->layout(rndr, width - margin_left);
         }
-        return offset;
+        return offset + margin.bottom;
     }
 
     void render(renderer *rndr, vec2 pos) override {
         int cnt = 1;
-        auto num_char = static_cast<float>(std::ceil(std::log10(m_children.size())));
+        auto num_char =
+            static_cast<float>(std::ceil(std::log10(m_children.size())));
         for (auto child : m_children) {
             auto child_pos = child->get_position();
             child_pos = child_pos + pos + m_pos;
-            vec2 marker_top_left(child_pos.x() -
-                                     rndr->get_float_param("list.margin_left"),
+            vec2 marker_top_left(child_pos.x() - rndr->get_margin("list").left,
                                  child_pos.y());
             vec2 marker_bottom_right(
                 child_pos.x(),

@@ -35,6 +35,8 @@ TEST(document, strong_style_is_propagated) {
 
 TEST(document, layouting_of_a_single_line_is_correct) {
     fake_renderer frndr;
+    frndr.set_float_param("margin_top", 0.f);
+    frndr.set_float_param("margin_bottom", 0.f);
     document d = document::from_string("Hello World");
     d.set_renderer(&frndr);
     EXPECT_EQ(d.get_root_element()->get_font(&frndr)->get_line_height(),
@@ -43,6 +45,8 @@ TEST(document, layouting_of_a_single_line_is_correct) {
 
 TEST(document, layouting_of_a_single_heading_is_correct) {
     fake_renderer frndr;
+    frndr.set_float_param("margin_top", 0.f);
+    frndr.set_float_param("margin_bottom", 0.f);
     document d = document::from_string("# Hello World");
     d.set_renderer(&frndr);
     style st;
@@ -53,6 +57,8 @@ TEST(document, layouting_of_a_single_heading_is_correct) {
 
 TEST(document, layouting_of_to_large_single_word_is_correct) {
     fake_renderer frndr;
+    frndr.set_float_param("margin_top", 0.f);
+    frndr.set_float_param("margin_bottom", 0.f);
     document d = document::from_string("# HelloWorld");
     d.set_renderer(&frndr);
     style st;
@@ -65,6 +71,8 @@ TEST(document, layouting_of_to_large_single_word_is_correct) {
 
 TEST(document, list_layouting_is_correct) {
     fake_renderer frndr;
+    frndr.set_float_param("margin_top", 0.f);
+    frndr.set_float_param("margin_bottom", 0.f);
     frndr.set_float_param("list.margin_left", 5.f);
     document d = document::from_string("- Item1\n- Item2");
     d.set_renderer(&frndr);
@@ -86,6 +94,8 @@ TEST(document, list_layouting_is_correct) {
 
 TEST(document, code_layout_is_correct) {
     fake_renderer frndr;
+    frndr.set_float_param("margin_top", 0.f);
+    frndr.set_float_param("margin_bottom", 0.f);
     frndr.set_float_param("code_block.margin_left", 10.f);
     document d = document::from_string("    code;");
     d.set_renderer(&frndr);
@@ -103,6 +113,8 @@ TEST(document, code_layout_is_correct) {
 
 TEST(document, code_font_is_propagated) {
     fake_renderer frndr;
+    frndr.set_float_param("margin_top", 0.f);
+    frndr.set_float_param("margin_bottom", 0.f);
     frndr.set_float_param("code_block.margin_left", 10.f);
     document d = document::from_string("    code;");
     d.set_renderer(&frndr);
