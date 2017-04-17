@@ -5,12 +5,14 @@
 class document_element : public element {
   public:
     virtual float layout(renderer *rndr, float width) {
-        float cumul_height = 0;
+        auto margin = rndr->get_margin("document");
+        float cumul_height = margin.top;
         for (auto child : m_children) {
-            child->set_position({0, cumul_height});
-            cumul_height += child->layout(rndr, width);
+            child->set_position({margin.left, cumul_height});
+            cumul_height +=
+                child->layout(rndr, width - margin.horizontal_margin());
         }
 
-        return cumul_height;
+        return cumul_height + margin.top;
     }
 };

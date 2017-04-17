@@ -8,6 +8,8 @@ renderer::renderer() {
     set_string_param("color", "#000000ff");
     set_string_param("background_color", "#00000000"); // be transparent
 
+    set_float_param("document.margin", 2.f);
+
     // for minimal spacing between elements:
     set_float_param("margin_top", 2.f);
     set_float_param("margin_bottom", 2.f);

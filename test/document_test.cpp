@@ -2,6 +2,23 @@
 #include "fake_renderer.h"
 #include "gtest/gtest.h"
 
+class document_test : public ::testing::Test {
+public:
+  document_test() : ::testing::Test() {}
+
+protected:
+  virtual void SetUp() override {
+      // reset some preset stylings to ease testing
+      frndr.set_float_param("margin_top", 0.f);
+      frndr.set_float_param("margin_bottom", 0.f);
+      frndr.set_float_param("document.margin", 0.f);
+  }
+
+  virtual void TearDown() override {}
+
+  fake_renderer frndr;
+};
+
 TEST(document, return_document_for_invalid_file_name) {
     document d = document::from_file("definitily_not_there");
     EXPECT_NE(nullptr, d.get_root_element());
@@ -33,20 +50,14 @@ TEST(document, strong_style_is_propagated) {
     EXPECT_FALSE(world->get_style().get_emph());
 }
 
-TEST(document, layouting_of_a_single_line_is_correct) {
-    fake_renderer frndr;
-    frndr.set_float_param("margin_top", 0.f);
-    frndr.set_float_param("margin_bottom", 0.f);
+TEST_F(document_test, layouting_of_a_single_line_is_correct) {
     document d = document::from_string("Hello World");
     d.set_renderer(&frndr);
     EXPECT_EQ(d.get_root_element()->get_font(&frndr)->get_line_height(),
               d.layout(400));
 }
 
-TEST(document, layouting_of_a_single_heading_is_correct) {
-    fake_renderer frndr;
-    frndr.set_float_param("margin_top", 0.f);
-    frndr.set_float_param("margin_bottom", 0.f);
+TEST_F(document_test, layouting_of_a_single_heading_is_correct) {
     document d = document::from_string("# Hello World");
     d.set_renderer(&frndr);
     style st;
@@ -55,10 +66,7 @@ TEST(document, layouting_of_a_single_heading_is_correct) {
     EXPECT_EQ(fnt->get_line_height(), d.layout(400));
 }
 
-TEST(document, layouting_of_to_large_single_word_is_correct) {
-    fake_renderer frndr;
-    frndr.set_float_param("margin_top", 0.f);
-    frndr.set_float_param("margin_bottom", 0.f);
+TEST_F(document_test, layouting_of_to_large_single_word_is_correct) {
     document d = document::from_string("# HelloWorld");
     d.set_renderer(&frndr);
     style st;
@@ -69,10 +77,7 @@ TEST(document, layouting_of_to_large_single_word_is_correct) {
     EXPECT_EQ(fnt->get_line_height(), d.layout(50));
 }
 
-TEST(document, list_layouting_is_correct) {
-    fake_renderer frndr;
-    frndr.set_float_param("margin_top", 0.f);
-    frndr.set_float_param("margin_bottom", 0.f);
+TEST_F(document_test, list_layouting_is_correct) {
     frndr.set_float_param("list.margin_left", 5.f);
     document d = document::from_string("- Item1\n- Item2");
     d.set_renderer(&frndr);
@@ -92,10 +97,7 @@ TEST(document, list_layouting_is_correct) {
     EXPECT_EQ(indent, item2->get_position().x());
 }
 
-TEST(document, code_layout_is_correct) {
-    fake_renderer frndr;
-    frndr.set_float_param("margin_top", 0.f);
-    frndr.set_float_param("margin_bottom", 0.f);
+TEST_F(document_test, code_layout_is_correct) {
     frndr.set_float_param("code_block.margin_left", 10.f);
     document d = document::from_string("    code;");
     d.set_renderer(&frndr);
@@ -112,10 +114,7 @@ TEST(document, code_layout_is_correct) {
     EXPECT_EQ(0.f, code->get_position().x());
 }
 
-TEST(document, code_font_is_propagated) {
-    fake_renderer frndr;
-    frndr.set_float_param("margin_top", 0.f);
-    frndr.set_float_param("margin_bottom", 0.f);
+TEST_F(document_test, code_font_is_propagated) {
     frndr.set_float_param("code_block.margin_left", 10.f);
     document d = document::from_string("    code;");
     d.set_renderer(&frndr);
