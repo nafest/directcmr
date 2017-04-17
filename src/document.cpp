@@ -26,6 +26,7 @@
 std::vector<element *> transform_children(cmark_node *node, bool be_verbose) {
     std::vector<element *> child_elements;
     auto child = cmark_node_first_child(node);
+    bool softbreak_discarded = false;
     while (child) {
         element *elem;
         switch (cmark_node_get_type(child)) {
@@ -33,8 +34,22 @@ std::vector<element *> transform_children(cmark_node *node, bool be_verbose) {
             elem = new paragraph_element();
             break;
         case CMARK_NODE_TEXT:
-            elem = new text_element();
-            elem->set_literal(cmark_node_get_literal(child));
+            // do not separate subsequent text elements (because cmark returns
+            // multiple text elements if a word contains an underscore, e.g.)
+            if (child_elements.size() > 0 &&
+                child_elements.back()->get_type() == "text" &&
+                !softbreak_discarded) {
+                // if the previously added element was already a text element
+                // fuse this element with the last one
+                auto literal = child_elements.back()->get_literal();
+                child_elements.back()->set_literal(
+                    literal + cmark_node_get_literal(child));
+                elem = nullptr;
+            } else {
+                elem = new text_element();
+                elem->set_literal(cmark_node_get_literal(child));
+            }
+            softbreak_discarded = false;
             break;
         case CMARK_NODE_EMPH:
             elem = new emph_element();
@@ -77,6 +92,7 @@ std::vector<element *> transform_children(cmark_node *node, bool be_verbose) {
         case CMARK_NODE_SOFTBREAK:
             // since we don't output HTML, softbreaks can be ignored
             elem = nullptr;
+            softbreak_discarded = true;
             break;
         default: {
             auto type_string = cmark_node_get_type_string(child);
@@ -191,7 +207,8 @@ document document::from_file(const std::string &file_name, bool be_verbose) {
 
 int document::layout(int width) {
     m_layout_width = width;
-    return static_cast<int>(std::ceil(m_root_element->layout(m_renderer, static_cast<float>(width))));
+    return static_cast<int>(std::ceil(
+        m_root_element->layout(m_renderer, static_cast<float>(width))));
 }
 
 void document::render(vec2 origin, int height) {

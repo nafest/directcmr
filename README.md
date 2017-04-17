@@ -32,7 +32,6 @@ the contents of an element.
     -  CMARK_NODE_CUSTOM_INLINE = CMARK_NODE_TYPE_INLINE | 0x0006,
     -  CMARK_NODE_LINK          = CMARK_NODE_TYPE_INLINE | 0x0009,
 - read styling form a CSS-like file
-- add a background rectangle (with rounded corners) to code blocks
 - add additional line spacing (configurable), such that the rectangle of inline code spans
   can be increased in height
 - add basic syntax highlighting in code blocks/spans
