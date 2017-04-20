@@ -13,12 +13,12 @@ class code_element : public emph_element {
         pstate.set_paragraph_width(pwidth - margin.right);
         auto left_offset = pstate.get_left_offset();
         pstate.set_left_offset(left_offset + margin.left);
-        pstate.advance(vec2(margin.left, 0.f));
+        pstate.advance(vec2(margin.left, 0.f), nullptr);
 
         for (auto child : m_children)
             child->add_to_leaf_block(rndr, pstate);
 
-        pstate.advance(vec2(margin.right, 0.f));
+        pstate.advance(vec2(margin.right, 0.f), nullptr);
         pstate.set_paragraph_width(pwidth);
         pstate.set_left_offset(left_offset);
     }

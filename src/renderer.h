@@ -30,7 +30,7 @@ struct color {
     color(unsigned char _r, unsigned char _g, unsigned char _b,
           unsigned char _a)
         : r(_r), g(_g), b(_b), a(_a) {}
-    color(const std::string& color_string) {
+    color(const std::string &color_string) {
         *this = string_to_color(color_string);
     }
     unsigned char r, g, b, a;
@@ -103,6 +103,10 @@ class renderer {
     }
 
     font *font_for_style(const style &st);
+
+    virtual vec2 get_image_extents(const std::string &src) = 0;
+    virtual void draw_image(const std::string &src, const vec2 &pos, int width,
+                            int height) = 0;
 
     virtual void draw_string(const std::string &text, const vec2 &pos,
                              font *fnt, const color &col) = 0;

@@ -36,7 +36,7 @@ int main(int argc, const char *argv[]) {
         auto layout_time = bench_clock::now() - start_time;
 
         start_time = bench_clock::now();
-        d.render(vec2(0, 0), 400);
+        d.render(vec2(0, 0), 800);
         auto render_time = bench_clock::now() - start_time;
 
         std::cout << "Processed " << file << std::endl;

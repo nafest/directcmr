@@ -5,10 +5,18 @@
 
 class word_element : public element {
   public:
+    word_element(float top_to_base_line)
+        : m_top_to_base_line(top_to_base_line) {}
+
+    virtual float get_top_to_base_line() noexcept override { return m_top_to_base_line; }
+
     virtual void render(renderer *rndr, vec2 pos) override {
         rndr->draw_string(m_literal, pos + m_rect.top_left(), get_font(rndr),
                           get_color(rndr));
     }
+
+  private:
+    float m_top_to_base_line;
 };
 
 class text_element : public element {
@@ -44,18 +52,20 @@ class text_element : public element {
         std::vector<element *> word_children;
 
         auto space_extents = get_font(rndr)->get_space_width();
+        auto font = get_font(rndr);
 
         for (auto word : splitter) {
-            vec2 top_left{pstate.get_posx(), pstate.get_posy()};
-            auto extents = rndr->string_extents(get_font(rndr), word);
-            if (!pstate.advance(extents))
-                top_left = vec2(pstate.get_left_offset(), pstate.get_posy());
-            pstate.add_space(space_extents);
-
             // Store the individual words with their layouted
             // position (top/left), such that these computations
             // must not be redone while rendering
-            element *elem = new word_element();
+            element *elem = new word_element(font->get_ascent());
+
+            vec2 top_left{pstate.get_posx(), pstate.get_posy()};
+            auto extents = rndr->string_extents(font, word);
+            if (!pstate.advance(extents, elem))
+                top_left = vec2(pstate.get_left_offset(), pstate.get_posy());
+            pstate.add_space(space_extents);
+
             elem->set_literal(word);
             elem->set_position(top_left);
             // word elements need to be aware of the style

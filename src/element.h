@@ -102,6 +102,9 @@ class element {
         for (auto child : m_children)
             child->render(rndr, pos + m_rect.top_left());
     }
+
+    virtual float get_top_to_base_line() noexcept { return 0.f; }
+
     virtual void add_to_leaf_block(renderer *rndr, paragraph_state &pstate) {}
 
     void set_position(const vec2 &pos) noexcept { m_rect.top_left() = pos; }

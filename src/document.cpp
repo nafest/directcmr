@@ -9,6 +9,7 @@
 #include "element.h"
 #include "emph_element.h"
 #include "heading_element.h"
+#include "image_element.h"
 #include "item_element.h"
 #include "list_element.h"
 #include "paragraph_element.h"
@@ -88,6 +89,9 @@ std::vector<element *> transform_children(cmark_node *node, bool be_verbose) {
         }
         case CMARK_NODE_BLOCK_QUOTE:
             elem = new blockquote_element();
+            break;
+        case CMARK_NODE_IMAGE:
+            elem = new image_element(cmark_node_get_url(child));
             break;
         case CMARK_NODE_SOFTBREAK:
             // since we don't output HTML, softbreaks can be ignored

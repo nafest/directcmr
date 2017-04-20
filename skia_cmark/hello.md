@@ -7,6 +7,9 @@ back to paragraph
 1. List Item 1
 2. List Item 2
 
+back again
+![inception](chuck.jpg)
+
 > This is a
 > Block quote
 >     with `some code();`

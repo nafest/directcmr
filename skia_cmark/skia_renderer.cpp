@@ -1,6 +1,7 @@
 #include "skia_renderer.h"
 #include "../cmake-build-release/thirdparty/libskia-prefix/src/libskia/include/core/SkPaint.h"
 #include "SkImage.h"
+#include "SkImageDeserializer.h"
 #include "SkStream.h"
 #include "SkTypeface.h"
 
@@ -146,4 +147,25 @@ void skia_renderer::draw_line(const vec2 &from, const vec2 &to,
     paint.setColor(SkColorSetARGBMacro(col.a, col.r, col.g, col.b));
     paint.setStrokeWidth(line_width);
     m_canvas->drawLine(from.x(), from.y(), to.x(), to.y(), paint);
+}
+
+vec2 skia_renderer::get_image_extents(const std::string &src) {
+    auto data = SkData::MakeFromFileName(src.c_str());
+    auto image = SkImage::MakeFromEncoded(data);
+
+    vec2 extents{static_cast<float>(image->width()),
+                 static_cast<float>(image->height())};
+
+    return extents;
+}
+
+void skia_renderer::draw_image(const std::string &src, const vec2 &pos,
+                               int width, int height) {
+    auto data = SkData::MakeFromFileName(src.c_str());
+    auto image = SkImage::MakeFromEncoded(data);
+    SkPaint paint;
+
+    SkRect dst = SkRect::MakeXYWH(pos.x(), pos.y(), width, height);
+
+    m_canvas->drawImageRect(image, dst, &paint);
 }

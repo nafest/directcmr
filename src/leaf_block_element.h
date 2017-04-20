@@ -27,7 +27,9 @@ class leaf_block_element : public element {
         // the block and subsequently add all child elements
         // also keep track of the height of the current line
         paragraph_state pstate(width, get_font(rndr)->get_line_height(),
-                               get_font(rndr)->get_ascent() + margin.top, margin.left);
+                               get_font(rndr)->get_ascent(),
+                               get_font(rndr)->get_ascent() + margin.top,
+                               margin.left);
         // to use the correct space widths, add the spaces around
         // child elements in this element, e.g. otherwise there would be
         // a too wide space after an inline code span
@@ -36,6 +38,8 @@ class leaf_block_element : public element {
             child->add_to_leaf_block(rndr, pstate);
             pstate.add_space(space_extents);
         }
+
+        pstate.set_base_line();
 
         // add the line height for the last line only, if at least
         // one word has been added to the last line

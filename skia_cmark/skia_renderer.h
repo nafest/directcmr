@@ -10,11 +10,16 @@ class skia_renderer : public renderer {
   public:
     virtual void prepare_canvas(int width, int height) override;
 
+    virtual vec2 string_extents(const font *fnt,
+                                const std::string &string) override;
+
     virtual font *create_font(const std::string &family,
                               const std::string &style, int size) override;
 
-    virtual vec2 string_extents(const font *fnt,
-                                const std::string &string) override;
+    virtual vec2 get_image_extents(const std::string &src) override;
+
+    virtual void draw_image(const std::string &src, const vec2 &pos, int width,
+                            int height) override;
 
     virtual void draw_string(const std::string &text, const vec2 &pos,
                              font *fnt_in, const color &col) override;

@@ -106,6 +106,13 @@ class fake_renderer : public renderer {
 
     void draw_line(const vec2 &from, const vec2 &to, const color &col,
                    float line_width) override {}
+
+    virtual vec2 get_image_extents(const std::string &src) override {
+        return vec2(0.f, 0.f);
+    }
+    virtual void draw_image(const std::string &src, const vec2 &pos, int width,
+                            int height) override {}
+
     std::vector<draw_string_action> m_draw_string_calls;
     std::vector<draw_marker_action> m_draw_marker_calls;
 };
