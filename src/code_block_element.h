@@ -25,7 +25,7 @@ class code_block_element : public leaf_block_element {
         m_rect.bottom_right().x() = width;
         m_rect.bottom_right().y() = line_height * num_lines(m_literal) +
                                     m_rect.top_left().y() +
-                                    margin.horizontal_margin();
+                                    margin.vertical_margin();
         return line_height * num_lines(m_literal) + margin.top + margin.bottom;
     }
 
@@ -41,11 +41,10 @@ class code_block_element : public leaf_block_element {
         auto fnt = get_font(rndr);
         auto current_pos = pos + m_rect.top_left();
         current_pos.x() += rndr->get_margin("code_block").left;
-        current_pos.y() +=
-            fnt->get_ascent() + rndr->get_margin("code_block").top;
+        current_pos.y() += rndr->get_margin("code_block").top;
         for (auto &line : line_splitter(m_literal)) {
             std::string ln = line;
-            rndr->draw_string(ln, current_pos, fnt, get_color(rndr));
+            rndr->draw_string(ln, current_pos + vec2(0.f,fnt->get_ascent()), fnt, get_color(rndr));
             current_pos.y() += fnt->get_line_height();
         }
     }

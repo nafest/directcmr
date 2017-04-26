@@ -42,7 +42,6 @@ class code_element : public emph_element {
 
             auto font = words[0]->get_font(rndr);
             vec2 rect_offset = pos;
-            rect_offset.y() -= font->get_ascent();
             rect_offset.x() -= margin.left;
             rect current_rect;
             current_rect.top_left() = words[0]->get_position();

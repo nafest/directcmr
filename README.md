@@ -35,5 +35,3 @@ the contents of an element.
 - add additional line spacing (configurable), such that the rectangle of inline code spans
   can be increased in height
 - add basic syntax highlighting in code blocks/spans
-- handle subsequent text elements correctly (cmark splits cmark_renderer, e.g), the
-  easiest solution seems to be to fuse subsequent text elements

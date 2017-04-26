@@ -27,8 +27,7 @@ class leaf_block_element : public element {
         // the block and subsequently add all child elements
         // also keep track of the height of the current line
         paragraph_state pstate(width, get_font(rndr)->get_line_height(),
-                               get_font(rndr)->get_ascent(),
-                               get_font(rndr)->get_ascent() + margin.top,
+                               get_font(rndr)->get_ascent(), margin.top,
                                margin.left);
         // to use the correct space widths, add the spaces around
         // child elements in this element, e.g. otherwise there would be
@@ -43,8 +42,6 @@ class leaf_block_element : public element {
 
         // add the line height for the last line only, if at least
         // one word has been added to the last line
-        return pstate.get_posy() +
-               (pstate.get_posy() > 0.f ? pstate.get_line_height() : 0.f) -
-               get_font(rndr)->get_ascent() + margin.bottom;
+        return pstate.get_posy() + pstate.get_line_height() + margin.bottom;
     }
 };

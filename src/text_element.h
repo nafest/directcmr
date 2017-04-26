@@ -11,6 +11,7 @@ class word_element : public element {
     virtual float get_top_to_base_line() noexcept override { return m_top_to_base_line; }
 
     virtual void render(renderer *rndr, vec2 pos) override {
+        pos.y() += m_top_to_base_line;
         rndr->draw_string(m_literal, pos + m_rect.top_left(), get_font(rndr),
                           get_color(rndr));
     }

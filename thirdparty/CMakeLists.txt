@@ -4,7 +4,7 @@ add_subdirectory (googletest)
 
 ExternalProject_Add(depot_tools
     GIT_REPOSITORY https://chromium.googlesource.com/chromium/tools/depot_tools.git
-    #UPDATE_DISCONNECTED 1
+    UPDATE_DISCONNECTED 1
     BUILD_COMMAND ""
     CONFIGURE_COMMAND ""
     INSTALL_COMMAND ""
@@ -35,7 +35,7 @@ endif()
 
 ExternalProject_Add(libskia 
     GIT_REPOSITORY https://skia.googlesource.com/skia.git
-    #UPDATE_DISCONNECTED 1
+    UPDATE_DISCONNECTED 1
     GIT_TAG chrome/m58
     DEPENDS depot_tools
     CONFIGURE_COMMAND ""

@@ -66,6 +66,14 @@ class draw_marker_action {
     rect m_marker_rect;
 };
 
+class draw_rect_action {
+  public:
+    draw_rect_action() = default;
+    draw_rect_action(const rect &_rect) : m_rect(_rect) {}
+
+    rect m_rect;
+};
+
 class draw_image_action {
   public:
     draw_image_action() = default;
@@ -115,7 +123,7 @@ class fake_renderer : public renderer {
 
     virtual void draw_rounded_rect(const rect &rectangle, float radius,
                                    const color &col, bool fill) override {
-        m_draw_marker_calls.push_back(draw_marker_action(rectangle));
+        m_draw_rect_calls.push_back(draw_rect_action(rectangle));
     }
 
     void draw_line(const vec2 &from, const vec2 &to, const color &col,
@@ -141,4 +149,5 @@ class fake_renderer : public renderer {
     std::vector<draw_image_action> m_draw_image_calls;
     std::vector<draw_string_action> m_draw_string_calls;
     std::vector<draw_marker_action> m_draw_marker_calls;
+    std::vector<draw_rect_action> m_draw_rect_calls;
 };

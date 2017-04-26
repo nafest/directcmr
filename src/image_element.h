@@ -31,10 +31,6 @@ class image_element : public element {
             m_width = static_cast<int>(image_extents.x());
             m_height = static_cast<int>(image_extents.y());
         }
-        // this is somewhat confusing, word elements store thy vertical offset
-        // of the baseline
-        // TODO: fix this, word element should store the top left corner as well
-        top_left.y() -= pstate.get_ascent();
         set_position(top_left);
     }
 
