@@ -11,7 +11,7 @@ class leaf_block_element : public element {
         for (auto child : m_children) {
             preferred_width += child->preferred_width(rndr) + space_extents;
         }
-        return preferred_width - space_extents + margin.vertical_margin();
+        return preferred_width - space_extents + margin.horizontal_margin();
     }
 
     virtual float layout(renderer *rndr, float width) override {
@@ -21,7 +21,7 @@ class leaf_block_element : public element {
 
         // subtract the margins before layouting
         auto margin = rndr->get_margin(get_type());
-        width -= margin.vertical_margin();
+        width -= margin.horizontal_margin();
 
         // basically we have to start at the top left of
         // the block and subsequently add all child elements

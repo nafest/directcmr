@@ -39,8 +39,8 @@ struct color {
 struct elem_margin {
     elem_margin(float _left, float _top, float _right, float _bottom)
         : top(_top), left(_left), right(_right), bottom(_bottom) {}
-    float vertical_margin() const { return left + right; }
-    float horizontal_margin() const { return top + bottom; }
+    float vertical_margin() const { return top + bottom; }
+    float horizontal_margin() const { return left + right; }
     float top, left, bottom, right;
 };
 

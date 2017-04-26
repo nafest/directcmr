@@ -17,6 +17,13 @@ void paragraph_state::set_base_line() {
         elem->set_position(pos);
     }
 
+    // on default the base line is offset with m_ascent. If
+    // max_dist_to_base_line is larger than m_ascent, correct
+    // for the difference. E.g. this is the case if there is
+    // only a image and no text in a line.
+    if (max_dist_to_base_line - m_ascent > max_correction)
+        max_correction = max_dist_to_base_line - m_ascent;
+
     m_posy += max_correction;
 }
 

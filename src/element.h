@@ -82,7 +82,7 @@ class element {
         for (auto child : m_children) {
             min_width = std::max<float>(min_width, child->min_width(rndr));
         }
-        return min_width + rndr->get_margin(get_type()).vertical_margin();
+        return min_width + rndr->get_margin(get_type()).horizontal_margin();
     }
 
     // return the preferred width to render an element

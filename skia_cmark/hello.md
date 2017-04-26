@@ -9,6 +9,7 @@ back to paragraph
 
 back again
 ![inception](chuck.jpg)
+chuck
 
 > This is a
 > Block quote
