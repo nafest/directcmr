@@ -17,6 +17,7 @@
 #include "strong_element.h"
 #include "table_element.h"
 #include "text_element.h"
+#include "thematic_break_element.h"
 
 #include "../extensions/core-extensions.h"
 
@@ -92,6 +93,9 @@ std::vector<element *> transform_children(cmark_node *node, bool be_verbose) {
             break;
         case CMARK_NODE_IMAGE:
             elem = new image_element(cmark_node_get_url(child));
+            break;
+        case CMARK_NODE_THEMATIC_BREAK:
+            elem = new thematic_break_element();
             break;
         case CMARK_NODE_SOFTBREAK:
             // since we don't output HTML, softbreaks can be ignored

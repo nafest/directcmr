@@ -2,7 +2,7 @@
 #include "fake_renderer.h"
 #include "gtest/gtest.h"
 
-TEST(code_elment, inline_code_element) {
+TEST(code_element, inline_code_element) {
     fake_renderer frndr;
 
     // reset some preset stylings to ease testing

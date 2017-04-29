@@ -78,12 +78,25 @@ class draw_image_action {
   public:
     draw_image_action() = default;
     draw_image_action(const std::string &src, const vec2 &pos, int width,
-                      int height) : m_src(src), m_pos(pos), m_width(width), m_height(height) {}
+                      int height)
+        : m_src(src), m_pos(pos), m_width(width), m_height(height) {}
 
     std::string m_src;
     vec2 m_pos;
     int m_width;
     int m_height;
+};
+
+class draw_line_action {
+  public:
+    draw_line_action() = default;
+    draw_line_action(const vec2 &from, const vec2 &to, const color &col,
+                     float line_width)
+        : m_from(from), m_to(to), m_color(col), m_line_width(line_width) {}
+
+    vec2 m_from, m_to;
+    color m_color;
+    float m_line_width;
 };
 
 class fake_renderer : public renderer {
@@ -127,7 +140,10 @@ class fake_renderer : public renderer {
     }
 
     void draw_line(const vec2 &from, const vec2 &to, const color &col,
-                   float line_width) override {}
+                   float line_width) override {
+        m_draw_line_calls.push_back(
+            draw_line_action(from, to, col, line_width));
+    }
 
     virtual vec2 get_image_extents(const std::string &src) override {
         auto extents = m_image_extents[src];
@@ -136,18 +152,18 @@ class fake_renderer : public renderer {
 
     virtual void draw_image(const std::string &src, const vec2 &pos, int width,
                             int height) override {
-        m_draw_image_calls.push_back(draw_image_action(src, pos, width, height));
+        m_draw_image_calls.push_back(
+            draw_image_action(src, pos, width, height));
     }
 
-
-    void set_image_extents(const std::string &src, int width, int height)
-    {
+    void set_image_extents(const std::string &src, int width, int height) {
         m_image_extents[src] = std::make_pair(width, height);
     }
 
-    std::map<std::string, std::pair<int,int>> m_image_extents;
+    std::map<std::string, std::pair<int, int>> m_image_extents;
     std::vector<draw_image_action> m_draw_image_calls;
     std::vector<draw_string_action> m_draw_string_calls;
     std::vector<draw_marker_action> m_draw_marker_calls;
     std::vector<draw_rect_action> m_draw_rect_calls;
+    std::vector<draw_line_action> m_draw_line_calls;
 };

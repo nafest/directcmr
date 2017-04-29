@@ -35,7 +35,7 @@ add_library(cmark_renderer STATIC
     style.h
     table_element.h
     text_element.h
-    utils.cpp utils.h image_element.h paragraph_state.cpp)
+    utils.cpp utils.h image_element.h paragraph_state.cpp thematic_break_element.h)
 get_target_property(CMARK_SOURCE libcmark SOURCE_DIR)
 get_target_property(CMARK_LOCATION libcmark BINARY_DIR)
 target_link_libraries(cmark_renderer libcmark_static libcmarkextensions_static)
@@ -47,4 +47,3 @@ target_include_directories(cmark_renderer PRIVATE
     ${CMARK_LOCATION}
     ${CMAKE_BINARY_DIR}/thirdparty/cmark/src
     ${CMAKE_BINARY_DIR}/thirdparty/cmark/extensions)
-
