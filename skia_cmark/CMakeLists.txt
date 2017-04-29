@@ -35,3 +35,8 @@ endif()
 target_link_libraries(skia_cmark
     cmark_renderer skia)
 
+if (WITH_COVERAGE)
+    set_property(TARGET skia_cmark
+        PROPERTY LINK_FLAGS "-fprofile-arcs -ftest-coverage")
+endif()
+

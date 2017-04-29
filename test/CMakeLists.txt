@@ -25,3 +25,14 @@ add_executable(cmark_renderer_test
 
 target_link_libraries(cmark_renderer_test gtest_main cmark_renderer libcmark_static libcmarkextensions_static)
 target_include_directories(cmark_renderer_test PRIVATE ${cmark_renderer_SOURCE_DIR}/src)
+
+if (WITH_COVERAGE)
+    # since a lot of code from headers is instanciated in the
+    # test code, set the coverage flags for the test code as well
+    set_property(TARGET cmark_renderer_test
+        PROPERTY COMPILE_FLAGS "-g -O0 -fprofile-arcs -ftest-coverage")
+    set_property(TARGET cmark_renderer_test
+        PROPERTY LINK_FLAGS "-fprofile-arcs -ftest-coverage")
+endif()
+
+add_test(cmark_renderer_test cmark_renderer_test)

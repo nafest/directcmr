@@ -47,3 +47,8 @@ target_include_directories(cmark_renderer PRIVATE
     ${CMARK_LOCATION}
     ${CMAKE_BINARY_DIR}/thirdparty/cmark/src
     ${CMAKE_BINARY_DIR}/thirdparty/cmark/extensions)
+
+if(WITH_COVERAGE)
+    set_property(TARGET cmark_renderer
+        PROPERTY COMPILE_FLAGS "-g -O0 -fprofile-arcs -ftest-coverage")
+endif()
