@@ -1,3 +1,10 @@
+// cmark_renderer - a renderer for CommonMark
+//
+// image_element.h - class for image elements
+//
+// Copyright (c) 2017 Stefan Winkler
+// License: MIT License (for full license see LICENSE)
+
 #pragma once
 
 #include "element.h"

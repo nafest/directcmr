@@ -1,3 +1,11 @@
+// cmark_renderer - a renderer for CommonMark
+//
+// element.h - base class for elements in the CommonMark
+//             document tree
+//
+// Copyright (c) 2017 Stefan Winkler
+// License: MIT License (for full license see LICENSE)
+
 #pragma once
 
 #include "paragraph_state.h"

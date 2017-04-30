@@ -1,3 +1,11 @@
+// cmark_renderer - a renderer for CommonMark
+//
+// document_element.h - root element of a CommonMark
+//                      document tree
+//
+// Copyright (c) 2017 Stefan Winkler
+// License: MIT License (for full license see LICENSE)
+
 #pragma once
 
 #include "element.h"

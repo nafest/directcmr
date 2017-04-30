@@ -1,3 +1,11 @@
+// cmark_renderer - a renderer for CommonMark
+//
+// document.h - central class, that encapsulates the
+//              element tree of a CommonMark document
+//
+// Copyright (c) 2017 Stefan Winkler
+// License: MIT License (for full license see LICENSE)
+
 #include "element.h"
 #include "renderer.h"
 

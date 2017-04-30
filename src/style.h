@@ -1,3 +1,11 @@
+// cmark_renderer - a renderer for CommonMark
+//
+// style.h - class for styling information that is
+//           propagated through the element tree
+//
+// Copyright (c) 2017 Stefan Winkler
+// License: MIT License (for full license see LICENSE)
+
 #pragma once
 
 class style {

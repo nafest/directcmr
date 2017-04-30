@@ -1,3 +1,10 @@
+// cmark_renderer - a renderer for CommonMark
+//
+// code_block_element.h - class for code blocks
+//
+// Copyright (c) 2017 Stefan Winkler
+// License: MIT License (for full license see LICENSE)
+
 #pragma once
 
 #include "leaf_block_element.h"

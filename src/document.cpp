@@ -1,3 +1,10 @@
+// cmark_renderer - a renderer for CommonMark
+//
+// document.cpp - implementation of the document class
+//
+// Copyright (c) 2017 Stefan Winkler
+// License: MIT License (for full license see LICENSE)
+
 #include "cmark.h"
 #include "cmark_extension_api.h"
 

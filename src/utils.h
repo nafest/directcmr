@@ -1,3 +1,10 @@
+// cmark_renderer - a renderer for CommonMark
+//
+// utils.h - general purpose functions
+//
+// Copyright (c) 2017 Stefan Winkler
+// License: MIT License (for full license see LICENSE)
+
 #pragma once
 
 #include <sstream>

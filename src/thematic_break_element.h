@@ -1,3 +1,10 @@
+// cmark_renderer - a renderer for CommonMark
+//
+// thematic_break_element.h - class for thematic breaks
+//
+// Copyright (c) 2017 Stefan Winkler
+// License: MIT License (for full license see LICENSE)
+
 #pragma once
 #include "element.h"
 

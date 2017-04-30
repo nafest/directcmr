@@ -1,3 +1,10 @@
+// cmark_renderer - a renderer for CommonMark
+//
+// code_element.h - class for inline code spans
+//
+// Copyright (c) 2017 Stefan Winkler
+// License: MIT License (for full license see LICENSE)
+
 #pragma once
 
 #include "emph_element.h"

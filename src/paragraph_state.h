@@ -1,3 +1,11 @@
+// cmark_renderer - a renderer for CommonMark
+//
+// paragraph_state.h - current position for subsequently
+//                     layouting elements in a paragraph
+//
+// Copyright (c) 2017 Stefan Winkler
+// License: MIT License (for full license see LICENSE)
+
 #pragma once
 
 #include "renderer.h"

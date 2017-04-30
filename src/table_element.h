@@ -1,3 +1,11 @@
+// cmark_renderer - a renderer for CommonMark
+//
+// table_element.h - contains all classes to cope with
+//                   GitHubs table extension
+//
+// Copyright (c) 2017 Stefan Winkler
+// License: MIT License (for full license see LICENSE)
+
 #pragma once
 
 #include "leaf_block_element.h"

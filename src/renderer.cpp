@@ -1,3 +1,10 @@
+// cmark_renderer - a renderer for CommonMark
+//
+// renderer.cpp - abstract base class for renderer backends
+//
+// Copyright (c) 2017 Stefan Winkler
+// License: MIT License (for full license see LICENSE)
+
 #include "renderer.h"
 
 #include <iostream>

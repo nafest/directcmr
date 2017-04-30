@@ -1,3 +1,11 @@
+// cmark_renderer - a renderer for CommonMark
+//
+// paragraph_state.cpp - current position for subsequently
+//                       layouting elements in a paragraph
+//
+// Copyright (c) 2017 Stefan Winkler
+// License: MIT License (for full license see LICENSE)
+
 #include "paragraph_state.h"
 #include "element.h"
 

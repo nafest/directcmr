@@ -1,3 +1,12 @@
+// cmark_renderer - a renderer for CommonMark
+//
+// leaf_block_element.h - common base clase for all leaf
+//                        block elements (e.g. paragraph
+//                        elements)
+//
+// Copyright (c) 2017 Stefan Winkler
+// License: MIT License (for full license see LICENSE)
+
 #pragma once
 
 #include "element.h"

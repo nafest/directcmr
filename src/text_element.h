@@ -1,3 +1,12 @@
+// cmark_renderer - a renderer for CommonMark
+//
+// text_element.h - class for text nodes. To store layouting
+//                  information for rendering, these nodes
+//                  are split to word nodes.
+//
+// Copyright (c) 2017 Stefan Winkler
+// License: MIT License (for full license see LICENSE)
+
 #pragma once
 
 #include "element.h"
