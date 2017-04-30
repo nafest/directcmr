@@ -104,6 +104,11 @@ std::vector<element *> transform_children(cmark_node *node, bool be_verbose) {
         case CMARK_NODE_THEMATIC_BREAK:
             elem = new thematic_break_element();
             break;
+        case CMARK_NODE_HTML_BLOCK:
+        case CMARK_NODE_HTML_INLINE:
+            // ignore HTML block since cmark_renderer is no
+            // HTML rendering engine
+            break;
         case CMARK_NODE_SOFTBREAK:
             // since we don't output HTML, softbreaks can be ignored
             elem = nullptr;
