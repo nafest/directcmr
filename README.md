@@ -23,13 +23,6 @@ the contents of an element.
 - extend GitHubs cmark extensions to get the alignment of the table rows
 - add missing node types
     -  CMARK_NODE_LINEBREAK     = CMARK_NODE_TYPE_INLINE | 0x0003,
-    -  CMARK_NODE_LINK          = CMARK_NODE_TYPE_INLINE | 0x0009,
-- Links should be possible.
-    - Keep track of where they are renderered
-    - Add a function in the document to receive click elements
-      (the button should be a parameter)
-    - Add a function in renderer that is called when a link is
-      clicked (should also receive the button)
 - read styling form a CSS-like file
 - add additional line spacing (configurable), such that the rectangle of inline code spans
   can be increased in height

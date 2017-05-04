@@ -160,10 +160,20 @@ class fake_renderer : public renderer {
         m_image_extents[src] = std::make_pair(width, height);
     }
 
+    void add_visited_link(const std::string &uri) {
+        m_visited_links.push_back(uri);
+    }
+
+    virtual bool is_visited_uri(const std::string &uri) override {
+        return std::find(m_visited_links.begin(), m_visited_links.end(), uri) !=
+               m_visited_links.end();
+    }
+
     std::map<std::string, std::pair<int, int>> m_image_extents;
     std::vector<draw_image_action> m_draw_image_calls;
     std::vector<draw_string_action> m_draw_string_calls;
     std::vector<draw_marker_action> m_draw_marker_calls;
     std::vector<draw_rect_action> m_draw_rect_calls;
     std::vector<draw_line_action> m_draw_line_calls;
+    std::vector<std::string> m_visited_links;
 };

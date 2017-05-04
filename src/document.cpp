@@ -19,6 +19,7 @@
 #include "image_element.h"
 #include "item_element.h"
 #include "list_element.h"
+#include "link_element.h"
 #include "paragraph_element.h"
 #include "registry.h"
 #include "strong_element.h"
@@ -116,6 +117,9 @@ std::vector<element *> transform_children(cmark_node *node, bool be_verbose) {
             // since we don't output HTML, softbreaks can be ignored
             elem = nullptr;
             softbreak_discarded = true;
+            break;
+        case CMARK_NODE_LINK:
+            elem = new link_element(cmark_node_get_url(child));
             break;
         default: {
             auto type_string = cmark_node_get_type_string(child);

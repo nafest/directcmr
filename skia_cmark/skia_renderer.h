@@ -34,6 +34,8 @@ class skia_renderer : public renderer {
     virtual void draw_line(const vec2 &from, const vec2 &to, const color &col,
                            float line_width = 1.f) override;
 
+    virtual bool is_visited_uri(const std::string& uri) override;
+
     void dump_canvas(const std::string &file_name);
 
   private:

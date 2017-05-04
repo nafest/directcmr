@@ -40,6 +40,9 @@ struct color {
     color(const std::string &color_string) {
         *this = string_to_color(color_string);
     }
+    bool operator==(const color &rhs) const {
+        return r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a;
+    }
     unsigned char r, g, b, a;
 };
 
@@ -124,6 +127,11 @@ class renderer {
                                    const color &col, bool fill = true) = 0;
     virtual void draw_line(const vec2 &from, const vec2 &to, const color &col,
                            float line_width = 1.f) = 0;
+    // return true if the given URI has been visited before
+    //
+    // cmark_renderer uses this to choose between link.color
+    // and link.visited_color
+    virtual bool is_visited_uri(const std::string& uri) = 0;
 
   private:
     float get_side_margin(const std::string &element_name,

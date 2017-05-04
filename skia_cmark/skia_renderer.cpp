@@ -169,3 +169,7 @@ void skia_renderer::draw_image(const std::string &src, const vec2 &pos,
 
     m_canvas->drawImageRect(image, dst, &paint);
 }
+
+bool skia_renderer::is_visited_uri(const std::string& uri) {
+    return false;
+}

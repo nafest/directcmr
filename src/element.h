@@ -65,6 +65,12 @@ class element {
             return string_to_color(rndr->get_string_param("code_block.color"));
         } else if (get_style().get_inline_code()) {
             return string_to_color(rndr->get_string_param("code.color"));
+        } else if (get_style().get_link()) {
+            if (get_style().get_visited())
+                return string_to_color(
+                    rndr->get_string_param("link.visited_color"));
+            else
+                return string_to_color(rndr->get_string_param("link.color"));
         }
 
         return string_to_color(rndr->get_string_param("color"));

@@ -11,7 +11,8 @@
 class style {
   public:
     style()
-        : m_heading_level(0), m_emph(false), m_strong(false), m_code(false), m_blockquote(false) {}
+        : m_heading_level(0), m_emph(false), m_strong(false), m_code(false),
+          m_blockquote(false), m_link(false) {}
     ~style() = default;
 
     void set_emph(bool emph) noexcept { m_emph = emph; }
@@ -23,11 +24,21 @@ class style {
     void set_code(bool is_code_block) noexcept { m_code = is_code_block; }
     bool get_code() const noexcept { return m_code; }
 
-    void set_inline_code(bool is_inline_code) noexcept { m_inline_code = is_inline_code; }
+    void set_inline_code(bool is_inline_code) noexcept {
+        m_inline_code = is_inline_code;
+    }
     bool get_inline_code() const noexcept { return m_inline_code; }
 
-    void set_blockquote(bool is_blockquote) noexcept { m_blockquote = is_blockquote; }
+    void set_blockquote(bool is_blockquote) noexcept {
+        m_blockquote = is_blockquote;
+    }
     bool get_blockquote() const noexcept { return m_blockquote; }
+
+    void set_link(bool is_link) noexcept { m_link = is_link; }
+    bool get_link() const noexcept { return m_link; }
+
+    void set_visited(bool is_visited) noexcept { m_visited = is_visited; }
+    bool get_visited() const noexcept { return m_visited; }
 
     void set_heading_level(int heading_level) noexcept {
         m_heading_level = heading_level;
@@ -41,6 +52,8 @@ class style {
     bool m_code;
     bool m_inline_code;
     bool m_blockquote;
+    bool m_link;
+    bool m_visited;
 };
 
 inline bool operator<(const style &lhs, const style &rhs) {
@@ -65,13 +78,23 @@ inline bool operator<(const style &lhs, const style &rhs) {
         return false;
 
     if (!lhs.get_inline_code() && rhs.get_inline_code())
-    return true;
+        return true;
     if (lhs.get_inline_code() && !rhs.get_inline_code())
         return false;
 
     if (!lhs.get_blockquote() && rhs.get_blockquote())
         return true;
     if (lhs.get_blockquote() && !rhs.get_blockquote())
+        return false;
+
+    if (!lhs.get_link() && rhs.get_link())
+        return true;
+    if (lhs.get_link() && !rhs.get_link())
+        return false;
+
+    if (!lhs.get_visited() && rhs.get_visited())
+        return true;
+    if (lhs.get_visited() && !rhs.get_visited())
         return false;
 
     return false;
