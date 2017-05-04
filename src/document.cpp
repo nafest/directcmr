@@ -20,6 +20,7 @@
 #include "item_element.h"
 #include "list_element.h"
 #include "link_element.h"
+#include "linebreak_element.h"
 #include "paragraph_element.h"
 #include "registry.h"
 #include "strong_element.h"
@@ -112,6 +113,9 @@ std::vector<element *> transform_children(cmark_node *node, bool be_verbose) {
             // Ignore HTML block since cmark_renderer is no
             // HTML rendering engine.
             // Ignore custom nodes/inlines as well.
+            break;
+        case CMARK_NODE_LINEBREAK:
+            elem = new linebreak_element();
             break;
         case CMARK_NODE_SOFTBREAK:
             // since we don't output HTML, softbreaks can be ignored

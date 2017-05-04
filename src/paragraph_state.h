@@ -19,7 +19,8 @@ class paragraph_state {
     paragraph_state(float paragraph_width, float line_height, float ascent,
                     float top_offset = 0.f, float left_offset = 0.f)
         : m_posx(left_offset), m_posy(top_offset), m_line_height(line_height),
-          m_width(paragraph_width), m_left_offset(left_offset), m_ascent(ascent) {}
+          m_width(paragraph_width), m_left_offset(left_offset),
+          m_ascent(ascent) {}
 
     bool advance(vec2 text_extents, element *elem) noexcept {
         if (text_extents.x() + m_posx - m_left_offset <= m_width ||
@@ -46,7 +47,17 @@ class paragraph_state {
         }
     }
 
-    void add_space(float space_width) noexcept { m_posx += space_width; }
+    void line_break() noexcept {
+        set_base_line();
+        m_posy += m_line_height;
+        m_posx = m_left_offset;
+        m_line_elements.clear();
+    }
+
+    void add_space(float space_width) noexcept {
+        if (m_posx > m_left_offset)
+            m_posx += space_width;
+    }
     void set_base_line();
 
     float get_posx() const noexcept { return m_posx; }
@@ -62,7 +73,6 @@ class paragraph_state {
     }
 
   private:
-
     float m_posx;
     float m_posy;
     float m_line_height;
@@ -70,7 +80,8 @@ class paragraph_state {
     float m_left_offset;
     float m_ascent;
 
-    std::vector<element*> m_line_elements;  // keep track of all elements in a line, such
-                                            // that it is possible to adapt the vertical
-                                            // position of the base line
+    std::vector<element *>
+        m_line_elements; // keep track of all elements in a line, such
+                         // that it is possible to adapt the vertical
+                         // position of the base line
 };

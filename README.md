@@ -21,8 +21,7 @@ the contents of an element.
 - the document API must be extended, such that the origin can be passed to render()
 - it should be possible to provide an external canvas
 - extend GitHubs cmark extensions to get the alignment of the table rows
-- add missing node types
-    -  CMARK_NODE_LINEBREAK     = CMARK_NODE_TYPE_INLINE | 0x0003,
+- add support for more of GitHub's extensions
 - read styling form a CSS-like file
 - add additional line spacing (configurable), such that the rectangle of inline code spans
   can be increased in height

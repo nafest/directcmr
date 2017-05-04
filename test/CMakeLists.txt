@@ -21,7 +21,7 @@ add_executable(cmark_renderer_test
     fake_renderer.h
     utils_test.cpp
     element_test.cpp
-    table_element_test.cpp image_element_test.cpp code_element_test.cpp thematic_break_element_test.cpp link_element_test.cpp)
+    table_element_test.cpp image_element_test.cpp code_element_test.cpp thematic_break_element_test.cpp link_element_test.cpp linebreak_element_test.cpp)
 
 target_link_libraries(cmark_renderer_test gtest_main cmark_renderer libcmark_static libcmarkextensions_static)
 target_include_directories(cmark_renderer_test PRIVATE ${cmark_renderer_SOURCE_DIR}/src)
