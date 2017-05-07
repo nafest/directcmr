@@ -12,19 +12,27 @@
 #include <memory>
 #include <string>
 
+namespace cmr {
+
 // the document class encapsulates the tree of nodes
 // representing the markdown document
 class document {
   public:
-    static document from_file(const std::string &file_name, bool be_verbose = false);
-    static document from_string(const std::string &string, bool be_verbose = false);
+    static document from_file(const std::string &file_name,
+                              bool be_verbose = false);
+    static document from_string(const std::string &string,
+                                bool be_verbose = false);
 
     void set_renderer(renderer *renderer) { m_renderer = renderer; }
-    // layout the common mark document to a canvas with
-    // a given maxium width. returns the height required to
+
+    // layout the CommonMark document to a canvas with
+    // a given maximum width. returns the height required to
     // render the document
     int layout(int width);
 
+    // render the document to the canvas at the given origin
+    // and a maximum height. Everything exceeding height is
+    // clipped (as long as the renderer) supports this
     void render(vec2 origin, int height);
 
     element *get_root_element() const noexcept { return m_root_element.get(); }
@@ -33,6 +41,7 @@ class document {
     document(element *element) : m_root_element(element), m_renderer(nullptr){};
     std::unique_ptr<element> m_root_element;
     renderer *m_renderer; // referenced renderer implementation,
-                          // the document does not own the renderer
+    // the document does not own the renderer
     int m_layout_width;
 };
+}

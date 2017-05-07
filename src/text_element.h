@@ -12,6 +12,8 @@
 #include "element.h"
 #include <iostream>
 
+namespace cmr {
+
 class word_element : public element {
   public:
     word_element(float top_to_base_line)
@@ -89,3 +91,4 @@ class text_element : public element {
         append_children(word_children);
     }
 };
+}

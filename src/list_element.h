@@ -13,6 +13,8 @@
 #include <iostream>
 #include <strstream>
 
+namespace cmr {
+
 class list_element : public element {
   public:
     enum class list_element_type { ordered, unordered };
@@ -54,7 +56,8 @@ class list_element : public element {
             auto child_pos = child->get_position();
             child_pos = child_pos + pos + m_rect.top_left();
             vec2 marker_top_left(child_pos.x() - rndr->get_margin("list").left,
-                                 child_pos.y() + rndr->get_margin(child->get_type()).top);
+                                 child_pos.y() +
+                                     rndr->get_margin(child->get_type()).top);
             vec2 marker_bottom_right(
                 child_pos.x(),
                 child_pos.y() + child->get_font(rndr)->get_line_height());
@@ -63,10 +66,12 @@ class list_element : public element {
             if (m_type == list_element_type::unordered)
                 rndr->draw_list_marker(marker_rect);
             else {
-                // in order to render the ordinal correctly, to top margin of the child element has
+                // in order to render the ordinal correctly, to top margin of
+                // the child element has
                 // to be taken into account
-                marker_top_left.y() =
-                    child_pos.y() + child->get_font(rndr)->get_ascent() + rndr->get_margin(child->get_type()).top;
+                marker_top_left.y() = child_pos.y() +
+                                      child->get_font(rndr)->get_ascent() +
+                                      rndr->get_margin(child->get_type()).top;
                 marker_top_left.x() =
                     child_pos.x() -
                     (num_char + 0.5f) * child->get_font(rndr)->get_x_width();
@@ -84,3 +89,4 @@ class list_element : public element {
   private:
     list_element_type m_type;
 };
+}

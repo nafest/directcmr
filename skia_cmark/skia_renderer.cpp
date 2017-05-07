@@ -7,7 +7,7 @@
 
 #include <algorithm>
 
-class skia_font : public font {
+class skia_font : public cmr::font {
   public:
     skia_font(const std::string &family, const std::string &style, int size)
         : m_family(family) {
@@ -35,12 +35,12 @@ class skia_font : public font {
         m_space_width = string_extents(" ").x();
     }
 
-    vec2 string_extents(const std::string &text) const {
+    cmr::vec2 string_extents(const std::string &text) const {
         SkRect bounds;
 
         auto vertical_size =
             m_paint.measureText(text.c_str(), text.length(), &bounds);
-        return vec2(vertical_size, bounds.height());
+        return cmr::vec2(vertical_size, bounds.height());
     }
 
     SkPaint &paint() { return m_paint; }
@@ -85,25 +85,26 @@ void skia_renderer::dump_canvas(const std::string &file_name) {
     out.write(data->bytes(), data->size());
 }
 
-font *skia_renderer::create_font(const std::string &family,
-                                 const std::string &style, int size) {
+cmr::font *skia_renderer::create_font(const std::string &family,
+                                      const std::string &style, int size) {
     return new skia_font(family, style, size);
 }
 
-vec2 skia_renderer::string_extents(const font *fnt, const std::string &string) {
+cmr::vec2 skia_renderer::string_extents(const cmr::font *fnt,
+                                        const std::string &string) {
     const skia_font *sfnt = static_cast<const skia_font *>(fnt);
     return sfnt->string_extents(string);
 }
 
-void skia_renderer::draw_string(const std::string &text, const vec2 &pos,
-                                font *fnt_in, const color &col) {
+void skia_renderer::draw_string(const std::string &text, const cmr::vec2 &pos,
+                                cmr::font *fnt_in, const cmr::color &col) {
     skia_font *fnt = static_cast<skia_font *>(fnt_in);
     fnt->paint().setColor(SkColorSetARGBMacro(col.a, col.r, col.g, col.b));
     m_canvas->drawText(text.c_str(), text.size(), pos.x(), pos.y(),
                        fnt->paint());
 }
 
-void skia_renderer::draw_list_marker(const rect &marker_rect) {
+void skia_renderer::draw_list_marker(const cmr::rect &marker_rect) {
     float cx = marker_rect.top_left().x() + 0.5 * marker_rect.width();
     float cy = marker_rect.top_left().y() + 0.5 * marker_rect.height();
     float radius = 0.2 * std::min(marker_rect.width(), marker_rect.height());
@@ -114,7 +115,7 @@ void skia_renderer::draw_list_marker(const rect &marker_rect) {
     m_canvas->drawCircle(cx, cy, radius, paint);
 }
 
-void skia_renderer::draw_rect(const rect &marker_rect) {
+void skia_renderer::draw_rect(const cmr::rect &marker_rect) {
     SkPaint paint;
     paint.setColor(SK_ColorBLACK);
     paint.setAntiAlias(true);
@@ -125,8 +126,8 @@ void skia_renderer::draw_rect(const rect &marker_rect) {
     m_canvas->drawRect(rect, paint);
 }
 
-void skia_renderer::draw_rounded_rect(const rect &rectangle, float radius,
-                                      const color &col, bool fill) {
+void skia_renderer::draw_rounded_rect(const cmr::rect &rectangle, float radius,
+                                      const cmr::color &col, bool fill) {
     SkPaint paint;
     paint.setColor(SkColorSetARGBMacro(col.a, col.r, col.g, col.b));
     paint.setAntiAlias(true);
@@ -141,25 +142,25 @@ void skia_renderer::draw_rounded_rect(const rect &rectangle, float radius,
     m_canvas->drawRoundRect(rect, radius, radius, paint);
 }
 
-void skia_renderer::draw_line(const vec2 &from, const vec2 &to,
-                              const color &col, float line_width) {
+void skia_renderer::draw_line(const cmr::vec2 &from, const cmr::vec2 &to,
+                              const cmr::color &col, float line_width) {
     SkPaint paint;
     paint.setColor(SkColorSetARGBMacro(col.a, col.r, col.g, col.b));
     paint.setStrokeWidth(line_width);
     m_canvas->drawLine(from.x(), from.y(), to.x(), to.y(), paint);
 }
 
-vec2 skia_renderer::get_image_extents(const std::string &src) {
+cmr::vec2 skia_renderer::get_image_extents(const std::string &src) {
     auto data = SkData::MakeFromFileName(src.c_str());
     auto image = SkImage::MakeFromEncoded(data);
 
-    vec2 extents{static_cast<float>(image->width()),
-                 static_cast<float>(image->height())};
+    cmr::vec2 extents{static_cast<float>(image->width()),
+                      static_cast<float>(image->height())};
 
     return extents;
 }
 
-void skia_renderer::draw_image(const std::string &src, const vec2 &pos,
+void skia_renderer::draw_image(const std::string &src, const cmr::vec2 &pos,
                                int width, int height) {
     auto data = SkData::MakeFromFileName(src.c_str());
     auto image = SkImage::MakeFromEncoded(data);
@@ -170,6 +171,4 @@ void skia_renderer::draw_image(const std::string &src, const vec2 &pos,
     m_canvas->drawImageRect(image, dst, &paint);
 }
 
-bool skia_renderer::is_visited_uri(const std::string& uri) {
-    return false;
-}
+bool skia_renderer::is_visited_uri(const std::string &uri) { return false; }

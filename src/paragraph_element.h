@@ -9,4 +9,7 @@
 
 #include "leaf_block_element.h"
 
+namespace cmr {
+
 class paragraph_element : public leaf_block_element {};
+}

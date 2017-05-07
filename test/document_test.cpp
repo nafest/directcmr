@@ -3,46 +3,46 @@
 #include "gtest/gtest.h"
 
 class document_test : public ::testing::Test {
-public:
-  document_test() : ::testing::Test() {}
+  public:
+    document_test() : ::testing::Test() {}
 
-protected:
-  virtual void SetUp() override {
-      // reset some preset stylings to ease testing
-      frndr.set_float_param("margin_top", 0.f);
-      frndr.set_float_param("margin_bottom", 0.f);
-      frndr.set_float_param("document.margin", 0.f);
-  }
+  protected:
+    virtual void SetUp() override {
+        // reset some preset stylings to ease testing
+        frndr.set_float_param("margin_top", 0.f);
+        frndr.set_float_param("margin_bottom", 0.f);
+        frndr.set_float_param("document.margin", 0.f);
+    }
 
-  virtual void TearDown() override {}
+    virtual void TearDown() override {}
 
-  fake_renderer frndr;
+    fake_renderer frndr;
 };
 
 TEST(document, return_document_for_invalid_file_name) {
-    document d = document::from_file("definitily_not_there");
+    cmr::document d = cmr::document::from_file("definitily_not_there");
     EXPECT_NE(nullptr, d.get_root_element());
 }
 
 TEST(document, emph_style_is_propagated) {
-    document d = document::from_string("Hello *world*");
-    element *e = d.get_root_element();
-    element *paragraph = e->children()[0];
-    element *hello = paragraph->children()[0];
-    element *emph = paragraph->children()[1];
-    element *world = emph->children()[0];
+    auto d = cmr::document::from_string("Hello *world*");
+    auto e = d.get_root_element();
+    auto paragraph = e->children()[0];
+    auto hello = paragraph->children()[0];
+    auto emph = paragraph->children()[1];
+    auto world = emph->children()[0];
 
     EXPECT_FALSE(hello->get_style().get_emph());
     EXPECT_TRUE(world->get_style().get_emph());
 }
 
 TEST(document, strong_style_is_propagated) {
-    document d = document::from_string("Hello **world**");
-    element *e = d.get_root_element();
-    element *paragraph = e->children()[0];
-    element *hello = paragraph->children()[0];
-    element *emph = paragraph->children()[1];
-    element *world = emph->children()[0];
+    auto d = cmr::document::from_string("Hello **world**");
+    auto e = d.get_root_element();
+    auto paragraph = e->children()[0];
+    auto hello = paragraph->children()[0];
+    auto emph = paragraph->children()[1];
+    auto world = emph->children()[0];
 
     EXPECT_FALSE(hello->get_style().get_strong());
     EXPECT_FALSE(hello->get_style().get_emph());
@@ -51,25 +51,25 @@ TEST(document, strong_style_is_propagated) {
 }
 
 TEST_F(document_test, layouting_of_a_single_line_is_correct) {
-    document d = document::from_string("Hello World");
+    auto d = cmr::document::from_string("Hello World");
     d.set_renderer(&frndr);
     EXPECT_EQ(d.get_root_element()->get_font(&frndr)->get_line_height(),
               d.layout(400));
 }
 
 TEST_F(document_test, layouting_of_a_single_heading_is_correct) {
-    document d = document::from_string("# Hello World");
+    auto d = cmr::document::from_string("# Hello World");
     d.set_renderer(&frndr);
-    style st;
+    cmr::style st;
     st.set_heading_level(1);
     auto fnt = frndr.font_for_style(st);
     EXPECT_EQ(fnt->get_line_height(), d.layout(400));
 }
 
 TEST_F(document_test, layouting_of_to_large_single_word_is_correct) {
-    document d = document::from_string("# HelloWorld");
+    auto d = cmr::document::from_string("# HelloWorld");
     d.set_renderer(&frndr);
-    style st;
+    cmr::style st;
     st.set_heading_level(1);
     auto fnt = frndr.font_for_style(st);
     // the height of the layout must not span two lines, even
@@ -79,7 +79,7 @@ TEST_F(document_test, layouting_of_to_large_single_word_is_correct) {
 
 TEST_F(document_test, list_layouting_is_correct) {
     frndr.set_float_param("list.margin_left", 5.f);
-    document d = document::from_string("- Item1\n- Item2");
+    cmr::document d = cmr::document::from_string("- Item1\n- Item2");
     d.set_renderer(&frndr);
     auto height = d.layout(400);
     EXPECT_EQ(2 * d.get_root_element()->get_font(&frndr)->get_line_height(),
@@ -99,7 +99,7 @@ TEST_F(document_test, list_layouting_is_correct) {
 
 TEST_F(document_test, code_layout_is_correct) {
     frndr.set_float_param("code_block.margin_left", 10.f);
-    document d = document::from_string("    code;");
+    cmr::document d = cmr::document::from_string("    code;");
     d.set_renderer(&frndr);
     auto height = d.layout(400);
     EXPECT_EQ(d.get_root_element()->get_font(&frndr)->get_line_height() +
@@ -116,7 +116,7 @@ TEST_F(document_test, code_layout_is_correct) {
 
 TEST_F(document_test, code_font_is_propagated) {
     frndr.set_float_param("code_block.margin_left", 10.f);
-    document d = document::from_string("    code;");
+    cmr::document d = cmr::document::from_string("    code;");
     d.set_renderer(&frndr);
     auto height = d.layout(400);
     EXPECT_EQ(d.get_root_element()->get_font(&frndr)->get_line_height() +

@@ -31,11 +31,11 @@ class image_element_test : public ::testing::Test {
 
 TEST_F(image_element_test, paragraph_with_small_image) {
     frndr.set_image_extents("image.png", 50, 40);
-    document doc = document::from_string("Hello ![](image.png) image", false);
+    auto doc = cmr::document::from_string("Hello ![](image.png) image", false);
 
     doc.set_renderer(&frndr);
     doc.layout(500);
-    doc.render(vec2(0, 0), 500);
+    doc.render(cmr::vec2(0, 0), 500);
 
     EXPECT_EQ(1, frndr.m_draw_image_calls.size());
     EXPECT_EQ(50, frndr.m_draw_image_calls[0].m_width);
@@ -55,11 +55,11 @@ TEST_F(image_element_test, paragraph_with_small_image) {
 
 TEST_F(image_element_test, paragraph_with_tiny_image) {
     frndr.set_image_extents("image.png", 50, 5);
-    document doc = document::from_string("Hello ![](image.png) image", false);
+    cmr::document doc = cmr::document::from_string("Hello ![](image.png) image", false);
 
     doc.set_renderer(&frndr);
     doc.layout(500);
-    doc.render(vec2(0, 0), 500);
+    doc.render(cmr::vec2(0, 0), 500);
 
     EXPECT_EQ(1, frndr.m_draw_image_calls.size());
     EXPECT_EQ(50, frndr.m_draw_image_calls[0].m_width);
@@ -81,12 +81,12 @@ TEST_F(image_element_test, paragraph_with_tiny_image) {
 // with the width beeing below the paragaph width
 TEST_F(image_element_test, paragraph_with_larger_image) {
     frndr.set_image_extents("image.png", 400, 50);
-    document doc = document::from_string(
+    cmr::document doc = cmr::document::from_string(
         "HelloWorldHelloWorld ![](image.png) image", false);
 
     doc.set_renderer(&frndr);
     doc.layout(500);
-    doc.render(vec2(0, 0), 500);
+    doc.render(cmr::vec2(0, 0), 500);
 
     EXPECT_EQ(1, frndr.m_draw_image_calls.size());
     EXPECT_EQ(400, frndr.m_draw_image_calls[0].m_width);
@@ -111,12 +111,12 @@ TEST_F(image_element_test, paragraph_with_larger_image) {
 // with the width beeing larger than the paragaph width
 TEST_F(image_element_test, paragraph_with_very_large_image) {
     frndr.set_image_extents("image.png", 992, 50);
-    document doc = document::from_string(
+    cmr::document doc = cmr::document::from_string(
         "HelloWorldHelloWorld ![](image.png) image", false);
 
     doc.set_renderer(&frndr);
     doc.layout(500);
-    doc.render(vec2(0, 0), 500);
+    doc.render(cmr::vec2(0, 0), 500);
 
     EXPECT_EQ(1, frndr.m_draw_image_calls.size());
     EXPECT_EQ(496, frndr.m_draw_image_calls[0].m_width);

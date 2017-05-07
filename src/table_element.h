@@ -12,6 +12,7 @@
 
 #include <numeric>
 
+namespace cmr {
 // Layouting tables is a bit more complex and should fulfil the following
 // constraints:
 // - The width of the columns should adapt to the contents of the columns
@@ -155,3 +156,4 @@ class table_element : public element {
 class table_header_element : public element {};
 class table_row_element : public element {};
 class table_cell_element : public leaf_block_element {};
+}

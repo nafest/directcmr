@@ -16,10 +16,10 @@ TEST(code_element, inline_code_element) {
     frndr.set_string_param("code.font", "test_code_font");
     frndr.set_string_param("code.background_color", "#aabbccdd");
 
-    document doc = document::from_string("Hello `code`");
+    auto doc = cmr::document::from_string("Hello `code`");
     doc.set_renderer(&frndr);
     doc.layout(500);
-    doc.render(vec2(0, 0), 500);
+    doc.render(cmr::vec2(0, 0), 500);
 
     ASSERT_EQ(2, frndr.m_draw_string_calls.size());
 
@@ -36,8 +36,9 @@ TEST(code_element, inline_code_element) {
     // test if the background rectangle is positioned correctly
     EXPECT_EQ(1, frndr.m_draw_rect_calls.size());
 
-    EXPECT_EQ(vec2(60.0, 0.0), frndr.m_draw_rect_calls[0].m_rect.top_left());
+    EXPECT_EQ(cmr::vec2(60.0, 0.0),
+              frndr.m_draw_rect_calls[0].m_rect.top_left());
     // the rectangle must include the 5+5px margin
-    EXPECT_EQ(vec2(110.0, 16.0),
+    EXPECT_EQ(cmr::vec2(110.0, 16.0),
               frndr.m_draw_rect_calls[0].m_rect.bottom_right());
 }

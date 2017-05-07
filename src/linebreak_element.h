@@ -9,9 +9,12 @@
 
 #include "element.h"
 
+namespace cmr {
+
 class linebreak_element : public element {
     virtual void add_to_leaf_block(renderer *rndr,
                                    paragraph_state &pstate) override {
         pstate.line_break();
     }
 };
+}

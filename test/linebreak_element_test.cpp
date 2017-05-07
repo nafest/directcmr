@@ -22,12 +22,12 @@ class linebreak_element_test : public ::testing::Test {
 };
 
 TEST_F(linebreak_element_test, paragraph_with_linebreak) {
-    document doc = document::from_string("hello  \nworld");
+    auto doc = cmr::document::from_string("hello  \nworld");
     doc.set_renderer(&frndr);
     doc.layout(500);
-    doc.render(vec2(), 500);
+    doc.render(cmr::vec2(), 500);
 
     ASSERT_EQ(2, frndr.m_draw_string_calls.size());
-    EXPECT_EQ(vec2(0.f, 12.f), frndr.m_draw_string_calls[0].m_pos);
-    EXPECT_EQ(vec2(0.f, 28.f), frndr.m_draw_string_calls[1].m_pos);
+    EXPECT_EQ(cmr::vec2(0.f, 12.f), frndr.m_draw_string_calls[0].m_pos);
+    EXPECT_EQ(cmr::vec2(0.f, 28.f), frndr.m_draw_string_calls[1].m_pos);
 }

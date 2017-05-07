@@ -9,10 +9,12 @@
 
 #include "element.h"
 
+namespace cmr {
+
 class link_element : public element {
   public:
     link_element() = default;
-    link_element(const std::string& url) : m_url(url) {}
+    link_element(const std::string &url) : m_url(url) {}
 
     virtual void propagate_style(style st) noexcept override {
         st.set_link(true);
@@ -34,3 +36,4 @@ class link_element : public element {
   private:
     std::string m_url;
 };
+}

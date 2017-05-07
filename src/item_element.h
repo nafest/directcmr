@@ -9,6 +9,9 @@
 
 #include "element.h"
 
+namespace cmr {
+
 class item_element : public element {
   public:
 };
+}

@@ -10,6 +10,8 @@
 
 #include "renderer.h"
 
+namespace cmr {
+
 class element;
 
 class paragraph_state {
@@ -85,3 +87,4 @@ class paragraph_state {
                          // that it is possible to adapt the vertical
                          // position of the base line
 };
+}

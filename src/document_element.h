@@ -10,6 +10,8 @@
 
 #include "element.h"
 
+namespace cmr {
+
 class document_element : public element {
   public:
     virtual float layout(renderer *rndr, float width) {
@@ -24,3 +26,4 @@ class document_element : public element {
         return cumul_height + margin.top;
     }
 };
+}

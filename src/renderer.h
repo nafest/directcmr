@@ -14,6 +14,8 @@
 #include <map>
 #include <string>
 
+namespace cmr {
+
 // class representing a font. Implementations of renderer
 // may subclass it to extend it with render backend specific
 // data
@@ -34,24 +36,24 @@ class font {
 };
 
 struct color {
-    color(unsigned char _r, unsigned char _g, unsigned char _b,
-          unsigned char _a)
-        : r(_r), g(_g), b(_b), a(_a) {}
-    color(const std::string &color_string) {
-        *this = string_to_color(color_string);
-    }
-    bool operator==(const color &rhs) const {
-        return r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a;
-    }
-    unsigned char r, g, b, a;
+  color(unsigned char _r, unsigned char _g, unsigned char _b,
+        unsigned char _a)
+      : r(_r), g(_g), b(_b), a(_a) {}
+  color(const std::string &color_string) {
+      *this = string_to_color(color_string);
+  }
+  bool operator==(const color &rhs) const {
+      return r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a;
+  }
+  unsigned char r, g, b, a;
 };
 
 struct elem_margin {
-    elem_margin(float _left, float _top, float _right, float _bottom)
-        : top(_top), left(_left), right(_right), bottom(_bottom) {}
-    float vertical_margin() const { return top + bottom; }
-    float horizontal_margin() const { return left + right; }
-    float top, left, bottom, right;
+  elem_margin(float _left, float _top, float _right, float _bottom)
+      : top(_top), left(_left), right(_right), bottom(_bottom) {}
+  float vertical_margin() const { return top + bottom; }
+  float horizontal_margin() const { return left + right; }
+  float top, left, bottom, right;
 };
 
 // abstract class for the interface of a renderer
@@ -60,7 +62,7 @@ class renderer {
     renderer();
 
     virtual float get_float_param(const std::string &param_name) const
-        noexcept {
+    noexcept {
         auto elem = m_float_params.find(param_name);
         if (elem == m_float_params.end()) {
             auto dot_pos = param_name.find(".");
@@ -78,7 +80,7 @@ class renderer {
     }
 
     virtual std::string get_string_param(const std::string &param_name) const
-        noexcept {
+    noexcept {
         auto elem = m_string_params.find(param_name);
         if (elem == m_string_params.end()) {
             auto dot_pos = param_name.find(".");
@@ -96,7 +98,7 @@ class renderer {
     }
 
     virtual elem_margin get_margin(const std::string &element_name) const
-        noexcept;
+    noexcept;
 
     virtual void prepare_canvas(int width, int height) = 0;
     virtual vec2 string_extents(const font *fnt, const std::string &string) = 0;
@@ -131,7 +133,7 @@ class renderer {
     //
     // cmark_renderer uses this to choose between link.color
     // and link.visited_color
-    virtual bool is_visited_uri(const std::string& uri) = 0;
+    virtual bool is_visited_uri(const std::string &uri) = 0;
 
   private:
     float get_side_margin(const std::string &element_name,
@@ -141,3 +143,4 @@ class renderer {
     std::map<std::string, float> m_float_params;
     std::map<std::string, std::string> m_string_params;
 };
+}

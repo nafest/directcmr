@@ -9,6 +9,8 @@
 
 #include "element.h"
 
+namespace cmr {
+
 class emph_element : public element {
   public:
     virtual void propagate_style(style st) noexcept override {
@@ -22,3 +24,4 @@ class emph_element : public element {
             child->add_to_leaf_block(rndr, pstate);
     }
 };
+}

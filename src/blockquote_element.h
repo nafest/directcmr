@@ -9,6 +9,8 @@
 
 #include "element.h"
 
+namespace cmr {
+
 class blockquote_element : public element {
   public:
     virtual float layout(renderer *rndr, float width) override {
@@ -41,3 +43,4 @@ class blockquote_element : public element {
   public:
     float m_height;
 };
+}

@@ -11,6 +11,8 @@
 
 #include "element.h"
 
+namespace cmr {
+
 class leaf_block_element : public element {
   public:
     virtual float preferred_width(renderer *rndr) override {
@@ -54,3 +56,5 @@ class leaf_block_element : public element {
         return pstate.get_posy() + pstate.get_line_height() + margin.bottom;
     }
 };
+
+}

@@ -24,13 +24,13 @@ class link_element_test : public ::testing::Test {
 TEST_F(link_element_test, simple_link) {
     frndr.set_string_param("link.color", "#0000ffff");
 
-    document doc = document::from_string("[hello link](/uri)");
+    auto doc = cmr::document::from_string("[hello link](/uri)");
     doc.set_renderer(&frndr);
     doc.layout(500);
-    doc.render(vec2(), 500);
+    doc.render(cmr::vec2(), 500);
 
     ASSERT_EQ(2, frndr.m_draw_string_calls.size());
-    EXPECT_EQ(color("#0000ffff"), frndr.m_draw_string_calls[0].m_color);
+    EXPECT_EQ(cmr::color("#0000ffff"), frndr.m_draw_string_calls[0].m_color);
 }
 
 TEST_F(link_element_test, visited_link) {
@@ -38,12 +38,12 @@ TEST_F(link_element_test, visited_link) {
     frndr.set_string_param("link.visited_color", "#ff0000ff");
     frndr.add_visited_link("/uri");
 
-    document doc = document::from_string("[hello link](/uri)");
+    auto doc = cmr::document::from_string("[hello link](/uri)");
     doc.set_renderer(&frndr);
     doc.layout(500);
-    doc.render(vec2(), 500);
+    doc.render(cmr::vec2(), 500);
 
     ASSERT_EQ(2, frndr.m_draw_string_calls.size());
-    EXPECT_EQ(color("#ff0000ff"), frndr.m_draw_string_calls[0].m_color);
+    EXPECT_EQ(cmr::color("#ff0000ff"), frndr.m_draw_string_calls[0].m_color);
 }
 

@@ -9,6 +9,8 @@
 
 #include "emph_element.h"
 
+namespace cmr {
+
 class code_element : public emph_element {
   public:
     virtual void add_to_leaf_block(renderer *rndr,
@@ -93,3 +95,4 @@ class code_element : public emph_element {
         element::propagate_style(st);
     }
 };
+}

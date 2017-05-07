@@ -8,6 +8,8 @@
 #pragma once
 #include "element.h"
 
+namespace cmr {
+
 class thematic_break_element : public element {
   public:
     float layout(renderer *rndr, float width) override {
@@ -36,3 +38,4 @@ class thematic_break_element : public element {
   private:
     float m_width;
 };
+}

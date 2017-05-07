@@ -34,10 +34,10 @@ TEST_F(renderer_test, float_param_fallback) {
 
 TEST_F(renderer_test, RenderSimple) {
     frndr.set_float_param("list.margin_left", 5.f);
-    document d = document::from_string("Hello *world*");
+    auto d = cmr::document::from_string("Hello *world*");
     d.set_renderer(&frndr);
     d.layout(200);
-    d.render(vec2(0, 0), 100);
+    d.render(cmr::vec2(0, 0), 100);
 
     EXPECT_EQ(2, frndr.m_draw_string_calls.size());
     EXPECT_EQ(0, frndr.m_draw_string_calls[0].m_pos.x());
@@ -48,27 +48,28 @@ TEST_F(renderer_test, RenderSimple) {
 
 TEST_F(renderer_test, RenderList) {
     frndr.set_float_param("list.margin_left", 5.f);
-    document d = document::from_string("- Item1\n- Item2");
+    auto d = cmr::document::from_string("- Item1\n- Item2");
     d.set_renderer(&frndr);
     d.layout(100);
-    d.render(vec2(0, 0), 100);
+    d.render(cmr::vec2(0, 0), 100);
 
     auto fnt = d.get_root_element()->get_font(&frndr);
 
     EXPECT_EQ(2, frndr.m_draw_marker_calls.size());
     auto mrect = frndr.m_draw_marker_calls[0].m_marker_rect;
-    EXPECT_EQ(vec2(0.f, 0.f), mrect.top_left());
-    EXPECT_EQ(vec2(5.f, fnt->get_line_height()), mrect.bottom_right());
+    EXPECT_EQ(cmr::vec2(0.f, 0.f), mrect.top_left());
+    EXPECT_EQ(cmr::vec2(5.f, fnt->get_line_height()), mrect.bottom_right());
 
     auto mrect2 = frndr.m_draw_marker_calls[1].m_marker_rect;
-    EXPECT_EQ(vec2(0.f, fnt->get_line_height()), mrect2.top_left());
-    EXPECT_EQ(vec2(5.f, 2 * fnt->get_line_height()), mrect2.bottom_right());
+    EXPECT_EQ(cmr::vec2(0.f, fnt->get_line_height()), mrect2.top_left());
+    EXPECT_EQ(cmr::vec2(5.f, 2 * fnt->get_line_height()),
+              mrect2.bottom_right());
 }
 
 TEST_F(renderer_test, RenderCodeSpan) {
     frndr.set_float_param("code.margin_left", 5.f);
     frndr.set_float_param("code.margin_right", 6.f);
-    document d = document::from_string("foo `void main` bar");
+    auto d = cmr::document::from_string("foo `void main` bar");
 
     // the font width of normal text is 10px per character, while
     // it is 12px for code spans.
@@ -78,7 +79,7 @@ TEST_F(renderer_test, RenderCodeSpan) {
 
     d.set_renderer(&frndr);
     d.layout(500);
-    d.render(vec2(0, 0), 500);
+    d.render(cmr::vec2(0, 0), 500);
 
     EXPECT_EQ(4, frndr.m_draw_string_calls.size());
     EXPECT_EQ(0, frndr.m_draw_string_calls[0].m_pos.x());

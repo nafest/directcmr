@@ -9,6 +9,8 @@
 
 #include "emph_element.h"
 
+namespace cmr {
+
 class strong_element : public emph_element {
   public:
     virtual void propagate_style(style st) noexcept override {
@@ -16,3 +18,4 @@ class strong_element : public emph_element {
         element::propagate_style(st);
     }
 };
+}

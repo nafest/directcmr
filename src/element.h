@@ -18,6 +18,8 @@
 #include <string>
 #include <vector>
 
+namespace cmr {
+
 class element {
   public:
     element() = default;
@@ -141,3 +143,4 @@ class element {
     // coordinate system. The bottom right may not be used by all elements.
     rect m_rect;
 };
+}

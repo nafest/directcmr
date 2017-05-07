@@ -8,6 +8,8 @@
 
 #pragma once
 
+namespace cmr {
+
 class style {
   public:
     style()
@@ -98,4 +100,5 @@ inline bool operator<(const style &lhs, const style &rhs) {
         return false;
 
     return false;
+}
 }

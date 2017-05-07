@@ -9,7 +9,7 @@
 
 #include <iostream>
 
-renderer::renderer() {
+cmr::renderer::renderer() {
     // set some default parameters
     set_string_param("font", "Arial");
     set_string_param("color", "#000000ff");
@@ -47,7 +47,7 @@ renderer::renderer() {
     set_float_param("table_cell.margin", 2.f);
 }
 
-font *renderer::font_for_style(const style &st) {
+cmr::font *cmr::renderer::font_for_style(const cmr::style &st) {
     auto search = m_cached_fonts.find(st);
     if (search != m_cached_fonts.end())
         return search->second;
@@ -78,8 +78,8 @@ font *renderer::font_for_style(const style &st) {
     return font;
 }
 
-float renderer::get_side_margin(const std::string &element_name,
-                                const std::string side) const noexcept {
+float cmr::renderer::get_side_margin(const std::string &element_name,
+                                     const std::string side) const noexcept {
     float mrgn = 0.f;
 
     // use them
@@ -96,9 +96,9 @@ float renderer::get_side_margin(const std::string &element_name,
     return mrgn;
 }
 
-elem_margin renderer::get_margin(const std::string &element_name) const
-    noexcept {
-    elem_margin mrgn(0.f, 0.f, 0.f, 0.f);
+cmr::elem_margin
+cmr::renderer::get_margin(const std::string &element_name) const noexcept {
+    cmr::elem_margin mrgn(0.f, 0.f, 0.f, 0.f);
 
     mrgn.left = get_side_margin(element_name, "left");
     mrgn.top = get_side_margin(element_name, "top");

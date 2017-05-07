@@ -9,6 +9,8 @@
 
 #include "element.h"
 
+namespace cmr {
+
 class image_element : public element {
   public:
     image_element(const std::string url) : m_src(url) {}
@@ -25,14 +27,16 @@ class image_element : public element {
             top_left = vec2(pstate.get_left_offset(), pstate.get_posy());
             // the image was added to the next line
             // scale it if necessary
-            if (image_extents.x() + margin.horizontal_margin() <= pstate.get_width()) {
+            if (image_extents.x() + margin.horizontal_margin() <=
+                pstate.get_width()) {
                 m_width = static_cast<int>(image_extents.x());
                 m_height = static_cast<int>(image_extents.y());
             } else {
                 // keep the aspect ratio while using the maximum available width
-                m_width = static_cast<int>(pstate.get_width() - margin.horizontal_margin());
+                m_width = static_cast<int>(pstate.get_width() -
+                                           margin.horizontal_margin());
                 m_height = static_cast<int>(image_extents.y() *
-                    (m_width / image_extents.x()));
+                                            (m_width / image_extents.x()));
             }
         } else {
             m_width = static_cast<int>(image_extents.x());
@@ -53,3 +57,4 @@ class image_element : public element {
     int m_width;
     int m_height;
 };
+}

@@ -11,6 +11,8 @@
 
 #include <iostream>
 
+namespace cmr {
+
 class heading_element : public leaf_block_element {
   public:
     heading_element(int heading_level)
@@ -24,3 +26,4 @@ class heading_element : public leaf_block_element {
   private:
     int m_heading_level;
 };
+}

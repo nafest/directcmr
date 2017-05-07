@@ -12,6 +12,8 @@
 #include <string>
 #include <vector>
 
+namespace cmr {
+
 struct color;
 color string_to_color(const std::string &str);
 
@@ -85,7 +87,7 @@ class word {
     }
 };
 
-template <typename T> class splitter {
+template<typename T> class splitter {
   public:
     class iterator {
       public:
@@ -131,3 +133,4 @@ template <typename T> class splitter {
 
 using line_splitter = splitter<line>;
 using word_splitter = splitter<word>;
+}

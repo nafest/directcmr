@@ -7,6 +7,8 @@
 
 #pragma once
 
+namespace cmr {
+
 class vec2 {
   public:
     vec2() : m_x(0), m_y(0) {}
@@ -16,7 +18,7 @@ class vec2 {
         return vec2(m_x + rhs.x(), m_y + rhs.y());
     }
 
-    vec2& operator+=(const vec2 &rhs) {
+    vec2 &operator+=(const vec2 &rhs) {
         m_x += rhs.x();
         m_y += rhs.y();
 
@@ -61,3 +63,4 @@ class rect {
     vec2 m_top_left;
     vec2 m_bottom_right;
 };
+}

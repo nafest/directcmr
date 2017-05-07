@@ -9,7 +9,7 @@
 #include "paragraph_state.h"
 #include "element.h"
 
-void paragraph_state::set_base_line() {
+void cmr::paragraph_state::set_base_line() {
     float max_dist_to_base_line = 0.f;
 
     for (auto elem : m_line_elements) {
