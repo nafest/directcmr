@@ -7,17 +7,23 @@ included), cmark_renderer directly outputs rendering calls.
 ### Basic Approach
 1. Create a document instance from a string or from a file
 
+
     auto doc = cmr::document::from_file("README.md");
     
 2. Implement and set a backend for rendering
 
+
     my_backend_class my_backend;
     
     doc.set_backend(&my_backend);
+
 2. Layout the document which returns the required height
 
+
     auto height = doc.layout(800);
+
 3. Render the document
+
 
     doc.render(vec2(), 600);
 
