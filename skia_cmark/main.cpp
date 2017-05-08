@@ -1,6 +1,6 @@
 #include "document.h"
 
-#include "skia_renderer.h"
+#include "skia_backend.h"
 
 #include <chrono>
 #include <iostream>
@@ -27,10 +27,10 @@ int main(int argc, const char *argv[]) {
     }
 
     for (auto file : file_names) {
-        skia_renderer rndr;
+        skia_backend backnd;
 
         auto d = cmr::document::from_file(file, be_verbose);
-        d.set_renderer(&rndr);
+        d.set_backend(&backnd);
         auto start_time = bench_clock::now();
         auto layout_height = d.layout(600);
         auto layout_time = bench_clock::now() - start_time;
@@ -55,7 +55,7 @@ int main(int argc, const char *argv[]) {
         auto dot_pos = file.find_last_of('.');
         std::string out_name = file.substr(0, dot_pos) + ".png";
 
-        rndr.dump_canvas(out_name);
+        backnd.dump_canvas(out_name);
     }
     return 0;
 }

@@ -1,6 +1,6 @@
 // cmark_renderer - a renderer for CommonMark
 //
-// renderer.h - abstract base class for renderer backends
+// backend.h - abstract base class for renderer backends
 //
 // Copyright (c) 2017 Stefan Winkler
 // License: MIT License (for full license see LICENSE)
@@ -56,10 +56,10 @@ struct elem_margin {
   float top, left, bottom, right;
 };
 
-// abstract class for the interface of a renderer
-class renderer {
+// abstract class for the interface of a renderer backend
+class backend {
   public:
-    renderer();
+    backend();
 
     virtual float get_float_param(const std::string &param_name) const
     noexcept {

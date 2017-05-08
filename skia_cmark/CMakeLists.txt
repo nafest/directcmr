@@ -10,8 +10,8 @@ endif()
 
 add_executable(skia_cmark
    main.cpp
-   skia_renderer.cpp
-   skia_renderer.h)
+    skia_backend.cpp
+    skia_backend.h)
 
 target_include_directories(skia_cmark PRIVATE
     ${cmark_renderer_SOURCE_DIR}/src)

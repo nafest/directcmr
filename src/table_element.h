@@ -30,26 +30,26 @@ class table_element : public element {
         return static_cast<int>(m_children[0]->children().size());
     }
 
-    std::vector<float> min_col_widths(renderer *rndr) const {
+    std::vector<float> min_col_widths(backend *bcknd) const {
         std::vector<float> col_widths(num_column(), 0.f);
 
         for (auto child : m_children) {
             for (int i = 0; i < child->children().size(); i++) {
                 col_widths[i] = std::max<float>(
-                    col_widths[i], child->children()[i]->min_width(rndr));
+                    col_widths[i], child->children()[i]->min_width(bcknd));
             }
         }
 
         return col_widths;
     }
 
-    std::vector<float> preferred_col_widths(renderer *rndr) const {
+    std::vector<float> preferred_col_widths(backend *bcknd) const {
         std::vector<float> col_widths(num_column(), 0.f);
 
         for (auto child : m_children) {
             for (int i = 0; i < child->children().size(); i++) {
                 col_widths[i] = std::max<float>(
-                    col_widths[i], child->children()[i]->preferred_width(rndr));
+                    col_widths[i], child->children()[i]->preferred_width(bcknd));
             }
         }
 
@@ -71,9 +71,9 @@ class table_element : public element {
         return widths;
     }
 
-    virtual float layout(renderer *rndr, float width) {
+    virtual float layout(backend *bcknd, float width) {
         // styling options required for layouting the table
-        auto border_width = rndr->get_float_param("table.border_width");
+        auto border_width = bcknd->get_float_param("table.border_width");
 
         auto num_col = num_column();
         float spacing_width = (num_col + 1) * border_width;
@@ -81,7 +81,7 @@ class table_element : public element {
         // estimate the width used to render the table. If the sum of the
         // preferred widths is smaller than width use this value, otherwise
         // use width
-        auto preferred_widths = preferred_col_widths(rndr);
+        auto preferred_widths = preferred_col_widths(bcknd);
         float preferred_table_width =
             spacing_width + std::accumulate(preferred_widths.begin(),
                                             preferred_widths.end(), 0.f);
@@ -91,7 +91,7 @@ class table_element : public element {
             column_widths = preferred_widths;
         } else {
             column_widths = distribute_width(width - spacing_width, num_col,
-                                             min_col_widths(rndr));
+                                             min_col_widths(bcknd));
         }
 
         // given the column widths it is now possible to layout all rows
@@ -103,7 +103,7 @@ class table_element : public element {
                 border_width + column_widths[i - 1] + m_grid_col[i - 1];
 
         m_grid_row.push_back(0.5f * border_width);
-        float height = rndr->get_margin("table").top;
+        float height = bcknd->get_margin("table").top;
         for (auto row : m_children) {
             float row_height = 0.f;
             for (int i = 0; i < num_col; i++) {
@@ -111,37 +111,37 @@ class table_element : public element {
                 col->set_position(
                     vec2(m_grid_col[i] + 0.5f * border_width, height));
                 row_height = std::max<float>(
-                    row_height, col->layout(rndr, column_widths[i]));
+                    row_height, col->layout(bcknd, column_widths[i]));
             }
             height += row_height;
             m_grid_row.push_back(height + 0.5f * border_width);
         }
 
-        return height + rndr->get_margin("table").bottom;
+        return height + bcknd->get_margin("table").bottom;
     }
 
-    virtual void render(renderer *rndr, vec2 pos = {0, 0}) {
+    virtual void render(backend *bcknd, vec2 pos = {0, 0}) {
         auto num_col = num_column();
-        auto border_width = rndr->get_float_param("table.border_width");
+        auto border_width = bcknd->get_float_param("table.border_width");
 
         // render the horizontal lines;
         float width = m_grid_col.back();
         for (auto y : m_grid_row)
-            rndr->draw_line(vec2(0, y) + pos + m_rect.top_left(),
+            bcknd->draw_line(vec2(0, y) + pos + m_rect.top_left(),
                             vec2(width, y) + pos + m_rect.top_left(), color(0, 0, 0, 255),
                             border_width);
 
         // render the vertical lines;
         float height = m_grid_row.back();
         for (auto x : m_grid_col)
-            rndr->draw_line(vec2(x, 0) + pos + m_rect.top_left(),
+            bcknd->draw_line(vec2(x, 0) + pos + m_rect.top_left(),
                             vec2(x, height) + pos + m_rect.top_left(), color(0, 0, 0, 255),
                             border_width);
 
         for (auto row : m_children) {
             for (int i = 0; i < num_col; i++) {
                 auto cell = row->children()[i];
-                cell->render(rndr, pos + m_rect.top_left());
+                cell->render(bcknd, pos + m_rect.top_left());
             }
         }
     }

@@ -6,7 +6,7 @@
 // License: MIT License (for full license see LICENSE)
 
 #include "utils.h"
-#include "renderer.h"
+#include "backend.h"
 
 cmr::color cmr::string_to_color(const std::string &str) {
     cmr::color c(0, 0, 0, 255);

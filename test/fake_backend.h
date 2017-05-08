@@ -1,6 +1,6 @@
 #pragma once
 
-#include "renderer.h"
+#include "backend.h"
 
 #include <iostream>
 #include <map>
@@ -100,7 +100,7 @@ class draw_line_action {
     float m_line_width;
 };
 
-class fake_renderer : public cmr::renderer {
+class fake_backend : public cmr::backend {
   public:
     virtual void prepare_canvas(int width, int height) override {}
     virtual cmr::vec2 string_extents(const cmr::font *fnt,

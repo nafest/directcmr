@@ -16,9 +16,9 @@ else()
 endif()
 
 add_executable(cmark_renderer_test
-    renderer_test.cpp
+    backend_test.cpp
     document_test.cpp
-    fake_renderer.h
+    fake_backend.h
     utils_test.cpp
     element_test.cpp
     table_element_test.cpp image_element_test.cpp code_element_test.cpp thematic_break_element_test.cpp link_element_test.cpp linebreak_element_test.cpp)

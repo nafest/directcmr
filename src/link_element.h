@@ -21,17 +21,17 @@ class link_element : public element {
         element::propagate_style(st);
     }
 
-    virtual void add_to_leaf_block(renderer *rndr,
+    virtual void add_to_leaf_block(backend *bcknd,
                                    paragraph_state &pstate) override {
-        // since propagate_style misses the rndr as argument,
+        // since propagate_style misses the bcknd as argument,
         // propagate the style for visited links right before
         // adding them to the current leaf block
-        if (rndr->is_visited_uri(m_url)) {
+        if (bcknd->is_visited_uri(m_url)) {
             m_style.set_visited(true);
             element::propagate_style(m_style);
         }
         for (auto child : m_children)
-            child->add_to_leaf_block(rndr, pstate);
+            child->add_to_leaf_block(bcknd, pstate);
     }
   private:
     std::string m_url;

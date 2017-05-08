@@ -15,37 +15,37 @@ namespace cmr {
 
 class leaf_block_element : public element {
   public:
-    virtual float preferred_width(renderer *rndr) override {
-        auto space_extents = get_font(rndr)->get_space_width();
-        auto margin = rndr->get_margin(get_type());
+    virtual float preferred_width(backend *bcknd) override {
+        auto space_extents = get_font(bcknd)->get_space_width();
+        auto margin = bcknd->get_margin(get_type());
         float preferred_width = 0.f;
         for (auto child : m_children) {
-            preferred_width += child->preferred_width(rndr) + space_extents;
+            preferred_width += child->preferred_width(bcknd) + space_extents;
         }
         return preferred_width - space_extents + margin.horizontal_margin();
     }
 
-    virtual float layout(renderer *rndr, float width) override {
+    virtual float layout(backend *bcknd, float width) override {
         // a paragraph is a leaf block, i.e. it may not
         // contain other blocks. Only text and inline
         // elements
 
         // subtract the margins before layouting
-        auto margin = rndr->get_margin(get_type());
+        auto margin = bcknd->get_margin(get_type());
         width -= margin.horizontal_margin();
 
         // basically we have to start at the top left of
         // the block and subsequently add all child elements
         // also keep track of the height of the current line
-        paragraph_state pstate(width, get_font(rndr)->get_line_height(),
-                               get_font(rndr)->get_ascent(), margin.top,
+        paragraph_state pstate(width, get_font(bcknd)->get_line_height(),
+                               get_font(bcknd)->get_ascent(), margin.top,
                                margin.left);
         // to use the correct space widths, add the spaces around
         // child elements in this element, e.g. otherwise there would be
         // a too wide space after an inline code span
-        auto space_extents = get_font(rndr)->get_space_width();
+        auto space_extents = get_font(bcknd)->get_space_width();
         for (auto child : m_children) {
-            child->add_to_leaf_block(rndr, pstate);
+            child->add_to_leaf_block(bcknd, pstate);
             pstate.add_space(space_extents);
         }
 

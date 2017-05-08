@@ -12,7 +12,7 @@
 namespace cmr {
 
 class linebreak_element : public element {
-    virtual void add_to_leaf_block(renderer *rndr,
+    virtual void add_to_leaf_block(backend *bcknd,
                                    paragraph_state &pstate) override {
         pstate.line_break();
     }

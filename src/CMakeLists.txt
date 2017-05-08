@@ -30,7 +30,7 @@ add_library(cmark_renderer STATIC
     list_element.h
     paragraph_element.h
     paragraph_state.h
-    renderer.cpp renderer.h
+    backend.cpp backend.h
     strong_element.h
     style.h
     table_element.h

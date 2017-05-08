@@ -6,8 +6,21 @@ included), cmark_renderer directly outputs rendering calls.
 
 ### Basic Approach
 1. Create a document instance from a string or from a file
+
+    auto doc = cmr::document::from_file("README.md");
+    
+2. Implement and set a backend for rendering
+
+    my_backend_class my_backend;
+    
+    doc.set_backend(&my_backend);
 2. Layout the document which returns the required height
-3. Render the document 
+
+    auto height = doc.layout(800);
+3. Render the document
+
+    doc.render(vec2(), 600);
+
 
 ### Handling of positions and margins
 Every element contains its position in the coordinate system of its parent element. This
@@ -16,10 +29,13 @@ the contents of an element.
 
 ### (incomplete) List of open tasks
 - extend the documentation of the public API, i.e. the document
-  and the renderer class
+  and the backend class
 - add a test with UFT-8 characters
 - add a test for table_element
 - add clipping
+- move styling from backend to a separate class
+- common base class for tests with styling resets
+- document and cleanup the backend API
 - it should be possible to provide an external canvas
 - extend GitHubs cmark extensions to get the alignment of the table rows
 - add support for more of GitHub's extensions

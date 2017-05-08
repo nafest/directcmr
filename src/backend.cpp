@@ -1,15 +1,15 @@
 // cmark_renderer - a renderer for CommonMark
 //
-// renderer.cpp - abstract base class for renderer backends
+// backend.cpp - abstract base class for renderer backends
 //
 // Copyright (c) 2017 Stefan Winkler
 // License: MIT License (for full license see LICENSE)
 
-#include "renderer.h"
+#include "backend.h"
 
 #include <iostream>
 
-cmr::renderer::renderer() {
+cmr::backend::backend() {
     // set some default parameters
     set_string_param("font", "Arial");
     set_string_param("color", "#000000ff");
@@ -47,7 +47,7 @@ cmr::renderer::renderer() {
     set_float_param("table_cell.margin", 2.f);
 }
 
-cmr::font *cmr::renderer::font_for_style(const cmr::style &st) {
+cmr::font *cmr::backend::font_for_style(const cmr::style &st) {
     auto search = m_cached_fonts.find(st);
     if (search != m_cached_fonts.end())
         return search->second;
@@ -78,7 +78,7 @@ cmr::font *cmr::renderer::font_for_style(const cmr::style &st) {
     return font;
 }
 
-float cmr::renderer::get_side_margin(const std::string &element_name,
+float cmr::backend::get_side_margin(const std::string &element_name,
                                      const std::string side) const noexcept {
     float mrgn = 0.f;
 
@@ -97,7 +97,7 @@ float cmr::renderer::get_side_margin(const std::string &element_name,
 }
 
 cmr::elem_margin
-cmr::renderer::get_margin(const std::string &element_name) const noexcept {
+cmr::backend::get_margin(const std::string &element_name) const noexcept {
     cmr::elem_margin mrgn(0.f, 0.f, 0.f, 0.f);
 
     mrgn.left = get_side_margin(element_name, "left");

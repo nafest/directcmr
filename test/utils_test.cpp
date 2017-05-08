@@ -1,5 +1,5 @@
 #include "utils.h"
-#include "renderer.h"
+#include "backend.h"
 #include "gtest/gtest.h"
 
 TEST(line_splitter, single) {

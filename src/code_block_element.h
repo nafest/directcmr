@@ -21,15 +21,15 @@ class code_block_element : public leaf_block_element {
         element::propagate_style(st);
     }
 
-    virtual float layout(renderer *rndr, float width) override {
-        auto margin = rndr->get_margin("code_block");
+    virtual float layout(backend *bcknd, float width) override {
+        auto margin = bcknd->get_margin("code_block");
         // Since code blocks pay respect to line breaks
         // layouting must be implemented different to leaf_block_element
         // It should be sufficient to count the number of lines here,
         // and return the number multiplied with the line height of the
         // font
 
-        auto line_height = get_font(rndr)->get_line_height();
+        auto line_height = get_font(bcknd)->get_line_height();
 
         m_rect.bottom_right().x() = width;
         m_rect.bottom_right().y() = line_height * num_lines(m_literal) +
@@ -38,22 +38,22 @@ class code_block_element : public leaf_block_element {
         return line_height * num_lines(m_literal) + margin.top + margin.bottom;
     }
 
-    virtual void render(renderer *rndr, vec2 pos) override {
+    virtual void render(backend *bcknd, vec2 pos) override {
         // draw the background rectangle, if it differs from the overall
         // background
         auto background_color =
-            rndr->get_string_param("code_block.background_color");
-        if (background_color != rndr->get_string_param("background_color")) {
-            auto radius = rndr->get_float_param("code_block.border_radius");
-            rndr->draw_rounded_rect(m_rect, radius, color(background_color));
+            bcknd->get_string_param("code_block.background_color");
+        if (background_color != bcknd->get_string_param("background_color")) {
+            auto radius = bcknd->get_float_param("code_block.border_radius");
+            bcknd->draw_rounded_rect(m_rect, radius, color(background_color));
         }
-        auto fnt = get_font(rndr);
+        auto fnt = get_font(bcknd);
         auto current_pos = pos + m_rect.top_left();
-        current_pos.x() += rndr->get_margin("code_block").left;
-        current_pos.y() += rndr->get_margin("code_block").top;
+        current_pos.x() += bcknd->get_margin("code_block").left;
+        current_pos.y() += bcknd->get_margin("code_block").top;
         for (auto &line : line_splitter(m_literal)) {
             std::string ln = line;
-            rndr->draw_string(ln, current_pos + vec2(0.f, fnt->get_ascent()), fnt, get_color(rndr));
+            bcknd->draw_string(ln, current_pos + vec2(0.f, fnt->get_ascent()), fnt, get_color(bcknd));
             current_pos.y() += fnt->get_line_height();
         }
     }

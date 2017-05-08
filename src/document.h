@@ -7,7 +7,7 @@
 // License: MIT License (for full license see LICENSE)
 
 #include "element.h"
-#include "renderer.h"
+#include "backend.h"
 
 #include <memory>
 #include <string>
@@ -23,7 +23,7 @@ class document {
     static document from_string(const std::string &string,
                                 bool be_verbose = false);
 
-    void set_renderer(renderer *renderer) { m_renderer = renderer; }
+    void set_backend(backend *bcknd) { m_backend = bcknd; }
 
     // layout the CommonMark document to a canvas with
     // a given maximum width. returns the height required to
@@ -38,9 +38,9 @@ class document {
     element *get_root_element() const noexcept { return m_root_element.get(); }
 
   private:
-    document(element *element) : m_root_element(element), m_renderer(nullptr){};
+    document(element *element) : m_root_element(element), m_backend(nullptr){};
     std::unique_ptr<element> m_root_element;
-    renderer *m_renderer; // referenced renderer implementation,
+    backend *m_backend; // referenced renderer implementation,
     // the document does not own the renderer
     int m_layout_width;
 };

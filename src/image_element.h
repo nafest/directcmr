@@ -17,10 +17,10 @@ class image_element : public element {
 
     virtual float get_top_to_base_line() noexcept override { return m_height; }
 
-    virtual void add_to_leaf_block(renderer *rndr,
+    virtual void add_to_leaf_block(backend *bcknd,
                                    paragraph_state &pstate) override {
-        auto image_extents = rndr->get_image_extents(m_src);
-        auto margin = rndr->get_margin("image");
+        auto image_extents = bcknd->get_image_extents(m_src);
+        auto margin = bcknd->get_margin("image");
         vec2 top_left{pstate.get_posx(), pstate.get_posy()};
         if (!pstate.advance(
                 image_extents + vec2(margin.horizontal_margin(), 0.f), this)) {
@@ -45,9 +45,9 @@ class image_element : public element {
         set_position(top_left);
     }
 
-    virtual void render(renderer *rndr, vec2 pos) override {
-        auto margin = rndr->get_margin("image");
-        rndr->draw_image(m_src, pos + m_rect.top_left() +
+    virtual void render(backend *bcknd, vec2 pos) override {
+        auto margin = bcknd->get_margin("image");
+        bcknd->draw_image(m_src, pos + m_rect.top_left() +
                                     vec2(margin.left, margin.top),
                          m_width, m_height);
     }

@@ -9,7 +9,7 @@
 #pragma once
 
 #include "paragraph_state.h"
-#include "renderer.h"
+#include "backend.h"
 #include "style.h"
 #include "utils.h"
 
@@ -54,38 +54,38 @@ class element {
 
     style get_style() const noexcept { return m_style; }
 
-    font *get_font(renderer *rndr) { return rndr->font_for_style(m_style); }
+    font *get_font(backend *bcknd) { return bcknd->font_for_style(m_style); }
 
-    color get_color(renderer *rndr) {
+    color get_color(backend *bcknd) {
         // the color of inline code spans dominates to support code spans
         // in blockquote elements
         if (get_style().get_inline_code()) {
-            return string_to_color(rndr->get_string_param("code.color"));
+            return string_to_color(bcknd->get_string_param("code.color"));
         } else if (get_style().get_blockquote())
-            return string_to_color(rndr->get_string_param("blockquote.color"));
+            return string_to_color(bcknd->get_string_param("blockquote.color"));
         else if (get_style().get_code()) {
-            return string_to_color(rndr->get_string_param("code_block.color"));
+            return string_to_color(bcknd->get_string_param("code_block.color"));
         } else if (get_style().get_inline_code()) {
-            return string_to_color(rndr->get_string_param("code.color"));
+            return string_to_color(bcknd->get_string_param("code.color"));
         } else if (get_style().get_link()) {
             if (get_style().get_visited())
                 return string_to_color(
-                    rndr->get_string_param("link.visited_color"));
+                    bcknd->get_string_param("link.visited_color"));
             else
-                return string_to_color(rndr->get_string_param("link.color"));
+                return string_to_color(bcknd->get_string_param("link.color"));
         }
 
-        return string_to_color(rndr->get_string_param("color"));
+        return string_to_color(bcknd->get_string_param("color"));
     }
 
     // layout the element and all its subelements to fit the given width.
     // Returns the height required to render the element
-    virtual float layout(renderer *rndr, float width) {
+    virtual float layout(backend *bcknd, float width) {
         // on default return the cumulated height of all child elements
         float cumul_height = 0;
         for (auto child : m_children) {
             child->set_position({0, cumul_height});
-            cumul_height += child->layout(rndr, width);
+            cumul_height += child->layout(bcknd, width);
         }
 
         return cumul_height;
@@ -93,35 +93,35 @@ class element {
 
     // return the minimum width required to render an element
     // (in most cases this should be the width of the largest word)
-    virtual float min_width(renderer *rndr) {
+    virtual float min_width(backend *bcknd) {
         float min_width = 0;
         for (auto child : m_children) {
-            min_width = std::max<float>(min_width, child->min_width(rndr));
+            min_width = std::max<float>(min_width, child->min_width(bcknd));
         }
-        return min_width + rndr->get_margin(get_type()).horizontal_margin();
+        return min_width + bcknd->get_margin(get_type()).horizontal_margin();
     }
 
     // return the preferred width to render an element
     // (e.g. the width needed to render everything in a paragraph
     //  into one line)
-    virtual float preferred_width(renderer *rndr) {
+    virtual float preferred_width(backend *bcknd) {
         float preferred_width = 0;
         for (auto child : m_children) {
             preferred_width =
-                std::max<float>(preferred_width, child->preferred_width(rndr));
+                std::max<float>(preferred_width, child->preferred_width(bcknd));
         }
 
-        return preferred_width + rndr->get_margin(get_type()).vertical_margin();
+        return preferred_width + bcknd->get_margin(get_type()).vertical_margin();
     }
 
-    virtual void render(renderer *rndr, vec2 pos = {0, 0}) {
+    virtual void render(backend *bcknd, vec2 pos = {0, 0}) {
         for (auto child : m_children)
-            child->render(rndr, pos + m_rect.top_left());
+            child->render(bcknd, pos + m_rect.top_left());
     }
 
     virtual float get_top_to_base_line() noexcept { return 0.f; }
 
-    virtual void add_to_leaf_block(renderer *rndr, paragraph_state &pstate) {}
+    virtual void add_to_leaf_block(backend *bcknd, paragraph_state &pstate) {}
 
     void set_position(const vec2 &pos) noexcept { m_rect.top_left() = pos; }
     vec2 get_position() const noexcept { return m_rect.top_left(); }

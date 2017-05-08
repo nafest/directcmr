@@ -243,10 +243,10 @@ cmr::document cmr::document::from_file(const std::string &file_name,
 int cmr::document::layout(int width) {
     m_layout_width = width;
     return static_cast<int>(std::ceil(
-        m_root_element->layout(m_renderer, static_cast<float>(width))));
+        m_root_element->layout(m_backend, static_cast<float>(width))));
 }
 
 void cmr::document::render(vec2 origin, int height) {
-    m_renderer->prepare_canvas(m_layout_width, height);
-    m_root_element->render(m_renderer, origin);
+    m_backend->prepare_canvas(m_layout_width, height);
+    m_root_element->render(m_backend, origin);
 }

@@ -4,9 +4,9 @@
 #include "SkFontMgr.h"
 #include "SkSurface.h"
 
-#include "renderer.h"
+#include "backend.h"
 
-class skia_renderer : public cmr::renderer {
+class skia_backend : public cmr::backend {
   public:
     virtual void prepare_canvas(int width, int height) override;
 

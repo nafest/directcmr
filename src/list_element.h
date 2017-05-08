@@ -25,64 +25,64 @@ class list_element : public element {
     // On default this is given by list.margin_left
     // However if this value is too small to render
     // the ordinals, return a sufficient value
-    float element_margin(renderer *rndr) {
+    float element_margin(backend *bcknd) {
         if (m_type == list_element_type::unordered)
-            return rndr->get_margin("list").left;
+            return bcknd->get_margin("list").left;
         else {
             auto num_char =
                 static_cast<float>(std::ceil(std::log10(m_children.size())));
-            return std::max<float>(rndr->get_margin("list").left,
-                                   get_font(rndr)->get_x_width() *
+            return std::max<float>(bcknd->get_margin("list").left,
+                                   get_font(bcknd)->get_x_width() *
                                        (num_char + 1.f));
         }
     }
 
-    float layout(renderer *rndr, float width) override {
-        auto margin_left = element_margin(rndr);
-        auto margin = rndr->get_margin("list");
+    float layout(backend *bcknd, float width) override {
+        auto margin_left = element_margin(bcknd);
+        auto margin = bcknd->get_margin("list");
         float offset = margin.top;
         for (auto child : m_children) {
             child->set_position(vec2(margin_left, offset));
-            offset += child->layout(rndr, width - margin_left);
+            offset += child->layout(bcknd, width - margin_left);
         }
         return offset + margin.bottom;
     }
 
-    void render(renderer *rndr, vec2 pos) override {
+    void render(backend *bcknd, vec2 pos) override {
         int cnt = 1;
         auto num_char =
             static_cast<float>(std::ceil(std::log10(m_children.size())));
         for (auto child : m_children) {
             auto child_pos = child->get_position();
             child_pos = child_pos + pos + m_rect.top_left();
-            vec2 marker_top_left(child_pos.x() - rndr->get_margin("list").left,
+            vec2 marker_top_left(child_pos.x() - bcknd->get_margin("list").left,
                                  child_pos.y() +
-                                     rndr->get_margin(child->get_type()).top);
+                                     bcknd->get_margin(child->get_type()).top);
             vec2 marker_bottom_right(
                 child_pos.x(),
-                child_pos.y() + child->get_font(rndr)->get_line_height());
+                child_pos.y() + child->get_font(bcknd)->get_line_height());
 
             rect marker_rect(marker_top_left, marker_bottom_right);
             if (m_type == list_element_type::unordered)
-                rndr->draw_list_marker(marker_rect);
+                bcknd->draw_list_marker(marker_rect);
             else {
                 // in order to render the ordinal correctly, to top margin of
                 // the child element has
                 // to be taken into account
                 marker_top_left.y() = child_pos.y() +
-                                      child->get_font(rndr)->get_ascent() +
-                                      rndr->get_margin(child->get_type()).top;
+                                      child->get_font(bcknd)->get_ascent() +
+                                      bcknd->get_margin(child->get_type()).top;
                 marker_top_left.x() =
                     child_pos.x() -
-                    (num_char + 0.5f) * child->get_font(rndr)->get_x_width();
+                    (num_char + 0.5f) * child->get_font(bcknd)->get_x_width();
                 std::stringstream order_stream;
                 order_stream << cnt << ".";
                 std::string order = order_stream.str();
-                rndr->draw_string(order, marker_top_left, get_font(rndr),
-                                  get_color(rndr));
+                bcknd->draw_string(order, marker_top_left, get_font(bcknd),
+                                  get_color(bcknd));
                 cnt++;
             }
-            child->render(rndr, pos + m_rect.top_left());
+            child->render(bcknd, pos + m_rect.top_left());
         }
     }
 
