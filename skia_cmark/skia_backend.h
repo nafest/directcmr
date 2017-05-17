@@ -24,9 +24,8 @@ class skia_backend : public cmr::backend {
     virtual void draw_string(const std::string &text, const cmr::vec2 &pos,
                              cmr::font *fnt_in, const cmr::color &col) override;
 
-    virtual void draw_list_marker(const cmr::rect &marker_rect) override;
-
-    virtual void draw_rect(const cmr::rect &marker_rect) override;
+    virtual void draw_list_marker(const cmr::rect &marker_rect,
+                                  const cmr::color &col) override;
 
     virtual void draw_rounded_rect(const cmr::rect &rectangle, float radius,
                                    const cmr::color &col,

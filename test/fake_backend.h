@@ -129,11 +129,8 @@ class fake_backend : public cmr::backend {
             draw_string_action(text, pos, fnt->m_font_params, col));
     }
 
-    virtual void draw_list_marker(const cmr::rect &marker_rect) override {
-        m_draw_marker_calls.push_back(draw_marker_action(marker_rect));
-    }
-
-    virtual void draw_rect(const cmr::rect &marker_rect) override {
+    virtual void draw_list_marker(const cmr::rect &marker_rect,
+                                  const cmr::color &col) override {
         m_draw_marker_calls.push_back(draw_marker_action(marker_rect));
     }
 

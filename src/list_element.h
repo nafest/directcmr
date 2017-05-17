@@ -64,7 +64,7 @@ class list_element : public element {
 
             rect marker_rect(marker_top_left, marker_bottom_right);
             if (m_type == list_element_type::unordered)
-                bcknd->draw_list_marker(marker_rect);
+                bcknd->draw_list_marker(marker_rect, color(0, 0, 0, 255));
             else {
                 // in order to render the ordinal correctly, to top margin of
                 // the child element has
@@ -79,7 +79,7 @@ class list_element : public element {
                 order_stream << cnt << ".";
                 std::string order = order_stream.str();
                 bcknd->draw_string(order, marker_top_left, get_font(bcknd),
-                                  get_color(bcknd));
+                                   get_color(bcknd));
                 cnt++;
             }
             child->render(bcknd, pos + m_rect.top_left());

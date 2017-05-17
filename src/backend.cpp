@@ -12,6 +12,7 @@
 cmr::backend::backend() {
     // set some default parameters
     set_string_param("font", "Arial");
+    set_float_param("font_size", 14.f);
     set_string_param("color", "#000000ff");
     set_string_param("background_color", "#00000000"); // be transparent
 
@@ -67,11 +68,12 @@ cmr::font *cmr::backend::font_for_style(const cmr::style &st) {
     else if (st.get_inline_code())
         family_str = get_string_param("code.font");
     else
-        family_str = default_family();
+        family_str = get_string_param("font");
 
-    int size = default_size();
+    int size = get_float_param("font_size");
     if (st.get_heading_level() > 0)
-        size = heading_size(st.get_heading_level());
+      for (int i = 6; i >= st.get_heading_level(); i--)
+        size = static_cast<int>(size * 1.1f);
 
     auto font = create_font(family_str, style_str, size);
     m_cached_fonts[st] = font;

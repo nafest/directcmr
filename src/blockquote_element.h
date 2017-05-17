@@ -31,7 +31,7 @@ class blockquote_element : public element {
         rect bq_marker(pos + m_rect.top_left() + vec2(0, 0),
                        pos + m_rect.top_left() + vec2(5, m_height));
 
-        bcknd->draw_rect(bq_marker);
+        bcknd->draw_rounded_rect(bq_marker, 0, bcknd->get_string_param("blockquot.color"));
         for (auto child : m_children)
             child->render(bcknd, pos + m_rect.top_left() + margin);
     }

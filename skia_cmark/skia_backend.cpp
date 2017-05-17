@@ -104,26 +104,15 @@ void skia_backend::draw_string(const std::string &text, const cmr::vec2 &pos,
                        fnt->paint());
 }
 
-void skia_backend::draw_list_marker(const cmr::rect &marker_rect) {
+void skia_backend::draw_list_marker(const cmr::rect &marker_rect, const cmr::color &col) {
     float cx = marker_rect.top_left().x() + 0.5 * marker_rect.width();
     float cy = marker_rect.top_left().y() + 0.5 * marker_rect.height();
     float radius = 0.2 * std::min(marker_rect.width(), marker_rect.height());
     SkPaint paint;
-    paint.setColor(SK_ColorBLACK);
+    paint.setColor(SkColorSetARGBMacro(col.a, col.r, col.g, col.b));
     paint.setAntiAlias(true);
     paint.setStyle(SkPaint::kStrokeAndFill_Style);
     m_canvas->drawCircle(cx, cy, radius, paint);
-}
-
-void skia_backend::draw_rect(const cmr::rect &marker_rect) {
-    SkPaint paint;
-    paint.setColor(SK_ColorBLACK);
-    paint.setAntiAlias(true);
-    paint.setStyle(SkPaint::kStrokeAndFill_Style);
-    SkRect rect = SkRect::MakeLTRB(
-        marker_rect.top_left().x(), marker_rect.top_left().y(),
-        marker_rect.bottom_right().x(), marker_rect.bottom_right().y());
-    m_canvas->drawRect(rect, paint);
 }
 
 void skia_backend::draw_rounded_rect(const cmr::rect &rectangle, float radius,
@@ -139,7 +128,10 @@ void skia_backend::draw_rounded_rect(const cmr::rect &rectangle, float radius,
     SkRect rect = SkRect::MakeLTRB(
         rectangle.top_left().x(), rectangle.top_left().y(),
         rectangle.bottom_right().x(), rectangle.bottom_right().y());
-    m_canvas->drawRoundRect(rect, radius, radius, paint);
+    if (radius == 0.f)
+        m_canvas->drawRect(rect, paint);
+    else
+        m_canvas->drawRoundRect(rect, radius, radius, paint);
 }
 
 void skia_backend::draw_line(const cmr::vec2 &from, const cmr::vec2 &to,
