@@ -10,9 +10,10 @@ class backend_test : public ::testing::Test {
   protected:
     virtual void SetUp() override {
         // reset some preset stylings to ease testing
-        fbcknd.set_float_param("margin_top", 0.f);
-        fbcknd.set_float_param("margin_bottom", 0.f);
-        fbcknd.set_float_param("document.margin", 0.f);
+        auto& ss = fbcknd.get_style_sheet();
+        ss.set_float_param("margin_top", 0.f);
+        ss.set_float_param("margin_bottom", 0.f);
+        ss.set_float_param("document.margin", 0.f);
     }
 
     virtual void TearDown() override {}
@@ -21,19 +22,21 @@ class backend_test : public ::testing::Test {
 };
 
 TEST_F(backend_test, string_param_fallback) {
-    fbcknd.set_string_param("bar", "42");
+    fbcknd.get_style_sheet().set_string_param("bar", "42");
 
-    EXPECT_STREQ("42", fbcknd.get_string_param("foo.bar").c_str());
+    EXPECT_STREQ("42",
+                 fbcknd.get_style_sheet().get_string_param("foo.bar").c_str());
 }
 
 TEST_F(backend_test, float_param_fallback) {
-    fbcknd.set_float_param("bar", 42.f);
+    auto& ss = fbcknd.get_style_sheet();
+    ss.set_float_param("bar", 42.f);
 
-    EXPECT_EQ(42.f, fbcknd.get_float_param("foo.bar"));
+    EXPECT_EQ(42.f, ss.get_float_param("foo.bar"));
 }
 
 TEST_F(backend_test, RenderSimple) {
-    fbcknd.set_float_param("list.margin_left", 5.f);
+    fbcknd.get_style_sheet().set_float_param("list.margin_left", 5.f);
     auto d = cmr::document::from_string("Hello *world*");
     d.set_backend(&fbcknd);
     d.layout(200);
@@ -41,13 +44,15 @@ TEST_F(backend_test, RenderSimple) {
 
     EXPECT_EQ(2, fbcknd.m_draw_string_calls.size());
     EXPECT_EQ(0, fbcknd.m_draw_string_calls[0].m_pos.x());
-    EXPECT_STREQ("Normal", fbcknd.m_draw_string_calls[0].m_font.m_style.c_str());
+    EXPECT_STREQ("Normal",
+                 fbcknd.m_draw_string_calls[0].m_font.m_style.c_str());
     EXPECT_EQ(60, fbcknd.m_draw_string_calls[1].m_pos.x());
-    EXPECT_STREQ("Italic", fbcknd.m_draw_string_calls[1].m_font.m_style.c_str());
+    EXPECT_STREQ("Italic",
+                 fbcknd.m_draw_string_calls[1].m_font.m_style.c_str());
 }
 
 TEST_F(backend_test, RenderList) {
-    fbcknd.set_float_param("list.margin_left", 5.f);
+    fbcknd.get_style_sheet().set_float_param("list.margin_left", 5.f);
     auto d = cmr::document::from_string("- Item1\n- Item2");
     d.set_backend(&fbcknd);
     d.layout(100);
@@ -67,8 +72,9 @@ TEST_F(backend_test, RenderList) {
 }
 
 TEST_F(backend_test, RenderCodeSpan) {
-    fbcknd.set_float_param("code.margin_left", 5.f);
-    fbcknd.set_float_param("code.margin_right", 6.f);
+    auto& ss = fbcknd.get_style_sheet();
+    ss.set_float_param("code.margin_left", 5.f);
+    ss.set_float_param("code.margin_right", 6.f);
     auto d = cmr::document::from_string("foo `void main` bar");
 
     // the font width of normal text is 10px per character, while
@@ -91,39 +97,43 @@ TEST_F(backend_test, RenderCodeSpan) {
 
 TEST(get_margin, nothing_set) {
     fake_backend fbcknd;
-    EXPECT_EQ(0.f, fbcknd.get_margin("foo_elem").left);
+    EXPECT_EQ(0.f, fbcknd.get_style_sheet().get_margin("foo_elem").left);
 }
 
 TEST(get_margin, specific_set) {
     fake_backend fbcknd;
-    fbcknd.set_float_param("margin", 45.f);
-    fbcknd.set_float_param("margin_left", 44.f);
-    fbcknd.set_float_param("foo_elem.margin", 43.f);
-    fbcknd.set_float_param("foo_elem.margin_left", 42.f);
+    auto& ss = fbcknd.get_style_sheet();
+    ss.set_float_param("margin", 45.f);
+    ss.set_float_param("margin_left", 44.f);
+    ss.set_float_param("foo_elem.margin", 43.f);
+    ss.set_float_param("foo_elem.margin_left", 42.f);
 
-    EXPECT_EQ(42.f, fbcknd.get_margin("foo_elem").left);
+    EXPECT_EQ(42.f, ss.get_margin("foo_elem").left);
 }
 
 TEST(get_margin, specific_elem_set) {
     fake_backend fbcknd;
-    fbcknd.set_float_param("margin", 45.f);
-    fbcknd.set_float_param("margin_left", 44.f);
-    fbcknd.set_float_param("foo_elem.margin", 43.f);
+    auto ss = fbcknd.get_style_sheet();
+    ss.set_float_param("margin", 45.f);
+    ss.set_float_param("margin_left", 44.f);
+    ss.set_float_param("foo_elem.margin", 43.f);
 
-    EXPECT_EQ(43.f, fbcknd.get_margin("foo_elem").left);
+    EXPECT_EQ(43.f, ss.get_margin("foo_elem").left);
 }
 
 TEST(get_margin, specific_general_set) {
     fake_backend fbcknd;
-    fbcknd.set_float_param("margin", 45.f);
-    fbcknd.set_float_param("margin_left", 44.f);
+    auto ss = fbcknd.get_style_sheet();
+    ss.set_float_param("margin", 45.f);
+    ss.set_float_param("margin_left", 44.f);
 
-    EXPECT_EQ(44.f, fbcknd.get_margin("foo_elem").left);
+    EXPECT_EQ(44.f, ss.get_margin("foo_elem").left);
 }
 
 TEST(get_margin, general_set) {
     fake_backend fbcknd;
-    fbcknd.set_float_param("margin", 45.f);
+    auto ss = fbcknd.get_style_sheet();
+    ss.set_float_param("margin", 45.f);
 
-    EXPECT_EQ(45.f, fbcknd.get_margin("foo_elem").left);
+    EXPECT_EQ(45.f, ss.get_margin("foo_elem").left);
 }

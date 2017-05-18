@@ -49,7 +49,8 @@ class table_element : public element {
         for (auto child : m_children) {
             for (int i = 0; i < child->children().size(); i++) {
                 col_widths[i] = std::max<float>(
-                    col_widths[i], child->children()[i]->preferred_width(bcknd));
+                    col_widths[i],
+                    child->children()[i]->preferred_width(bcknd));
             }
         }
 
@@ -72,8 +73,9 @@ class table_element : public element {
     }
 
     virtual float layout(backend *bcknd, float width) {
+        auto ss = bcknd->get_style_sheet();
         // styling options required for layouting the table
-        auto border_width = bcknd->get_float_param("table.border_width");
+        auto border_width = ss.get_float_param("table.border_width");
 
         auto num_col = num_column();
         float spacing_width = (num_col + 1) * border_width;
@@ -103,7 +105,7 @@ class table_element : public element {
                 border_width + column_widths[i - 1] + m_grid_col[i - 1];
 
         m_grid_row.push_back(0.5f * border_width);
-        float height = bcknd->get_margin("table").top;
+        float height = ss.get_margin("table").top;
         for (auto row : m_children) {
             float row_height = 0.f;
             for (int i = 0; i < num_col; i++) {
@@ -117,26 +119,27 @@ class table_element : public element {
             m_grid_row.push_back(height + 0.5f * border_width);
         }
 
-        return height + bcknd->get_margin("table").bottom;
+        return height + ss.get_margin("table").bottom;
     }
 
     virtual void render(backend *bcknd, vec2 pos = {0, 0}) {
         auto num_col = num_column();
-        auto border_width = bcknd->get_float_param("table.border_width");
+        auto border_width =
+            bcknd->get_style_sheet().get_float_param("table.border_width");
 
         // render the horizontal lines;
         float width = m_grid_col.back();
         for (auto y : m_grid_row)
             bcknd->draw_line(vec2(0, y) + pos + m_rect.top_left(),
-                            vec2(width, y) + pos + m_rect.top_left(), color(0, 0, 0, 255),
-                            border_width);
+                             vec2(width, y) + pos + m_rect.top_left(),
+                             color(0, 0, 0, 255), border_width);
 
         // render the vertical lines;
         float height = m_grid_row.back();
         for (auto x : m_grid_col)
             bcknd->draw_line(vec2(x, 0) + pos + m_rect.top_left(),
-                            vec2(x, height) + pos + m_rect.top_left(), color(0, 0, 0, 255),
-                            border_width);
+                             vec2(x, height) + pos + m_rect.top_left(),
+                             color(0, 0, 0, 255), border_width);
 
         for (auto row : m_children) {
             for (int i = 0; i < num_col; i++) {

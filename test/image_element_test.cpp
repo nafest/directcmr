@@ -16,11 +16,12 @@ class image_element_test : public ::testing::Test {
   protected:
     virtual void SetUp() override {
         // reset some preset stylings to ease testing
-        fbcknd.set_float_param("margin_top", 0.f);
-        fbcknd.set_float_param("margin_bottom", 0.f);
-        fbcknd.set_float_param("document.margin", 0.f);
-        fbcknd.set_float_param("image.margin_left", 2.f);
-        fbcknd.set_float_param("image.margin_right", 2.f);
+        auto& ss = fbcknd.get_style_sheet();
+        ss.set_float_param("margin_top", 0.f);
+        ss.set_float_param("margin_bottom", 0.f);
+        ss.set_float_param("document.margin", 0.f);
+        ss.set_float_param("image.margin_left", 2.f);
+        ss.set_float_param("image.margin_right", 2.f);
     }
 
     virtual void TearDown() override {}

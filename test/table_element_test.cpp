@@ -32,8 +32,9 @@ TEST(distribute_width, pay_respect_to_min_width_difficult) {
 
 TEST(table_cell_preferred_width, includes_margin) {
     fake_backend fbcknd;
-    fbcknd.set_float_param("table_cell.margin_left", 12.0);
-    fbcknd.set_float_param("table_cell.margin_right", 13.0);
+    auto& ss = fbcknd.get_style_sheet();
+    ss.set_float_param("table_cell.margin_left", 12.0);
+    ss.set_float_param("table_cell.margin_right", 13.0);
 
     cmr::document doc = cmr::document::from_string(
         "| lorem | ipsum |\n| --- | --- |\n| lorem | ipsum dolor |");
@@ -50,8 +51,9 @@ TEST(table_cell_preferred_width, includes_margin) {
 
 TEST(table_cell_min_width, includes_margin) {
     fake_backend fbcknd;
-    fbcknd.set_float_param("table_cell.margin_left", 12.0);
-    fbcknd.set_float_param("table_cell.margin_right", 13.0);
+    auto& ss = fbcknd.get_style_sheet();
+    ss.set_float_param("table_cell.margin_left", 12.0);
+    ss.set_float_param("table_cell.margin_right", 13.0);
 
     cmr::document doc = cmr::document::from_string(
         "| lorem | ipsum |\n| --- | --- |\n| lorem | ipsum dolores |");

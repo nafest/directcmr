@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include "paragraph_state.h"
 #include "backend.h"
+#include "paragraph_state.h"
 #include "style.h"
 #include "utils.h"
 
@@ -59,23 +59,26 @@ class element {
     color get_color(backend *bcknd) {
         // the color of inline code spans dominates to support code spans
         // in blockquote elements
+
+        auto ss = bcknd->get_style_sheet();
+
         if (get_style().get_inline_code()) {
-            return string_to_color(bcknd->get_string_param("code.color"));
+            return string_to_color(ss.get_string_param("code.color"));
         } else if (get_style().get_blockquote())
-            return string_to_color(bcknd->get_string_param("blockquote.color"));
+            return string_to_color(ss.get_string_param("blockquote.color"));
         else if (get_style().get_code()) {
-            return string_to_color(bcknd->get_string_param("code_block.color"));
+            return string_to_color(ss.get_string_param("code_block.color"));
         } else if (get_style().get_inline_code()) {
-            return string_to_color(bcknd->get_string_param("code.color"));
+            return string_to_color(ss.get_string_param("code.color"));
         } else if (get_style().get_link()) {
             if (get_style().get_visited())
                 return string_to_color(
-                    bcknd->get_string_param("link.visited_color"));
+                    ss.get_string_param("link.visited_color"));
             else
-                return string_to_color(bcknd->get_string_param("link.color"));
+                return string_to_color(ss.get_string_param("link.color"));
         }
 
-        return string_to_color(bcknd->get_string_param("color"));
+        return string_to_color(ss.get_string_param("color"));
     }
 
     // layout the element and all its subelements to fit the given width.
@@ -98,7 +101,10 @@ class element {
         for (auto child : m_children) {
             min_width = std::max<float>(min_width, child->min_width(bcknd));
         }
-        return min_width + bcknd->get_margin(get_type()).horizontal_margin();
+        return min_width +
+               bcknd->get_style_sheet()
+                   .get_margin(get_type())
+                   .horizontal_margin();
     }
 
     // return the preferred width to render an element
@@ -111,7 +117,10 @@ class element {
                 std::max<float>(preferred_width, child->preferred_width(bcknd));
         }
 
-        return preferred_width + bcknd->get_margin(get_type()).vertical_margin();
+        return preferred_width +
+               bcknd->get_style_sheet()
+                   .get_margin(get_type())
+                   .vertical_margin();
     }
 
     virtual void render(backend *bcknd, vec2 pos = {0, 0}) {

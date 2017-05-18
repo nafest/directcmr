@@ -36,7 +36,6 @@ the contents of an element.
 ### (incomplete) List of open tasks
 - add a test for table_element
 - add clipping
-- move styling from backend to a separate class
 - common base class for tests with styling resets
 - document and cleanup the backend API
 - it should be possible to provide an external canvas

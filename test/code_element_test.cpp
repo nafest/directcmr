@@ -6,15 +6,16 @@ TEST(code_element, inline_code_element) {
     fake_backend fbcknd;
 
     // reset some preset stylings to ease testing
-    fbcknd.set_float_param("margin_top", 0.f);
-    fbcknd.set_float_param("margin_bottom", 0.f);
-    fbcknd.set_float_param("document.margin", 0.f);
-    fbcknd.set_float_param("image.margin_left", 2.f);
-    fbcknd.set_float_param("image.margin_right", 2.f);
-    fbcknd.set_float_param("code.margin_left", 5.f);
-    fbcknd.set_float_param("code.margin_right", 5.f);
-    fbcknd.set_string_param("code.font", "test_code_font");
-    fbcknd.set_string_param("code.background_color", "#aabbccdd");
+    auto& ss = fbcknd.get_style_sheet();
+    ss.set_float_param("margin_top", 0.f);
+    ss.set_float_param("margin_bottom", 0.f);
+    ss.set_float_param("document.margin", 0.f);
+    ss.set_float_param("image.margin_left", 2.f);
+    ss.set_float_param("image.margin_right", 2.f);
+    ss.set_float_param("code.margin_left", 5.f);
+    ss.set_float_param("code.margin_right", 5.f);
+    ss.set_string_param("code.font", "test_code_font");
+    ss.set_string_param("code.background_color", "#aabbccdd");
 
     auto doc = cmr::document::from_string("Hello `code`");
     doc.set_backend(&fbcknd);

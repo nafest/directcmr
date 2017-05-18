@@ -26,12 +26,13 @@ class list_element : public element {
     // However if this value is too small to render
     // the ordinals, return a sufficient value
     float element_margin(backend *bcknd) {
+        auto ss = bcknd->get_style_sheet();
         if (m_type == list_element_type::unordered)
-            return bcknd->get_margin("list").left;
+            return ss.get_margin("list").left;
         else {
             auto num_char =
                 static_cast<float>(std::ceil(std::log10(m_children.size())));
-            return std::max<float>(bcknd->get_margin("list").left,
+            return std::max<float>(ss.get_margin("list").left,
                                    get_font(bcknd)->get_x_width() *
                                        (num_char + 1.f));
         }
@@ -39,7 +40,7 @@ class list_element : public element {
 
     float layout(backend *bcknd, float width) override {
         auto margin_left = element_margin(bcknd);
-        auto margin = bcknd->get_margin("list");
+        auto margin = bcknd->get_style_sheet().get_margin("list");
         float offset = margin.top;
         for (auto child : m_children) {
             child->set_position(vec2(margin_left, offset));
@@ -49,15 +50,16 @@ class list_element : public element {
     }
 
     void render(backend *bcknd, vec2 pos) override {
+        auto ss = bcknd->get_style_sheet();
         int cnt = 1;
         auto num_char =
             static_cast<float>(std::ceil(std::log10(m_children.size())));
         for (auto child : m_children) {
             auto child_pos = child->get_position();
             child_pos = child_pos + pos + m_rect.top_left();
-            vec2 marker_top_left(child_pos.x() - bcknd->get_margin("list").left,
+            vec2 marker_top_left(child_pos.x() - ss.get_margin("list").left,
                                  child_pos.y() +
-                                     bcknd->get_margin(child->get_type()).top);
+                                     ss.get_margin(child->get_type()).top);
             vec2 marker_bottom_right(
                 child_pos.x(),
                 child_pos.y() + child->get_font(bcknd)->get_line_height());
@@ -71,7 +73,7 @@ class list_element : public element {
                 // to be taken into account
                 marker_top_left.y() = child_pos.y() +
                                       child->get_font(bcknd)->get_ascent() +
-                                      bcknd->get_margin(child->get_type()).top;
+                                      ss.get_margin(child->get_type()).top;
                 marker_top_left.x() =
                     child_pos.x() -
                     (num_char + 0.5f) * child->get_font(bcknd)->get_x_width();

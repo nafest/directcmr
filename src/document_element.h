@@ -15,7 +15,7 @@ namespace cmr {
 class document_element : public element {
   public:
     virtual float layout(backend *bcknd, float width) {
-        auto margin = bcknd->get_margin("document");
+        auto margin = bcknd->get_style_sheet().get_margin("document");
         float cumul_height = margin.top;
         for (auto child : m_children) {
             child->set_position({margin.left, cumul_height});

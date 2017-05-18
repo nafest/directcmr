@@ -9,6 +9,7 @@
 
 #include "geom.h"
 #include "style.h"
+#include "style_sheet.h"
 #include "utils.h"
 
 #include <map>
@@ -55,60 +56,10 @@ struct color {
     unsigned char r, g, b, a;
 };
 
-// struct for margins (left, top, right, bottom)
-struct elem_margin {
-    elem_margin(float _left, float _top, float _right, float _bottom)
-        : top(_top), left(_left), right(_right), bottom(_bottom) {}
-    float vertical_margin() const { return top + bottom; }
-    float horizontal_margin() const { return left + right; }
-    float top, left, bottom, right;
-};
-
 // abstract class for the interface of a renderer backend
 // subclass and implement all pure virtual methods.
 class backend {
   public:
-    backend();
-
-    virtual float get_float_param(const std::string &param_name) const
-        noexcept {
-        auto elem = m_float_params.find(param_name);
-        if (elem == m_float_params.end()) {
-            auto dot_pos = param_name.find(".");
-            if (dot_pos != std::string::npos) {
-                return get_float_param(param_name.substr(dot_pos + 1));
-            }
-            return 0.f;
-        }
-        return elem->second;
-    }
-
-    virtual void set_float_param(const std::string &param_name,
-                                 float value) noexcept {
-        m_float_params[param_name] = value;
-    }
-
-    virtual std::string get_string_param(const std::string &param_name) const
-        noexcept {
-        auto elem = m_string_params.find(param_name);
-        if (elem == m_string_params.end()) {
-            auto dot_pos = param_name.find(".");
-            if (dot_pos != std::string::npos) {
-                return get_string_param(param_name.substr(dot_pos + 1));
-            }
-            return "";
-        }
-        return elem->second;
-    }
-
-    virtual void set_string_param(const std::string &param_name,
-                                  const std::string &value) noexcept {
-        m_string_params[param_name] = value;
-    }
-
-    virtual elem_margin get_margin(const std::string &element_name) const
-        noexcept;
-
     // called immediately before rendering starts
     //
     // width - the value passed to document::layout
@@ -181,19 +132,19 @@ class backend {
     // line_width - width of the line
     virtual void draw_line(const vec2 &from, const vec2 &to, const color &col,
                            float line_width = 1.f) = 0;
-    
+
     // return true if the given URI has been visited before
     //
     // cmark_renderer uses this to choose between link.color
     // and link.visited_color
     virtual bool is_visited_uri(const std::string &uri) = 0;
 
-  private:
-    float get_side_margin(const std::string &element_name,
-                          const std::string side) const noexcept;
+    // return a reference to the style sheet
+    style_sheet &get_style_sheet() { return m_style_sheet; }
 
+  private:
     std::map<style, font *> m_cached_fonts;
-    std::map<std::string, float> m_float_params;
-    std::map<std::string, std::string> m_string_params;
+
+    style_sheet m_style_sheet;
 };
 }

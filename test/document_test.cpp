@@ -9,9 +9,10 @@ class document_test : public ::testing::Test {
   protected:
     virtual void SetUp() override {
         // reset some preset stylings to ease testing
-        fbcknd.set_float_param("margin_top", 0.f);
-        fbcknd.set_float_param("margin_bottom", 0.f);
-        fbcknd.set_float_param("document.margin", 0.f);
+        auto& ss = fbcknd.get_style_sheet();
+        ss.set_float_param("margin_top", 0.f);
+        ss.set_float_param("margin_bottom", 0.f);
+        ss.set_float_param("document.margin", 0.f);
     }
 
     virtual void TearDown() override {}
@@ -78,7 +79,8 @@ TEST_F(document_test, layouting_of_to_large_single_word_is_correct) {
 }
 
 TEST_F(document_test, list_layouting_is_correct) {
-    fbcknd.set_float_param("list.margin_left", 5.f);
+    auto& ss = fbcknd.get_style_sheet();
+    ss.set_float_param("list.margin_left", 5.f);
     cmr::document d = cmr::document::from_string("- Item1\n- Item2");
     d.set_backend(&fbcknd);
     auto height = d.layout(400);
@@ -91,20 +93,21 @@ TEST_F(document_test, list_layouting_is_correct) {
     EXPECT_STREQ("item", item1->get_type().c_str());
     auto item2 = list->children()[1];
 
-    auto indent = fbcknd.get_float_param("list.margin_left");
+    auto indent = ss.get_float_param("list.margin_left");
 
     EXPECT_EQ(indent, item1->get_position().x());
     EXPECT_EQ(indent, item2->get_position().x());
 }
 
 TEST_F(document_test, code_layout_is_correct) {
-    fbcknd.set_float_param("code_block.margin_left", 10.f);
+    auto& ss = fbcknd.get_style_sheet();
+    ss.set_float_param("code_block.margin_left", 10.f);
     cmr::document d = cmr::document::from_string("    code;");
     d.set_backend(&fbcknd);
     auto height = d.layout(400);
     EXPECT_EQ(d.get_root_element()->get_font(&fbcknd)->get_line_height() +
-                  fbcknd.get_float_param("code_block.margin_top") +
-                  fbcknd.get_float_param("code_block.margin_bottom"),
+                  ss.get_float_param("code_block.margin_top") +
+                  ss.get_float_param("code_block.margin_bottom"),
               height);
     auto root = d.get_root_element();
     auto code = root->children()[0];
@@ -115,18 +118,19 @@ TEST_F(document_test, code_layout_is_correct) {
 }
 
 TEST_F(document_test, code_font_is_propagated) {
-    fbcknd.set_float_param("code_block.margin_left", 10.f);
+    auto& ss = fbcknd.get_style_sheet();
+    ss.set_float_param("code_block.margin_left", 10.f);
     cmr::document d = cmr::document::from_string("    code;");
     d.set_backend(&fbcknd);
     auto height = d.layout(400);
     EXPECT_EQ(d.get_root_element()->get_font(&fbcknd)->get_line_height() +
-                  fbcknd.get_float_param("code_block.margin_top") +
-                  fbcknd.get_float_param("code_block.margin_bottom"),
+                  ss.get_float_param("code_block.margin_top") +
+                  ss.get_float_param("code_block.margin_bottom"),
               height);
     auto root = d.get_root_element();
     auto code = root->children()[0];
     fake_font *fnt = static_cast<fake_font *>(code->get_font(&fbcknd));
     ASSERT_NE(nullptr, fnt);
-    EXPECT_STREQ(fbcknd.get_string_param("code_block.font").c_str(),
+    EXPECT_STREQ(ss.get_string_param("code_block.font").c_str(),
                  fnt->m_font_params.m_family.c_str());
 }

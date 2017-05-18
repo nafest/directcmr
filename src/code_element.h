@@ -17,7 +17,7 @@ class code_element : public emph_element {
                                    paragraph_state &pstate) override {
         // add extra margin in the left;
         // manipulate the paragraph_state to do this;
-        auto margin = bcknd->get_margin("code");
+        auto margin = bcknd->get_style_sheet().get_margin("code");
         auto pwidth = pstate.get_width();
         pstate.set_paragraph_width(pwidth - margin.right);
         auto left_offset = pstate.get_left_offset();
@@ -33,12 +33,13 @@ class code_element : public emph_element {
     }
 
     virtual void render(backend *bcknd, vec2 pos) override {
+        auto ss = bcknd->get_style_sheet();
         // draw the background rectangle, if it differs from the overall
         // background
-        auto margin = bcknd->get_margin("code");
-        auto background_color = bcknd->get_string_param("code.background_color");
-        if (background_color != bcknd->get_string_param("background_color")) {
-            auto radius = bcknd->get_float_param("code.border_radius");
+        auto margin = ss.get_margin("code");
+        auto background_color = ss.get_string_param("code.background_color");
+        if (background_color != ss.get_string_param("background_color")) {
+            auto radius = ss.get_float_param("code.border_radius");
 
             // a code span contains only one text_element. So loop over all
             // text elements and form the background rectangles for this text;
@@ -73,7 +74,7 @@ class code_element : public emph_element {
                     current_rect.bottom_right().x() +=
                         margin.horizontal_margin();
                     bcknd->draw_rounded_rect(current_rect, radius,
-                                            color(background_color));
+                                             color(background_color));
                     current_rect.top_left() = words[i]->get_position();
                     current_rect.bottom_right() = current_rect.top_left();
                     current_rect.bottom_right().x() += extents.x();
@@ -84,7 +85,7 @@ class code_element : public emph_element {
             current_rect.bottom_right() += rect_offset;
             current_rect.bottom_right().x() += margin.horizontal_margin();
             bcknd->draw_rounded_rect(current_rect, radius,
-                                    color(background_color));
+                                     color(background_color));
         }
 
         emph_element::render(bcknd, pos);

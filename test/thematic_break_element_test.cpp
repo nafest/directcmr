@@ -6,10 +6,11 @@ TEST(thematic_break_element, renders_correctly) {
     fake_backend fbcknd;
 
     // reset some preset stylings to ease testing
-    fbcknd.set_float_param("margin_top", 0.f);
-    fbcknd.set_float_param("margin_bottom", 0.f);
-    fbcknd.set_float_param("document.margin", 0.f);
-    fbcknd.set_float_param("thematic_break.line_width", 1.f);
+    auto& ss = fbcknd.get_style_sheet();
+    ss.set_float_param("margin_top", 0.f);
+    ss.set_float_param("margin_bottom", 0.f);
+    ss.set_float_param("document.margin", 0.f);
+    ss.set_float_param("thematic_break.line_width", 1.f);
 
     auto doc = cmr::document::from_string("Hello\n\n   ---");
     doc.set_backend(&fbcknd);

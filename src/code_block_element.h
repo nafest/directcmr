@@ -22,7 +22,8 @@ class code_block_element : public leaf_block_element {
     }
 
     virtual float layout(backend *bcknd, float width) override {
-        auto margin = bcknd->get_margin("code_block");
+        auto ss = bcknd->get_style_sheet();
+        auto margin = ss.get_margin("code_block");
         // Since code blocks pay respect to line breaks
         // layouting must be implemented different to leaf_block_element
         // It should be sufficient to count the number of lines here,
@@ -39,18 +40,19 @@ class code_block_element : public leaf_block_element {
     }
 
     virtual void render(backend *bcknd, vec2 pos) override {
+        auto ss = bcknd->get_style_sheet();
         // draw the background rectangle, if it differs from the overall
         // background
         auto background_color =
-            bcknd->get_string_param("code_block.background_color");
-        if (background_color != bcknd->get_string_param("background_color")) {
-            auto radius = bcknd->get_float_param("code_block.border_radius");
+            ss.get_string_param("code_block.background_color");
+        if (background_color != ss.get_string_param("background_color")) {
+            auto radius = ss.get_float_param("code_block.border_radius");
             bcknd->draw_rounded_rect(m_rect, radius, color(background_color));
         }
         auto fnt = get_font(bcknd);
         auto current_pos = pos + m_rect.top_left();
-        current_pos.x() += bcknd->get_margin("code_block").left;
-        current_pos.y() += bcknd->get_margin("code_block").top;
+        current_pos.x() += ss.get_margin("code_block").left;
+        current_pos.y() += ss.get_margin("code_block").top;
         for (auto &line : line_splitter(m_literal)) {
             std::string ln = line;
             bcknd->draw_string(ln, current_pos + vec2(0.f, fnt->get_ascent()), fnt, get_color(bcknd));

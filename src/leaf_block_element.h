@@ -17,7 +17,7 @@ class leaf_block_element : public element {
   public:
     virtual float preferred_width(backend *bcknd) override {
         auto space_extents = get_font(bcknd)->get_space_width();
-        auto margin = bcknd->get_margin(get_type());
+        auto margin = bcknd->get_style_sheet().get_margin(get_type());
         float preferred_width = 0.f;
         for (auto child : m_children) {
             preferred_width += child->preferred_width(bcknd) + space_extents;
@@ -31,7 +31,7 @@ class leaf_block_element : public element {
         // elements
 
         // subtract the margins before layouting
-        auto margin = bcknd->get_margin(get_type());
+        auto margin = bcknd->get_style_sheet().get_margin(get_type());
         width -= margin.horizontal_margin();
 
         // basically we have to start at the top left of
@@ -56,5 +56,4 @@ class leaf_block_element : public element {
         return pstate.get_posy() + pstate.get_line_height() + margin.bottom;
     }
 };
-
 }
