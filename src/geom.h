@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <iostream>
+
 namespace cmr {
 
 class vec2 {
@@ -39,6 +41,10 @@ class vec2 {
     float m_x;
     float m_y;
 };
+
+inline std::ostream &operator<<(std::ostream &os, const vec2 &v) {
+    return os << "(" << v.x() << ", " << v.y() << ")";
+}
 
 class rect {
   public:

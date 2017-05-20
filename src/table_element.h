@@ -104,8 +104,8 @@ class table_element : public element {
             m_grid_col[i] =
                 border_width + column_widths[i - 1] + m_grid_col[i - 1];
 
-        m_grid_row.push_back(0.5f * border_width);
-        float height = ss.get_margin("table").top;
+        float height = ss.get_margin("table").top + border_width;
+        m_grid_row.push_back(height - 0.5f * border_width);
         for (auto row : m_children) {
             float row_height = 0.f;
             for (int i = 0; i < num_col; i++) {
@@ -115,8 +115,8 @@ class table_element : public element {
                 row_height = std::max<float>(
                     row_height, col->layout(bcknd, column_widths[i]));
             }
-            height += row_height;
-            m_grid_row.push_back(height + 0.5f * border_width);
+            height += row_height + border_width;
+            m_grid_row.push_back(height - 0.5f * border_width);
         }
 
         return height + ss.get_margin("table").bottom;
@@ -128,16 +128,18 @@ class table_element : public element {
             bcknd->get_style_sheet().get_float_param("table.border_width");
 
         // render the horizontal lines;
-        float width = m_grid_col.back();
+        float width = m_grid_col.back() + 0.5f * border_width;
+        float left = m_grid_col.front() - 0.5f * border_width;
         for (auto y : m_grid_row)
-            bcknd->draw_line(vec2(0, y) + pos + m_rect.top_left(),
+            bcknd->draw_line(vec2(left, y) + pos + m_rect.top_left(),
                              vec2(width, y) + pos + m_rect.top_left(),
                              color(0, 0, 0, 255), border_width);
 
         // render the vertical lines;
         float height = m_grid_row.back();
+        float top = m_grid_row.front() - 0.5f * border_width;
         for (auto x : m_grid_col)
-            bcknd->draw_line(vec2(x, 0) + pos + m_rect.top_left(),
+            bcknd->draw_line(vec2(x, top) + pos + m_rect.top_left(),
                              vec2(x, height) + pos + m_rect.top_left(),
                              color(0, 0, 0, 255), border_width);
 

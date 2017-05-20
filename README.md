@@ -34,7 +34,6 @@ position does not contain any margin, which must be taken into account when rend
 the contents of an element.
 
 ### (incomplete) List of open tasks
-- add a test for table_element
 - add clipping
 - common base class for tests with styling resets
 - document and cleanup the backend API
