@@ -4,6 +4,9 @@ directcmr renders CommonMark documents without intermediate conversion to anothe
 Given a a simple renderer implementation (an example implementation with Skia is
 included), directcmr directly outputs rendering calls.
 
+[![Build Status](https://travis-ci.org/nafest/directcmr.svg?branch=master)](https://travis-ci.org/nafest/directcmr)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+
 ### Basic Approach
 1. Create a document instance from a string or from a file
 

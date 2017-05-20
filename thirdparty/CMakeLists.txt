@@ -2,7 +2,7 @@ include(ExternalProject)
 
 add_subdirectory (googletest)
 
-if (NOT WITH_COVERAGE)
+if (WITH_SKIA_CMARK)
     ExternalProject_Add(depot_tools
         GIT_REPOSITORY https://chromium.googlesource.com/chromium/tools/depot_tools.git
         UPDATE_DISCONNECTED 1

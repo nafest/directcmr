@@ -11,7 +11,6 @@
 
 #include <cmath>
 #include <iostream>
-#include <strstream>
 
 namespace dcmr {
 
