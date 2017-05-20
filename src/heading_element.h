@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // heading_element.h - class for headings
 //
@@ -11,7 +11,7 @@
 
 #include <iostream>
 
-namespace cmr {
+namespace dcmr {
 
 class heading_element : public leaf_block_element {
   public:

@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // backend.cpp - abstract base class for renderer backends
 //
@@ -9,7 +9,7 @@
 
 #include <iostream>
 
-cmr::font *cmr::backend::font_for_style(const cmr::style &st) {
+dcmr::font *dcmr::backend::font_for_style(const dcmr::style &st) {
     auto search = m_cached_fonts.find(st);
     if (search != m_cached_fonts.end())
         return search->second;

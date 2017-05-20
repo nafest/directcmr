@@ -37,10 +37,10 @@ TEST_F(backend_test, float_param_fallback) {
 
 TEST_F(backend_test, RenderSimple) {
     fbcknd.get_style_sheet().set_float_param("list.margin_left", 5.f);
-    auto d = cmr::document::from_string("Hello *world*");
+    auto d = dcmr::document::from_string("Hello *world*");
     d.set_backend(&fbcknd);
     d.layout(200);
-    d.render(cmr::vec2(0, 0), 100);
+    d.render(dcmr::vec2(0, 0), 100);
 
     EXPECT_EQ(2, fbcknd.m_draw_string_calls.size());
     EXPECT_EQ(0, fbcknd.m_draw_string_calls[0].m_pos.x());
@@ -53,21 +53,21 @@ TEST_F(backend_test, RenderSimple) {
 
 TEST_F(backend_test, RenderList) {
     fbcknd.get_style_sheet().set_float_param("list.margin_left", 5.f);
-    auto d = cmr::document::from_string("- Item1\n- Item2");
+    auto d = dcmr::document::from_string("- Item1\n- Item2");
     d.set_backend(&fbcknd);
     d.layout(100);
-    d.render(cmr::vec2(0, 0), 100);
+    d.render(dcmr::vec2(0, 0), 100);
 
     auto fnt = d.get_root_element()->get_font(&fbcknd);
 
     EXPECT_EQ(2, fbcknd.m_draw_marker_calls.size());
     auto mrect = fbcknd.m_draw_marker_calls[0].m_marker_rect;
-    EXPECT_EQ(cmr::vec2(0.f, 0.f), mrect.top_left());
-    EXPECT_EQ(cmr::vec2(5.f, fnt->get_line_height()), mrect.bottom_right());
+    EXPECT_EQ(dcmr::vec2(0.f, 0.f), mrect.top_left());
+    EXPECT_EQ(dcmr::vec2(5.f, fnt->get_line_height()), mrect.bottom_right());
 
     auto mrect2 = fbcknd.m_draw_marker_calls[1].m_marker_rect;
-    EXPECT_EQ(cmr::vec2(0.f, fnt->get_line_height()), mrect2.top_left());
-    EXPECT_EQ(cmr::vec2(5.f, 2 * fnt->get_line_height()),
+    EXPECT_EQ(dcmr::vec2(0.f, fnt->get_line_height()), mrect2.top_left());
+    EXPECT_EQ(dcmr::vec2(5.f, 2 * fnt->get_line_height()),
               mrect2.bottom_right());
 }
 
@@ -75,7 +75,7 @@ TEST_F(backend_test, RenderCodeSpan) {
     auto& ss = fbcknd.get_style_sheet();
     ss.set_float_param("code.margin_left", 5.f);
     ss.set_float_param("code.margin_right", 6.f);
-    auto d = cmr::document::from_string("foo `void main` bar");
+    auto d = dcmr::document::from_string("foo `void main` bar");
 
     // the font width of normal text is 10px per character, while
     // it is 12px for code spans.
@@ -85,7 +85,7 @@ TEST_F(backend_test, RenderCodeSpan) {
 
     d.set_backend(&fbcknd);
     d.layout(500);
-    d.render(cmr::vec2(0, 0), 500);
+    d.render(dcmr::vec2(0, 0), 500);
 
     EXPECT_EQ(4, fbcknd.m_draw_string_calls.size());
     EXPECT_EQ(0, fbcknd.m_draw_string_calls[0].m_pos.x());

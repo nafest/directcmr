@@ -1,4 +1,4 @@
-/// cmark_renderer - a renderer for CommonMark
+/// directcmr - the CommonMark renderer you never wanted
 //
 // link_element.h - class for link elements
 //
@@ -9,7 +9,7 @@
 
 #include "element.h"
 
-namespace cmr {
+namespace dcmr {
 
 class link_element : public element {
   public:

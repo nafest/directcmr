@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // thematic_break_element.h - class for thematic breaks
 //
@@ -8,7 +8,7 @@
 #pragma once
 #include "element.h"
 
-namespace cmr {
+namespace dcmr {
 
 class thematic_break_element : public element {
   public:

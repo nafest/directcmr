@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // utils.cpp - general purpose functions
 //
@@ -8,8 +8,8 @@
 #include "utils.h"
 #include "backend.h"
 
-cmr::color cmr::string_to_color(const std::string &str) {
-    cmr::color c(0, 0, 0, 255);
+dcmr::color dcmr::string_to_color(const std::string &str) {
+    dcmr::color c(0, 0, 0, 255);
     if (str.length() < 7 || str[0] != '#')
         return c;
 
@@ -21,7 +21,7 @@ cmr::color cmr::string_to_color(const std::string &str) {
         c.b = static_cast<unsigned char>(
             std::strtoul(str.substr(5, 2).c_str(), nullptr, 16));
     } catch (...) {
-        return cmr::color(0, 0, 0, 255);
+        return dcmr::color(0, 0, 0, 255);
     }
 
     try {
@@ -34,9 +34,9 @@ cmr::color cmr::string_to_color(const std::string &str) {
     return c;
 }
 
-int cmr::num_lines(const std::string &in) {
+int dcmr::num_lines(const std::string &in) {
     int num = 0;
-    for (auto &line : cmr::line_splitter(in))
+    for (auto &line : dcmr::line_splitter(in))
         num++;
 
     return num;

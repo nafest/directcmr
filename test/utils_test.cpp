@@ -4,7 +4,7 @@
 
 TEST(line_splitter, single) {
     std::string str = "foo";
-    cmr::line_splitter splitter(str);
+    dcmr::line_splitter splitter(str);
 
     auto begin = splitter.begin();
     std::string first = *begin;
@@ -14,7 +14,7 @@ TEST(line_splitter, single) {
 TEST(line_splitter, splits_two_lines) {
     std::string str = "foo\nbar";
     std::vector<std::string> lines;
-    for (auto &line : cmr::line_splitter(str))
+    for (auto &line : dcmr::line_splitter(str))
         lines.push_back(line);
 
     ASSERT_EQ(2, lines.size());
@@ -23,7 +23,7 @@ TEST(line_splitter, splits_two_lines) {
 }
 
 std::vector<std::string> split_words(const std::string &txt) {
-    cmr::word_splitter splitter(txt);
+    dcmr::word_splitter splitter(txt);
     std::vector<std::string> word_vec;
     for (auto w : splitter)
         word_vec.push_back(w);
@@ -103,13 +103,13 @@ TEST(word_splitter, first_token_with_single_word) {
     size_t start = 0;
     size_t end = 0;
 
-    cmr::word::first_token("foo", start, end);
+    dcmr::word::first_token("foo", start, end);
     EXPECT_EQ(0, start);
     EXPECT_EQ(std::string::npos, end);
 }
 
 TEST(string_to_color, valid_string) {
-    auto c = cmr::string_to_color("#010203ff");
+    auto c = dcmr::string_to_color("#010203ff");
     EXPECT_EQ(1, c.r);
     EXPECT_EQ(2, c.g);
     EXPECT_EQ(3, c.b);
@@ -117,7 +117,7 @@ TEST(string_to_color, valid_string) {
 }
 
 TEST(string_to_color, invalid_string) {
-    auto c = cmr::string_to_color("");
+    auto c = dcmr::string_to_color("");
     EXPECT_EQ(0, c.r);
     EXPECT_EQ(0, c.g);
     EXPECT_EQ(0, c.b);
@@ -125,7 +125,7 @@ TEST(string_to_color, invalid_string) {
 }
 
 TEST(string_to_color, invalid_string2) {
-    auto c = cmr::string_to_color("invalid_color");
+    auto c = dcmr::string_to_color("invalid_color");
     EXPECT_EQ(0, c.r);
     EXPECT_EQ(0, c.g);
     EXPECT_EQ(0, c.b);

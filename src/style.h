@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // style.h - class for styling information that is
 //           propagated through the element tree
@@ -8,7 +8,7 @@
 
 #pragma once
 
-namespace cmr {
+namespace dcmr {
 
 class style {
   public:

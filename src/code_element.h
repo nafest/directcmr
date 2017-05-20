@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // code_element.h - class for inline code spans
 //
@@ -9,7 +9,7 @@
 
 #include "emph_element.h"
 
-namespace cmr {
+namespace dcmr {
 
 class code_element : public emph_element {
   public:

@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // table_element.h - contains all classes to cope with
 //                   GitHubs table extension
@@ -12,7 +12,7 @@
 
 #include <numeric>
 
-namespace cmr {
+namespace dcmr {
 // Layouting tables is a bit more complex and should fulfil the following
 // constraints:
 // - The width of the columns should adapt to the contents of the columns

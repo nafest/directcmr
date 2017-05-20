@@ -9,7 +9,7 @@ if(WIN32)
 endif()
 
 add_executable(skia_cmark
-   main.cpp
+    main.cpp
     skia_backend.cpp
     skia_backend.h)
 
@@ -33,7 +33,7 @@ if(WIN32)
 endif()
 
 target_link_libraries(skia_cmark
-    cmark_renderer skia)
+    directcmr skia)
 
 if (WITH_COVERAGE)
     set_property(TARGET skia_cmark

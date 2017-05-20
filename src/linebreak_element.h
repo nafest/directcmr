@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // document.cpp - implementation of the document class
 //
@@ -9,7 +9,7 @@
 
 #include "element.h"
 
-namespace cmr {
+namespace dcmr {
 
 class linebreak_element : public element {
     virtual void add_to_leaf_block(backend *bcknd,

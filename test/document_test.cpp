@@ -21,12 +21,12 @@ class document_test : public ::testing::Test {
 };
 
 TEST(document, return_document_for_invalid_file_name) {
-    cmr::document d = cmr::document::from_file("definitily_not_there");
+    dcmr::document d = dcmr::document::from_file("definitily_not_there");
     EXPECT_NE(nullptr, d.get_root_element());
 }
 
 TEST(document, emph_style_is_propagated) {
-    auto d = cmr::document::from_string("Hello *world*");
+    auto d = dcmr::document::from_string("Hello *world*");
     auto e = d.get_root_element();
     auto paragraph = e->children()[0];
     auto hello = paragraph->children()[0];
@@ -38,7 +38,7 @@ TEST(document, emph_style_is_propagated) {
 }
 
 TEST(document, strong_style_is_propagated) {
-    auto d = cmr::document::from_string("Hello **world**");
+    auto d = dcmr::document::from_string("Hello **world**");
     auto e = d.get_root_element();
     auto paragraph = e->children()[0];
     auto hello = paragraph->children()[0];
@@ -52,25 +52,25 @@ TEST(document, strong_style_is_propagated) {
 }
 
 TEST_F(document_test, layouting_of_a_single_line_is_correct) {
-    auto d = cmr::document::from_string("Hello World");
+    auto d = dcmr::document::from_string("Hello World");
     d.set_backend(&fbcknd);
     EXPECT_EQ(d.get_root_element()->get_font(&fbcknd)->get_line_height(),
               d.layout(400));
 }
 
 TEST_F(document_test, layouting_of_a_single_heading_is_correct) {
-    auto d = cmr::document::from_string("# Hello World");
+    auto d = dcmr::document::from_string("# Hello World");
     d.set_backend(&fbcknd);
-    cmr::style st;
+    dcmr::style st;
     st.set_heading_level(1);
     auto fnt = fbcknd.font_for_style(st);
     EXPECT_EQ(fnt->get_line_height(), d.layout(400));
 }
 
 TEST_F(document_test, layouting_of_to_large_single_word_is_correct) {
-    auto d = cmr::document::from_string("# HelloWorld");
+    auto d = dcmr::document::from_string("# HelloWorld");
     d.set_backend(&fbcknd);
-    cmr::style st;
+    dcmr::style st;
     st.set_heading_level(1);
     auto fnt = fbcknd.font_for_style(st);
     // the height of the layout must not span two lines, even
@@ -81,7 +81,7 @@ TEST_F(document_test, layouting_of_to_large_single_word_is_correct) {
 TEST_F(document_test, list_layouting_is_correct) {
     auto& ss = fbcknd.get_style_sheet();
     ss.set_float_param("list.margin_left", 5.f);
-    cmr::document d = cmr::document::from_string("- Item1\n- Item2");
+    dcmr::document d = dcmr::document::from_string("- Item1\n- Item2");
     d.set_backend(&fbcknd);
     auto height = d.layout(400);
     EXPECT_EQ(2 * d.get_root_element()->get_font(&fbcknd)->get_line_height(),
@@ -102,7 +102,7 @@ TEST_F(document_test, list_layouting_is_correct) {
 TEST_F(document_test, code_layout_is_correct) {
     auto& ss = fbcknd.get_style_sheet();
     ss.set_float_param("code_block.margin_left", 10.f);
-    cmr::document d = cmr::document::from_string("    code;");
+    dcmr::document d = dcmr::document::from_string("    code;");
     d.set_backend(&fbcknd);
     auto height = d.layout(400);
     EXPECT_EQ(d.get_root_element()->get_font(&fbcknd)->get_line_height() +
@@ -120,7 +120,7 @@ TEST_F(document_test, code_layout_is_correct) {
 TEST_F(document_test, code_font_is_propagated) {
     auto& ss = fbcknd.get_style_sheet();
     ss.set_float_param("code_block.margin_left", 10.f);
-    cmr::document d = cmr::document::from_string("    code;");
+    dcmr::document d = dcmr::document::from_string("    code;");
     d.set_backend(&fbcknd);
     auto height = d.layout(400);
     EXPECT_EQ(d.get_root_element()->get_font(&fbcknd)->get_line_height() +

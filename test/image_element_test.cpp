@@ -32,11 +32,11 @@ class image_element_test : public ::testing::Test {
 
 TEST_F(image_element_test, paragraph_with_small_image) {
     fbcknd.set_image_extents("image.png", 50, 40);
-    auto doc = cmr::document::from_string("Hello ![](image.png) image", false);
+    auto doc = dcmr::document::from_string("Hello ![](image.png) image", false);
 
     doc.set_backend(&fbcknd);
     doc.layout(500);
-    doc.render(cmr::vec2(0, 0), 500);
+    doc.render(dcmr::vec2(0, 0), 500);
 
     EXPECT_EQ(1, fbcknd.m_draw_image_calls.size());
     EXPECT_EQ(50, fbcknd.m_draw_image_calls[0].m_width);
@@ -56,11 +56,11 @@ TEST_F(image_element_test, paragraph_with_small_image) {
 
 TEST_F(image_element_test, paragraph_with_tiny_image) {
     fbcknd.set_image_extents("image.png", 50, 5);
-    cmr::document doc = cmr::document::from_string("Hello ![](image.png) image", false);
+    dcmr::document doc = dcmr::document::from_string("Hello ![](image.png) image", false);
 
     doc.set_backend(&fbcknd);
     doc.layout(500);
-    doc.render(cmr::vec2(0, 0), 500);
+    doc.render(dcmr::vec2(0, 0), 500);
 
     EXPECT_EQ(1, fbcknd.m_draw_image_calls.size());
     EXPECT_EQ(50, fbcknd.m_draw_image_calls[0].m_width);
@@ -82,12 +82,12 @@ TEST_F(image_element_test, paragraph_with_tiny_image) {
 // with the width beeing below the paragaph width
 TEST_F(image_element_test, paragraph_with_larger_image) {
     fbcknd.set_image_extents("image.png", 400, 50);
-    cmr::document doc = cmr::document::from_string(
+    dcmr::document doc = dcmr::document::from_string(
         "HelloWorldHelloWorld ![](image.png) image", false);
 
     doc.set_backend(&fbcknd);
     doc.layout(500);
-    doc.render(cmr::vec2(0, 0), 500);
+    doc.render(dcmr::vec2(0, 0), 500);
 
     EXPECT_EQ(1, fbcknd.m_draw_image_calls.size());
     EXPECT_EQ(400, fbcknd.m_draw_image_calls[0].m_width);
@@ -112,12 +112,12 @@ TEST_F(image_element_test, paragraph_with_larger_image) {
 // with the width beeing larger than the paragaph width
 TEST_F(image_element_test, paragraph_with_very_large_image) {
     fbcknd.set_image_extents("image.png", 992, 50);
-    cmr::document doc = cmr::document::from_string(
+    dcmr::document doc = dcmr::document::from_string(
         "HelloWorldHelloWorld ![](image.png) image", false);
 
     doc.set_backend(&fbcknd);
     doc.layout(500);
-    doc.render(cmr::vec2(0, 0), 500);
+    doc.render(dcmr::vec2(0, 0), 500);
 
     EXPECT_EQ(1, fbcknd.m_draw_image_calls.size());
     EXPECT_EQ(496, fbcknd.m_draw_image_calls[0].m_width);

@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // paragraph_state.h - current position for subsequently
 //                     layouting elements in a paragraph
@@ -10,7 +10,7 @@
 
 #include "backend.h"
 
-namespace cmr {
+namespace dcmr {
 
 class element;
 

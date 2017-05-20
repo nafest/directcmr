@@ -12,12 +12,12 @@ TEST(thematic_break_element, renders_correctly) {
     ss.set_float_param("document.margin", 0.f);
     ss.set_float_param("thematic_break.line_width", 1.f);
 
-    auto doc = cmr::document::from_string("Hello\n\n   ---");
+    auto doc = dcmr::document::from_string("Hello\n\n   ---");
     doc.set_backend(&fbcknd);
     doc.layout(500);
-    doc.render(cmr::vec2(0, 0), 500);
+    doc.render(dcmr::vec2(0, 0), 500);
 
     ASSERT_EQ(1, fbcknd.m_draw_line_calls.size());
-    EXPECT_EQ(cmr::vec2(0.0, 16.5), fbcknd.m_draw_line_calls[0].m_from);
-    EXPECT_EQ(cmr::vec2(500.0, 16.5), fbcknd.m_draw_line_calls[0].m_to);
+    EXPECT_EQ(dcmr::vec2(0.0, 16.5), fbcknd.m_draw_line_calls[0].m_from);
+    EXPECT_EQ(dcmr::vec2(500.0, 16.5), fbcknd.m_draw_line_calls[0].m_to);
 }

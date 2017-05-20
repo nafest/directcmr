@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // text_element.h - class for text nodes. To store layouting
 //                  information for rendering, these nodes
@@ -12,7 +12,7 @@
 #include "element.h"
 #include <iostream>
 
-namespace cmr {
+namespace dcmr {
 
 class word_element : public element {
   public:

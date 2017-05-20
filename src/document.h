@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // document.h - central class, that encapsulates the
 //              element tree of a CommonMark document
@@ -12,7 +12,7 @@
 #include <memory>
 #include <string>
 
-namespace cmr {
+namespace dcmr {
 
 // the document class encapsulates the tree of nodes
 // representing the markdown document

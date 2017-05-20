@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // utils.h - general purpose functions
 //
@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-namespace cmr {
+namespace dcmr {
 
 struct color;
 color string_to_color(const std::string &str);

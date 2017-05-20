@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // blockqoute_element.h - class for blockquote blocks
 //
@@ -9,7 +9,7 @@
 
 #include "element.h"
 
-namespace cmr {
+namespace dcmr {
 
 class blockquote_element : public element {
   public:

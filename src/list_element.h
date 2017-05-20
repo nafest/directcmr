@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // list_element.h - class for ordered and unordered lists
 //
@@ -13,7 +13,7 @@
 #include <iostream>
 #include <strstream>
 
-namespace cmr {
+namespace dcmr {
 
 class list_element : public element {
   public:

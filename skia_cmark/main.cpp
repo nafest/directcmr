@@ -29,14 +29,14 @@ int main(int argc, const char *argv[]) {
     for (auto file : file_names) {
         skia_backend backnd;
 
-        auto d = cmr::document::from_file(file, be_verbose);
+        auto d = dcmr::document::from_file(file, be_verbose);
         d.set_backend(&backnd);
         auto start_time = bench_clock::now();
         auto layout_height = d.layout(600);
         auto layout_time = bench_clock::now() - start_time;
 
         start_time = bench_clock::now();
-        d.render(cmr::vec2(0, 0), 800);
+        d.render(dcmr::vec2(0, 0), 800);
         auto render_time = bench_clock::now() - start_time;
 
         std::cout << "Processed " << file << std::endl;

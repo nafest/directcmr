@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // paragraph_state.cpp - current position for subsequently
 //                       layouting elements in a paragraph
@@ -9,7 +9,7 @@
 #include "paragraph_state.h"
 #include "element.h"
 
-void cmr::paragraph_state::set_base_line() {
+void dcmr::paragraph_state::set_base_line() {
     float max_dist_to_base_line = 0.f;
 
     for (auto elem : m_line_elements) {

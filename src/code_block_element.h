@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // code_block_element.h - class for code blocks
 //
@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-namespace cmr {
+namespace dcmr {
 
 class code_block_element : public leaf_block_element {
   public:

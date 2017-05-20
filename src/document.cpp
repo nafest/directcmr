@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // document.cpp - implementation of the document class
 //
@@ -34,16 +34,16 @@
 #include <iostream>
 #include <vector>
 
-std::vector<cmr::element *> transform_children(cmark_node *node,
+std::vector<dcmr::element *> transform_children(cmark_node *node,
                                                bool be_verbose) {
-    std::vector<cmr::element *> child_elements;
+    std::vector<dcmr::element *> child_elements;
     auto child = cmark_node_first_child(node);
     bool softbreak_discarded = false;
     while (child) {
-        cmr::element *elem;
+        dcmr::element *elem;
         switch (cmark_node_get_type(child)) {
         case CMARK_NODE_PARAGRAPH:
-            elem = new cmr::paragraph_element();
+            elem = new dcmr::paragraph_element();
             break;
         case CMARK_NODE_TEXT:
             // do not separate subsequent text elements (because cmark returns
@@ -58,40 +58,40 @@ std::vector<cmr::element *> transform_children(cmark_node *node,
                     literal + cmark_node_get_literal(child));
                 elem = nullptr;
             } else {
-                elem = new cmr::text_element();
+                elem = new dcmr::text_element();
                 elem->set_literal(cmark_node_get_literal(child));
             }
             softbreak_discarded = false;
             break;
         case CMARK_NODE_EMPH:
-            elem = new cmr::emph_element();
+            elem = new dcmr::emph_element();
             break;
         case CMARK_NODE_STRONG:
-            elem = new cmr::strong_element();
+            elem = new dcmr::strong_element();
             break;
         case CMARK_NODE_HEADING:
             elem =
-                new cmr::heading_element(cmark_node_get_heading_level(child));
+                new dcmr::heading_element(cmark_node_get_heading_level(child));
             break;
         case CMARK_NODE_LIST: {
             auto type = cmark_node_get_list_type(child) == CMARK_ORDERED_LIST
-                            ? cmr::list_element::list_element_type::ordered
-                            : cmr::list_element::list_element_type::unordered;
-            elem = new cmr::list_element(type);
+                            ? dcmr::list_element::list_element_type::ordered
+                            : dcmr::list_element::list_element_type::unordered;
+            elem = new dcmr::list_element(type);
             break;
         }
         case CMARK_NODE_ITEM:
-            elem = new cmr::item_element();
+            elem = new dcmr::item_element();
             break;
         case CMARK_NODE_CODE:
-            elem = new cmr::code_element();
+            elem = new dcmr::code_element();
             if (cmark_node_get_literal(child)) {
                 elem->children().push_back(
-                    new cmr::text_element(cmark_node_get_literal(child)));
+                    new dcmr::text_element(cmark_node_get_literal(child)));
             }
             break;
         case CMARK_NODE_CODE_BLOCK: {
-            elem = new cmr::code_block_element();
+            elem = new dcmr::code_block_element();
             std::string literal = cmark_node_get_literal(child);
             // code blocks seem all to be ended with an extra
             // line break, remove it.
@@ -100,24 +100,24 @@ std::vector<cmr::element *> transform_children(cmark_node *node,
             break;
         }
         case CMARK_NODE_BLOCK_QUOTE:
-            elem = new cmr::blockquote_element();
+            elem = new dcmr::blockquote_element();
             break;
         case CMARK_NODE_IMAGE:
-            elem = new cmr::image_element(cmark_node_get_url(child));
+            elem = new dcmr::image_element(cmark_node_get_url(child));
             break;
         case CMARK_NODE_THEMATIC_BREAK:
-            elem = new cmr::thematic_break_element();
+            elem = new dcmr::thematic_break_element();
             break;
         case CMARK_NODE_CUSTOM_BLOCK:
         case CMARK_NODE_CUSTOM_INLINE:
         case CMARK_NODE_HTML_BLOCK:
         case CMARK_NODE_HTML_INLINE:
-            // Ignore HTML block since cmark_renderer is no
+            // Ignore HTML block since directcmr is no
             // HTML rendering engine.
             // Ignore custom nodes/inlines as well.
             break;
         case CMARK_NODE_LINEBREAK:
-            elem = new cmr::linebreak_element();
+            elem = new dcmr::linebreak_element();
             break;
         case CMARK_NODE_SOFTBREAK:
             // since we don't output HTML, softbreaks can be ignored
@@ -125,7 +125,7 @@ std::vector<cmr::element *> transform_children(cmark_node *node,
             softbreak_discarded = true;
             break;
         case CMARK_NODE_LINK:
-            elem = new cmr::link_element(cmark_node_get_url(child));
+            elem = new dcmr::link_element(cmark_node_get_url(child));
             break;
         default: {
             auto type_string = cmark_node_get_type_string(child);
@@ -133,15 +133,15 @@ std::vector<cmr::element *> transform_children(cmark_node *node,
             // cannot be identified with a type constant, we
             // have to use the type string here
             if (!strcmp(type_string, "table")) {
-                elem = new cmr::table_element();
+                elem = new dcmr::table_element();
             } else if (!strcmp(type_string, "table_header")) {
-                elem = new cmr::table_header_element();
+                elem = new dcmr::table_header_element();
             } else if (!strcmp(type_string, "table_row")) {
-                elem = new cmr::table_row_element();
+                elem = new dcmr::table_row_element();
             } else if (!strcmp(type_string, "table_cell")) {
-                elem = new cmr::table_cell_element();
+                elem = new dcmr::table_cell_element();
             } else {
-                elem = new cmr::element();
+                elem = new dcmr::element();
                 std::cout << "unsupported element kind "
                           << cmark_node_get_type_string(child) << std::endl;
             }
@@ -193,7 +193,7 @@ void destroy_parser(cmark_parser *parser) {
     cmark_release_plugins();
 }
 
-cmr::document cmr::document::from_string(const std::string &string,
+dcmr::document dcmr::document::from_string(const std::string &string,
                                          bool be_verbose) {
     auto parser = init_parser();
 
@@ -211,7 +211,7 @@ cmr::document cmr::document::from_string(const std::string &string,
     return document(elem);
 }
 
-cmr::document cmr::document::from_file(const std::string &file_name,
+dcmr::document dcmr::document::from_file(const std::string &file_name,
                                        bool be_verbose) {
     std::ifstream in_file(file_name);
 
@@ -240,13 +240,13 @@ cmr::document cmr::document::from_file(const std::string &file_name,
     return document(elem);
 }
 
-int cmr::document::layout(int width) {
+int dcmr::document::layout(int width) {
     m_layout_width = width;
     return static_cast<int>(std::ceil(
         m_root_element->layout(m_backend, static_cast<float>(width))));
 }
 
-void cmr::document::render(vec2 origin, int height) {
+void dcmr::document::render(vec2 origin, int height) {
     m_backend->prepare_canvas(m_layout_width, height);
     m_root_element->render(m_backend, origin);
 }

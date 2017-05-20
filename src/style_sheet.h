@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // style_sheet.h - class holding the styling of a document
 //                 loosely related to CSS
@@ -11,7 +11,7 @@
 #include <string>
 #include <map>
 
-namespace cmr {
+namespace dcmr {
 
 // struct for margins (left, top, right, bottom)
 struct elem_margin {

@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.5)
 
-project (cmark_renderer LANGUAGES CXX)
+project (directcmr LANGUAGES CXX)
 
 option(WITH_COVERAGE "Generate code coverage report." OFF)
 
@@ -20,6 +20,6 @@ endif()
 
 if(NOT Win32 AND WITH_COVERAGE)
     include(cmake/CodeCoverage.cmake)
-    setup_target_for_coverage(cmark_renderer_coverage
-        cmark_renderer_test coverage)
+    setup_target_for_coverage(directcmr_coverage
+        directcmr_test coverage)
 endif()

@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // item_element.h - class for items in a list
 //
@@ -9,7 +9,7 @@
 
 #include "element.h"
 
-namespace cmr {
+namespace dcmr {
 
 class item_element : public element {
   public:

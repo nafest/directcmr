@@ -1,14 +1,14 @@
-## cmark_renderer - directly render CommonMark
+## directcmr - the direct CommonMark renderer you never wanted
 
-cmark_renderer renders CommonMark documents without intermediate conversion to another markup language like HTML.
+directcmr renders CommonMark documents without intermediate conversion to another markup language like HTML.
 Given a a simple renderer implementation (an example implementation with Skia is
-included), cmark_renderer directly outputs rendering calls.
+included), directcmr directly outputs rendering calls.
 
 ### Basic Approach
 1. Create a document instance from a string or from a file
 
 
-    auto doc = cmr::document::from_file("README.md");
+    auto doc = dcmr::document::from_file("README.md");
     
 2. Implement and set a backend for rendering
 

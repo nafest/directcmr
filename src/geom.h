@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // geom.h - 2d geometry utils
 //
@@ -9,7 +9,7 @@
 
 #include <iostream>
 
-namespace cmr {
+namespace dcmr {
 
 class vec2 {
   public:

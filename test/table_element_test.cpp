@@ -5,7 +5,7 @@
 
 TEST(distribute_width, sufficient_space) {
     std::vector<float> min_widths{20.0, 20.0, 20.0};
-    auto widths = cmr::table_element::distribute_width(300, 3, min_widths);
+    auto widths = dcmr::table_element::distribute_width(300, 3, min_widths);
 
     EXPECT_EQ(100, widths[0]);
     EXPECT_EQ(100, widths[1]);
@@ -14,7 +14,7 @@ TEST(distribute_width, sufficient_space) {
 
 TEST(distribute_width, pay_respect_to_min_width) {
     std::vector<float> min_widths{30.0, 120.0, 30.0};
-    auto widths = cmr::table_element::distribute_width(300, 3, min_widths);
+    auto widths = dcmr::table_element::distribute_width(300, 3, min_widths);
 
     EXPECT_EQ(70, widths[0]);
     EXPECT_EQ(160, widths[1]);
@@ -23,7 +23,7 @@ TEST(distribute_width, pay_respect_to_min_width) {
 
 TEST(distribute_width, pay_respect_to_min_width_difficult) {
     std::vector<float> min_widths{150.0, 90.0, 30.0};
-    auto widths = cmr::table_element::distribute_width(300, 3, min_widths);
+    auto widths = dcmr::table_element::distribute_width(300, 3, min_widths);
 
     EXPECT_EQ(160, widths[0]);
     EXPECT_EQ(100, widths[1]);
@@ -36,7 +36,7 @@ TEST(table_cell_preferred_width, includes_margin) {
     ss.set_float_param("table_cell.margin_left", 12.0);
     ss.set_float_param("table_cell.margin_right", 13.0);
 
-    cmr::document doc = cmr::document::from_string(
+    dcmr::document doc = dcmr::document::from_string(
         "| lorem | ipsum |\n| --- | --- |\n| lorem | ipsum dolor |");
     // table -> table_row -> table_cell
     auto table = doc.get_root_element()->children()[0];
@@ -55,7 +55,7 @@ TEST(table_cell_min_width, includes_margin) {
     ss.set_float_param("table_cell.margin_left", 12.0);
     ss.set_float_param("table_cell.margin_right", 13.0);
 
-    cmr::document doc = cmr::document::from_string(
+    dcmr::document doc = dcmr::document::from_string(
         "| lorem | ipsum |\n| --- | --- |\n| lorem | ipsum dolores |");
     // table -> table_row -> table_cell
     auto table = doc.get_root_element()->children()[0];
@@ -76,12 +76,12 @@ TEST(table_cell_preferred_width, renders_correctly) {
     ss.set_float_param("document.margin", 0.f);
     ss.set_float_param("table_cell.margin", 2.0);
 
-    auto doc = cmr::document::from_string(
+    auto doc = dcmr::document::from_string(
         "| lorem | ipsum |\n| --- | --- |\n| lorem | ipsum dolor |");
 
     doc.set_backend(&fbcknd);
     auto height = doc.layout(500);
-    doc.render(cmr::vec2(), 500);
+    doc.render(dcmr::vec2(), 500);
 
     auto table = doc.get_root_element()->children()[0];
     auto fnt = table->get_font(&fbcknd);
@@ -103,28 +103,28 @@ TEST(table_cell_preferred_width, renders_correctly) {
     ASSERT_EQ(6, fbcknd.m_draw_line_calls.size());
 
     // the horizontal lines are rendered first
-    EXPECT_EQ(cmr::vec2(0.f, 0.5f), fbcknd.m_draw_line_calls[0].m_from);
+    EXPECT_EQ(dcmr::vec2(0.f, 0.5f), fbcknd.m_draw_line_calls[0].m_from);
     // 3 + 50 + 5 + 110 + 3 = 171
-    EXPECT_EQ(cmr::vec2(171.f, 0.5f), fbcknd.m_draw_line_calls[0].m_to);
+    EXPECT_EQ(dcmr::vec2(171.f, 0.5f), fbcknd.m_draw_line_calls[0].m_to);
 
     auto second_line = 3 + fnt->get_line_height() + 2 + 0.5f;
-    EXPECT_EQ(cmr::vec2(0.f, second_line), fbcknd.m_draw_line_calls[1].m_from);
-    EXPECT_EQ(cmr::vec2(171.f, second_line), fbcknd.m_draw_line_calls[1].m_to);
+    EXPECT_EQ(dcmr::vec2(0.f, second_line), fbcknd.m_draw_line_calls[1].m_from);
+    EXPECT_EQ(dcmr::vec2(171.f, second_line), fbcknd.m_draw_line_calls[1].m_to);
 
     auto third_line =
         3 + fnt->get_line_height() + 5 + fnt->get_line_height() + 2 + 0.5f;
-    EXPECT_EQ(cmr::vec2(0.f, third_line), fbcknd.m_draw_line_calls[2].m_from);
-    EXPECT_EQ(cmr::vec2(171.f, third_line), fbcknd.m_draw_line_calls[2].m_to);
+    EXPECT_EQ(dcmr::vec2(0.f, third_line), fbcknd.m_draw_line_calls[2].m_from);
+    EXPECT_EQ(dcmr::vec2(171.f, third_line), fbcknd.m_draw_line_calls[2].m_to);
 
     // now the vertical lines
-    EXPECT_EQ(cmr::vec2(0.5f, 0.f), fbcknd.m_draw_line_calls[3].m_from);
-    EXPECT_EQ(cmr::vec2(0.5f, third_line), fbcknd.m_draw_line_calls[3].m_to);
+    EXPECT_EQ(dcmr::vec2(0.5f, 0.f), fbcknd.m_draw_line_calls[3].m_from);
+    EXPECT_EQ(dcmr::vec2(0.5f, third_line), fbcknd.m_draw_line_calls[3].m_to);
 
-    EXPECT_EQ(cmr::vec2(55.5f, 0.f), fbcknd.m_draw_line_calls[4].m_from);
-    EXPECT_EQ(cmr::vec2(55.5f, third_line), fbcknd.m_draw_line_calls[4].m_to);
+    EXPECT_EQ(dcmr::vec2(55.5f, 0.f), fbcknd.m_draw_line_calls[4].m_from);
+    EXPECT_EQ(dcmr::vec2(55.5f, third_line), fbcknd.m_draw_line_calls[4].m_to);
 
-    EXPECT_EQ(cmr::vec2(170.5f, 0.f), fbcknd.m_draw_line_calls[5].m_from);
-    EXPECT_EQ(cmr::vec2(170.5f, third_line), fbcknd.m_draw_line_calls[5].m_to);
+    EXPECT_EQ(dcmr::vec2(170.5f, 0.f), fbcknd.m_draw_line_calls[5].m_from);
+    EXPECT_EQ(dcmr::vec2(170.5f, third_line), fbcknd.m_draw_line_calls[5].m_to);
 }
 
 // add a test where the preferred with is too large
@@ -136,12 +136,12 @@ TEST(table_cell_preferred_width, renders_too_wide_table_correctly) {
     ss.set_float_param("document.margin", 0.f);
     ss.set_float_param("table_cell.margin", 2.0);
 
-    auto doc = cmr::document::from_string(
+    auto doc = dcmr::document::from_string(
         "| lorem | ipsum |\n| --- | --- |\n| lorem | ipsum dolor |");
 
     doc.set_backend(&fbcknd);
     auto height = doc.layout(120);
-    doc.render(cmr::vec2(), 500);
+    doc.render(dcmr::vec2(), 500);
 
     auto table = doc.get_root_element()->children()[0];
     auto fnt = table->get_font(&fbcknd);
@@ -167,27 +167,27 @@ TEST(table_cell_preferred_width, renders_too_wide_table_correctly) {
     ASSERT_EQ(6, fbcknd.m_draw_line_calls.size());
 
     // the horizontal lines are rendered first
-    EXPECT_EQ(cmr::vec2(0.f, 0.5f), fbcknd.m_draw_line_calls[0].m_from);
+    EXPECT_EQ(dcmr::vec2(0.f, 0.5f), fbcknd.m_draw_line_calls[0].m_from);
     // 3 + 50 + 5 + 110 + 3 = 171
-    EXPECT_EQ(cmr::vec2(120.f, 0.5f), fbcknd.m_draw_line_calls[0].m_to);
+    EXPECT_EQ(dcmr::vec2(120.f, 0.5f), fbcknd.m_draw_line_calls[0].m_to);
 
     auto second_line = 3 + fnt->get_line_height() + 2 + 0.5f;
-    EXPECT_EQ(cmr::vec2(0.f, second_line), fbcknd.m_draw_line_calls[1].m_from);
-    EXPECT_EQ(cmr::vec2(120.f, second_line), fbcknd.m_draw_line_calls[1].m_to);
+    EXPECT_EQ(dcmr::vec2(0.f, second_line), fbcknd.m_draw_line_calls[1].m_from);
+    EXPECT_EQ(dcmr::vec2(120.f, second_line), fbcknd.m_draw_line_calls[1].m_to);
 
     // the second row now spans over two lines
     auto third_line =
         second_line + 0.5f + 2 + 2 * fnt->get_line_height() + 2 + 0.5f;
-    EXPECT_EQ(cmr::vec2(0.f, third_line), fbcknd.m_draw_line_calls[2].m_from);
-    EXPECT_EQ(cmr::vec2(120.f, third_line), fbcknd.m_draw_line_calls[2].m_to);
+    EXPECT_EQ(dcmr::vec2(0.f, third_line), fbcknd.m_draw_line_calls[2].m_from);
+    EXPECT_EQ(dcmr::vec2(120.f, third_line), fbcknd.m_draw_line_calls[2].m_to);
 
     // now the vertical lines
-    EXPECT_EQ(cmr::vec2(0.5f, 0.f), fbcknd.m_draw_line_calls[3].m_from);
-    EXPECT_EQ(cmr::vec2(0.5f, third_line), fbcknd.m_draw_line_calls[3].m_to);
+    EXPECT_EQ(dcmr::vec2(0.5f, 0.f), fbcknd.m_draw_line_calls[3].m_from);
+    EXPECT_EQ(dcmr::vec2(0.5f, third_line), fbcknd.m_draw_line_calls[3].m_to);
 
-    EXPECT_EQ(cmr::vec2(60.0f, 0.f), fbcknd.m_draw_line_calls[4].m_from);
-    EXPECT_EQ(cmr::vec2(60.0f, third_line), fbcknd.m_draw_line_calls[4].m_to);
+    EXPECT_EQ(dcmr::vec2(60.0f, 0.f), fbcknd.m_draw_line_calls[4].m_from);
+    EXPECT_EQ(dcmr::vec2(60.0f, third_line), fbcknd.m_draw_line_calls[4].m_to);
 
-    EXPECT_EQ(cmr::vec2(119.5f, 0.f), fbcknd.m_draw_line_calls[5].m_from);
-    EXPECT_EQ(cmr::vec2(119.5f, third_line), fbcknd.m_draw_line_calls[5].m_to);
+    EXPECT_EQ(dcmr::vec2(119.5f, 0.f), fbcknd.m_draw_line_calls[5].m_from);
+    EXPECT_EQ(dcmr::vec2(119.5f, third_line), fbcknd.m_draw_line_calls[5].m_to);
 }

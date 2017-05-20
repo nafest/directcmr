@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // leaf_block_element.h - common base clase for all leaf
 //                        block elements (e.g. paragraph
@@ -11,7 +11,7 @@
 
 #include "element.h"
 
-namespace cmr {
+namespace dcmr {
 
 class leaf_block_element : public element {
   public:

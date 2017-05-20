@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // document_element.h - root element of a CommonMark
 //                      document tree
@@ -10,7 +10,7 @@
 
 #include "element.h"
 
-namespace cmr {
+namespace dcmr {
 
 class document_element : public element {
   public:

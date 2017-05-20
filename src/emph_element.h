@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // emph_element.h - class for emphasized spans
 //
@@ -9,7 +9,7 @@
 
 #include "element.h"
 
-namespace cmr {
+namespace dcmr {
 
 class emph_element : public element {
   public:

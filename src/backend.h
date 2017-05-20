@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // backend.h - abstract base class for renderer backends
 //
@@ -15,7 +15,7 @@
 #include <map>
 #include <string>
 
-namespace cmr {
+namespace dcmr {
 
 // class representing a font. Implementations of backend
 // must subclass it to extend it with render backend specific
@@ -55,6 +55,10 @@ struct color {
     }
     unsigned char r, g, b, a;
 };
+
+inline std::ostream &operator<<(std::ostream &os, const color &c) {
+    return os << "(" << c.r << ", " << c.g << ", " << c.b << ", " << c.a << ")";
+}
 
 // abstract class for the interface of a renderer backend
 // subclass and implement all pure virtual methods.
@@ -135,7 +139,7 @@ class backend {
 
     // return true if the given URI has been visited before
     //
-    // cmark_renderer uses this to choose between link.color
+    // directcmr uses this to choose between link.color
     // and link.visited_color
     virtual bool is_visited_uri(const std::string &uri) = 0;
 

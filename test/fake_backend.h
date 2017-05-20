@@ -17,7 +17,7 @@ class font_params {
     int m_size;
 };
 
-class fake_font : public cmr::font {
+class fake_font : public dcmr::font {
     virtual float get_line_height() const noexcept override {
         return m_font_params.m_size + 2.f;
     }
@@ -48,42 +48,42 @@ class fake_font : public cmr::font {
 class draw_string_action {
   public:
     draw_string_action() = default;
-    draw_string_action(const std::string &text, const cmr::vec2 &pos,
-                       const font_params &font, const cmr::color &col)
+    draw_string_action(const std::string &text, const dcmr::vec2 &pos,
+                       const font_params &font, const dcmr::color &col)
         : m_text(text), m_pos(pos), m_font(font), m_color(col) {}
 
     font_params m_font;
     std::string m_text;
-    cmr::vec2 m_pos;
-    cmr::color m_color;
+    dcmr::vec2 m_pos;
+    dcmr::color m_color;
 };
 
 class draw_marker_action {
   public:
     draw_marker_action() = default;
-    draw_marker_action(const cmr::rect &marker_rect)
+    draw_marker_action(const dcmr::rect &marker_rect)
         : m_marker_rect(marker_rect) {}
 
-    cmr::rect m_marker_rect;
+    dcmr::rect m_marker_rect;
 };
 
 class draw_rect_action {
   public:
     draw_rect_action() = default;
-    draw_rect_action(const cmr::rect &_rect) : m_rect(_rect) {}
+    draw_rect_action(const dcmr::rect &_rect) : m_rect(_rect) {}
 
-    cmr::rect m_rect;
+    dcmr::rect m_rect;
 };
 
 class draw_image_action {
   public:
     draw_image_action() = default;
-    draw_image_action(const std::string &src, const cmr::vec2 &pos, int width,
+    draw_image_action(const std::string &src, const dcmr::vec2 &pos, int width,
                       int height)
         : m_src(src), m_pos(pos), m_width(width), m_height(height) {}
 
     std::string m_src;
-    cmr::vec2 m_pos;
+    dcmr::vec2 m_pos;
     int m_width;
     int m_height;
 };
@@ -91,29 +91,29 @@ class draw_image_action {
 class draw_line_action {
   public:
     draw_line_action() = default;
-    draw_line_action(const cmr::vec2 &from, const cmr::vec2 &to,
-                     const cmr::color &col, float line_width)
+    draw_line_action(const dcmr::vec2 &from, const dcmr::vec2 &to,
+                     const dcmr::color &col, float line_width)
         : m_from(from), m_to(to), m_color(col), m_line_width(line_width) {}
 
-    cmr::vec2 m_from, m_to;
-    cmr::color m_color;
+    dcmr::vec2 m_from, m_to;
+    dcmr::color m_color;
     float m_line_width;
 };
 
-class fake_backend : public cmr::backend {
+class fake_backend : public dcmr::backend {
   public:
     virtual void prepare_canvas(int width, int height) override {}
-    virtual cmr::vec2 string_extents(const cmr::font *fnt,
+    virtual dcmr::vec2 string_extents(const dcmr::font *fnt,
                                      const std::string &string) override {
         const fake_font *ffnt = static_cast<const fake_font *>(fnt);
         float char_width = 10.f;
         if (ffnt->m_font_params.m_family == "Menlo")
             char_width = 12.f;
-        return cmr::vec2(string.length() * char_width,
+        return dcmr::vec2(string.length() * char_width,
                          static_cast<float>(ffnt->m_font_params.m_size));
     }
 
-    virtual cmr::font *create_font(const std::string &family,
+    virtual dcmr::font *create_font(const std::string &family,
                                    const std::string &style,
                                    int size) override {
         fake_font *fnt = new fake_font();
@@ -121,36 +121,36 @@ class fake_backend : public cmr::backend {
         return fnt;
     }
 
-    virtual void draw_string(const std::string &text, const cmr::vec2 &pos,
-                             cmr::font *fnt_in,
-                             const cmr::color &col) override {
+    virtual void draw_string(const std::string &text, const dcmr::vec2 &pos,
+                             dcmr::font *fnt_in,
+                             const dcmr::color &col) override {
         fake_font *fnt = static_cast<fake_font *>(fnt_in);
         m_draw_string_calls.push_back(
             draw_string_action(text, pos, fnt->m_font_params, col));
     }
 
-    virtual void draw_list_marker(const cmr::rect &marker_rect,
-                                  const cmr::color &col) override {
+    virtual void draw_list_marker(const dcmr::rect &marker_rect,
+                                  const dcmr::color &col) override {
         m_draw_marker_calls.push_back(draw_marker_action(marker_rect));
     }
 
-    virtual void draw_rounded_rect(const cmr::rect &rectangle, float radius,
-                                   const cmr::color &col, bool fill) override {
+    virtual void draw_rounded_rect(const dcmr::rect &rectangle, float radius,
+                                   const dcmr::color &col, bool fill) override {
         m_draw_rect_calls.push_back(draw_rect_action(rectangle));
     }
 
-    void draw_line(const cmr::vec2 &from, const cmr::vec2 &to,
-                   const cmr::color &col, float line_width) override {
+    void draw_line(const dcmr::vec2 &from, const dcmr::vec2 &to,
+                   const dcmr::color &col, float line_width) override {
         m_draw_line_calls.push_back(
             draw_line_action(from, to, col, line_width));
     }
 
-    virtual cmr::vec2 get_image_extents(const std::string &src) override {
+    virtual dcmr::vec2 get_image_extents(const std::string &src) override {
         auto extents = m_image_extents[src];
-        return cmr::vec2(extents.first, extents.second);
+        return dcmr::vec2(extents.first, extents.second);
     }
 
-    virtual void draw_image(const std::string &src, const cmr::vec2 &pos,
+    virtual void draw_image(const std::string &src, const dcmr::vec2 &pos,
                             int width, int height) override {
         m_draw_image_calls.push_back(
             draw_image_action(src, pos, width, height));

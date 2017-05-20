@@ -1,4 +1,4 @@
-// cmark_renderer - a renderer for CommonMark
+// directcmr - the CommonMark renderer you never wanted
 //
 // style_sheet.cpp - class holding the styling of a document
 //                   loosely related to CSS
@@ -8,7 +8,7 @@
 
 #include "style_sheet.h"
 
-cmr::style_sheet::style_sheet() {
+dcmr::style_sheet::style_sheet() {
     // set some default parameters
     set_string_param("font", "Arial");
     set_float_param("font_size", 14.f);
@@ -47,7 +47,7 @@ cmr::style_sheet::style_sheet() {
     set_float_param("table_cell.margin", 2.f);
 }
 
-float cmr::style_sheet::get_float_param(const std::string &param_name) const
+float dcmr::style_sheet::get_float_param(const std::string &param_name) const
     noexcept {
     auto elem = m_float_params.find(param_name);
     if (elem == m_float_params.end()) {
@@ -60,13 +60,13 @@ float cmr::style_sheet::get_float_param(const std::string &param_name) const
     return elem->second;
 }
 
-void cmr::style_sheet::set_float_param(const std::string &param_name,
+void dcmr::style_sheet::set_float_param(const std::string &param_name,
                                        float value) noexcept {
     m_float_params[param_name] = value;
 }
 
 std::string
-cmr::style_sheet::get_string_param(const std::string &param_name) const
+dcmr::style_sheet::get_string_param(const std::string &param_name) const
     noexcept {
     auto elem = m_string_params.find(param_name);
     if (elem == m_string_params.end()) {
@@ -79,12 +79,12 @@ cmr::style_sheet::get_string_param(const std::string &param_name) const
     return elem->second;
 }
 
-void cmr::style_sheet::set_string_param(const std::string &param_name,
+void dcmr::style_sheet::set_string_param(const std::string &param_name,
                                         const std::string &value) noexcept {
     m_string_params[param_name] = value;
 }
 
-float cmr::style_sheet::get_side_margin(const std::string &element_name,
+float dcmr::style_sheet::get_side_margin(const std::string &element_name,
                                         const std::string side) const noexcept {
     float mrgn = 0.f;
 
@@ -102,9 +102,9 @@ float cmr::style_sheet::get_side_margin(const std::string &element_name,
     return mrgn;
 }
 
-cmr::elem_margin
-cmr::style_sheet::get_margin(const std::string &element_name) const noexcept {
-    cmr::elem_margin mrgn(0.f, 0.f, 0.f, 0.f);
+dcmr::elem_margin
+dcmr::style_sheet::get_margin(const std::string &element_name) const noexcept {
+    dcmr::elem_margin mrgn(0.f, 0.f, 0.f, 0.f);
 
     mrgn.left = get_side_margin(element_name, "left");
     mrgn.top = get_side_margin(element_name, "top");

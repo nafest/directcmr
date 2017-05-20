@@ -9,7 +9,7 @@ class text_element_test : public ::testing::Test {
 
   protected:
     virtual void SetUp() override {
-        cmr::style st;
+        dcmr::style st;
         st.set_strong(true);
         text.propagate_style(st);
 
@@ -18,16 +18,16 @@ class text_element_test : public ::testing::Test {
         // 30 + 10 + 40 + 10 + 30 + 10 + 50
         text.set_literal("The lazy fox jumps");
         pstate =
-            cmr::paragraph_state(200, text.get_font(&fbcknd)->get_line_height(),
+            dcmr::paragraph_state(200, text.get_font(&fbcknd)->get_line_height(),
                                  text.get_font(&fbcknd)->get_ascent());
     }
 
     virtual void TearDown() override {}
 
     fake_backend fbcknd;
-    cmr::font *fnt;
-    cmr::text_element text;
-    cmr::paragraph_state pstate;
+    dcmr::font *fnt;
+    dcmr::text_element text;
+    dcmr::paragraph_state pstate;
 };
 
 TEST_F(text_element_test, add_to_leaf_node_is_correct) {
