@@ -104,18 +104,18 @@ class fake_backend : public dcmr::backend {
   public:
     virtual void prepare_canvas(int width, int height) override {}
     virtual dcmr::vec2 string_extents(const dcmr::font *fnt,
-                                     const std::string &string) override {
+                                      const std::string &string) override {
         const fake_font *ffnt = static_cast<const fake_font *>(fnt);
         float char_width = 10.f;
         if (ffnt->m_font_params.m_family == "Menlo")
             char_width = 12.f;
         return dcmr::vec2(string.length() * char_width,
-                         static_cast<float>(ffnt->m_font_params.m_size));
+                          static_cast<float>(ffnt->m_font_params.m_size));
     }
 
     virtual dcmr::font *create_font(const std::string &family,
-                                   const std::string &style,
-                                   int size) override {
+                                    const std::string &style,
+                                    int size) override {
         fake_font *fnt = new fake_font();
         fnt->m_font_params = font_params(family, style, size);
         return fnt;
@@ -147,7 +147,8 @@ class fake_backend : public dcmr::backend {
 
     virtual dcmr::vec2 get_image_extents(const std::string &src) override {
         auto extents = m_image_extents[src];
-        return dcmr::vec2(extents.first, extents.second);
+        return dcmr::vec2(static_cast<float>(extents.first),
+                          static_cast<float>(extents.second));
     }
 
     virtual void draw_image(const std::string &src, const dcmr::vec2 &pos,

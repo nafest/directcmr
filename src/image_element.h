@@ -15,7 +15,9 @@ class image_element : public element {
   public:
     image_element(const std::string url) : m_src(url) {}
 
-    virtual float get_top_to_base_line() noexcept override { return m_height; }
+    virtual float get_top_to_base_line() noexcept override {
+        return static_cast<float>(m_height);
+    }
 
     virtual void add_to_leaf_block(backend *bcknd,
                                    paragraph_state &pstate) override {

@@ -12,6 +12,5 @@ TEST(utf8_test, calls_backend_correctly) {
 
     ASSERT_EQ(2, fbcknd.m_draw_string_calls.size());
     EXPECT_STREQ(u8"äöü", fbcknd.m_draw_string_calls[0].m_text.c_str());
-    EXPECT_EQ(6, strlen(fbcknd.m_draw_string_calls[0].m_text.c_str()));
     EXPECT_STREQ(u8"öäü", fbcknd.m_draw_string_calls[1].m_text.c_str());
 }

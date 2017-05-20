@@ -31,10 +31,10 @@ dcmr::font *dcmr::backend::font_for_style(const dcmr::style &st) {
     else
         family_str = m_style_sheet.get_string_param("font");
 
-    int size = m_style_sheet.get_float_param("font_size");
+    int size = static_cast<int>(m_style_sheet.get_float_param("font_size"));
     if (st.get_heading_level() > 0)
-      for (int i = 6; i >= st.get_heading_level(); i--)
-        size = static_cast<int>(size * 1.1f);
+        for (int i = 6; i >= st.get_heading_level(); i--)
+            size = static_cast<int>(size * 1.1f);
 
     auto font = create_font(family_str, style_str, size);
     m_cached_fonts[st] = font;

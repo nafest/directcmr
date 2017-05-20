@@ -5,7 +5,7 @@ Given a a simple renderer implementation (an example implementation with Skia is
 included), directcmr directly outputs rendering calls.
 
 [![Build Status](https://travis-ci.org/nafest/directcmr.svg?branch=master)](https://travis-ci.org/nafest/directcmr)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+[![Build status](https://ci.appveyor.com/api/projects/status/60tt0hrnakb7expb?svg=true)](https://ci.appveyor.com/project/nafest/directcmr)[![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 
 ### Basic Approach
 1. Create a document instance from a string or from a file
