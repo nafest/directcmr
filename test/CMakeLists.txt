@@ -30,9 +30,9 @@ if (WITH_COVERAGE)
     # since a lot of code from headers is instanciated in the
     # test code, set the coverage flags for the test code as well
     set_property(TARGET directcmr_test
-        PROPERTY COMPILE_FLAGS "-g -O0 -fprofile-arcs -ftest-coverage")
+        PROPERTY COMPILE_FLAGS "-g -O0 --coverage")
     set_property(TARGET directcmr_test
-        PROPERTY LINK_FLAGS "-fprofile-arcs -ftest-coverage")
+        PROPERTY LINK_FLAGS "--coverage")
 endif()
 
 add_test(directcmr_test directcmr_test)

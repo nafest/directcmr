@@ -23,8 +23,8 @@ if (WITH_SKIA_CMARK)
     add_subdirectory(skia_cmark)
 endif()
 
-if(NOT Win32 AND WITH_COVERAGE)
-    include(cmake/CodeCoverage.cmake)
-    setup_target_for_coverage(directcmr_coverage
-        directcmr_test coverage)
-endif()
+#if(NOT Win32 AND WITH_COVERAGE)
+#    include(cmake/CodeCoverage.cmake)
+#    setup_target_for_coverage(directcmr_coverage
+#        directcmr_test coverage)
+#endif()
