@@ -11,7 +11,7 @@ extern "C" {
 
 /** # NAME
  *
- * **cmark** - CommonMark parsing, manipulating, and rendering
+ * **cmark-gfm** - CommonMark parsing, manipulating, and rendering
  */
 
 /** # DESCRIPTION
@@ -630,6 +630,18 @@ char *cmark_render_commonmark(cmark_node *root, int options, int width);
 CMARK_EXPORT
 char *cmark_render_commonmark_with_mem(cmark_node *root, int options, int width, cmark_mem *mem);
 
+/** Render a 'node' tree as a plain text document.
+ * It is the caller's responsibility to free the returned buffer.
+ */
+CMARK_EXPORT
+char *cmark_render_plaintext(cmark_node *root, int options, int width);
+
+/** As for 'cmark_render_plaintext', but specifying the allocator to use for
+ * the resulting string.
+ */
+CMARK_EXPORT
+char *cmark_render_plaintext_with_mem(cmark_node *root, int options, int width, cmark_mem *mem);
+
 /** Render a 'node' tree as a LaTeX document.
  * It is the caller's responsibility to free the returned buffer.
  */
@@ -678,10 +690,6 @@ char *cmark_render_latex_with_mem(cmark_node *root, int options, int width, cmar
  * ### Options affecting parsing
  */
 
-/** Normalize tree by consolidating adjacent text nodes.
- */
-#define CMARK_OPT_NORMALIZE (1 << 8)
-
 /** Validate UTF-8 in the input before parsing, replacing illegal
  * sequences with the replacement character U+FFFD.
  */
@@ -690,6 +698,15 @@ char *cmark_render_latex_with_mem(cmark_node *root, int options, int width, cmar
 /** Convert straight quotes to curly, --- to em dashes, -- to en dashes.
  */
 #define CMARK_OPT_SMART (1 << 10)
+
+/** Use GitHub-style <pre lang="x"> tags for code blocks instead of <pre><code
+ * class="language-x">.
+ */
+#define CMARK_OPT_GITHUB_PRE_LANG (1 << 11)
+
+/** Be liberal in interpreting inline HTML tags.
+ */
+#define CMARK_OPT_LIBERAL_HTML_TAG (1 << 12)
 
 /**
  * ## Version information

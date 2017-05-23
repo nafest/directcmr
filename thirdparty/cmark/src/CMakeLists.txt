@@ -2,8 +2,8 @@ if(${CMAKE_VERSION} VERSION_GREATER "3.3")
     cmake_policy(SET CMP0063 NEW)
 endif()
 
-set(LIBRARY "libcmark")
-set(STATICLIBRARY "libcmark_static")
+set(LIBRARY "libcmark-gfm")
+set(STATICLIBRARY "libcmark-gfm_static")
 set(HEADERS
   cmark.h
   cmark_extension_api.h
@@ -39,6 +39,7 @@ set(LIBRARY_SOURCES
   xml.c
   html.c
   commonmark.c
+  plaintext.c
   latex.c
   houdini_href_e.c
   houdini_html_e.c
@@ -52,7 +53,7 @@ set(LIBRARY_SOURCES
   ${HEADERS}
   )
 
-set(PROGRAM "cmark")
+set(PROGRAM "cmark-gfm")
 set(PROGRAM_SOURCES
   main.c
   )
@@ -70,10 +71,10 @@ include (GenerateExportHeader)
 add_executable(${PROGRAM} ${PROGRAM_SOURCES})
 add_compiler_export_flags()
 
-target_link_libraries(${PROGRAM} libcmark_static)
+target_link_libraries(${PROGRAM} libcmark-gfm_static)
 
-add_dependencies(${PROGRAM} libcmarkextensions_static)
-target_link_libraries(${PROGRAM} libcmarkextensions_static)
+add_dependencies(${PROGRAM} libcmark-gfmextensions_static)
+target_link_libraries(${PROGRAM} libcmark-gfmextensions_static)
 
 # Disable the PUBLIC declarations when compiling the executable:
 set_target_properties(${PROGRAM} PROPERTIES
@@ -99,15 +100,15 @@ if (CMARK_SHARED)
   add_library(${LIBRARY} SHARED ${LIBRARY_SOURCES})
   # Include minor version and patch level in soname for now.
   set_target_properties(${LIBRARY} PROPERTIES
-  OUTPUT_NAME "cmark"
-  SOVERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}
+  OUTPUT_NAME "cmark-gfm"
+  SOVERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}.gfm.${PROJECT_VERSION_GFM}
   VERSION ${PROJECT_VERSION})
 
   set_property(TARGET ${LIBRARY}
     APPEND PROPERTY MACOSX_RPATH true)
 
   # Avoid name clash between PROGRAM and LIBRARY pdb files.
-  set_target_properties(${LIBRARY} PROPERTIES PDB_NAME cmark_dll)
+  set_target_properties(${LIBRARY} PROPERTIES PDB_NAME cmark-gfm_dll)
 
   generate_export_header(${LIBRARY}
     BASE_NAME ${PROJECT_NAME})
@@ -123,15 +124,15 @@ if (CMARK_STATIC)
 
   if (MSVC)
   set_target_properties(${STATICLIBRARY} PROPERTIES
-    OUTPUT_NAME "cmark_static"
+    OUTPUT_NAME "cmark-gfm_static"
     VERSION ${PROJECT_VERSION})
   else()
   set_target_properties(${STATICLIBRARY} PROPERTIES
-    OUTPUT_NAME "cmark"
+    OUTPUT_NAME "cmark-gfm"
     VERSION ${PROJECT_VERSION})
 endif(MSVC)
 
-target_link_libraries(cmark ${CMAKE_DL_LIBS})
+target_link_libraries(cmark-gfm ${CMAKE_DL_LIBS})
 
   list(APPEND CMARK_INSTALL ${STATICLIBRARY})
 endif()
@@ -139,7 +140,7 @@ set_property(TARGET ${LIBRARY}
   APPEND PROPERTY MACOSX_RPATH true)
 
 # Avoid name clash between PROGRAM and LIBRARY pdb files.
-set_target_properties(${LIBRARY} PROPERTIES PDB_NAME cmark_dll)
+set_target_properties(${LIBRARY} PROPERTIES PDB_NAME cmark-gfm_dll)
 
 generate_export_header(${LIBRARY}
     BASE_NAME ${PROJECT_NAME})
@@ -160,9 +161,9 @@ install(TARGETS ${PROGRAM} ${CMARK_INSTALL}
   )
 
 if(CMARK_SHARED OR CMARK_STATIC)
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libcmark.pc.in
-    ${CMAKE_CURRENT_BINARY_DIR}/libcmark.pc @ONLY)
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libcmark.pc
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libcmark-gfm.pc.in
+    ${CMAKE_CURRENT_BINARY_DIR}/libcmark-gfm.pc @ONLY)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libcmark-gfm.pc
     DESTINATION lib${LIB_SUFFIX}/pkgconfig)
 
   install(FILES

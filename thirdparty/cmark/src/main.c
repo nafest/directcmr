@@ -24,25 +24,26 @@ typedef enum {
   FORMAT_XML,
   FORMAT_MAN,
   FORMAT_COMMONMARK,
+  FORMAT_PLAINTEXT,
   FORMAT_LATEX
 } writer_format;
 
 void print_usage() {
-  printf("Usage:   cmark [FILE*]\n");
+  printf("Usage:   cmark-gfm [FILE*]\n");
   printf("Options:\n");
-  printf("  --to, -t FORMAT  Specify output format (html, xml, man, "
-         "commonmark, latex)\n");
-  printf("  --width WIDTH    Specify wrap width (default 0 = nowrap)\n");
-  printf("  --sourcepos      Include source position attribute\n");
-  printf("  --hardbreaks     Treat newlines as hard line breaks\n");
-  printf("  --nobreaks       Render soft line breaks as spaces\n");
-  printf("  --safe           Suppress raw HTML and dangerous URLs\n");
-  printf("  --smart          Use smart punctuation\n");
-  printf("  --normalize      Consolidate adjacent text nodes\n");
-  printf("  -e, --extension EXTENSION_NAME Specify an extension name to use\n");
+  printf("  --to, -t FORMAT   Specify output format (html, xml, man, "
+         "commonmark, plaintext, latex)\n");
+  printf("  --width WIDTH     Specify wrap width (default 0 = nowrap)\n");
+  printf("  --sourcepos       Include source position attribute\n");
+  printf("  --hardbreaks      Treat newlines as hard line breaks\n");
+  printf("  --nobreaks        Render soft line breaks as spaces\n");
+  printf("  --safe            Suppress raw HTML and dangerous URLs\n");
+  printf("  --smart           Use smart punctuation\n");
+  printf("  --github-pre-lang Use GitHub-style <pre lang> for code blocks\n");
+  printf("  --extension, -e EXTENSION_NAME Specify an extension name to use\n");
   printf("  --list-extensions              List available extensions and quit\n");
-  printf("  --help, -h       Print usage information\n");
-  printf("  --version        Print version\n");
+  printf("  --help, -h        Print usage information\n");
+  printf("  --version         Print version\n");
 }
 
 static bool print_document(cmark_node *document, writer_format writer,
@@ -63,6 +64,9 @@ static bool print_document(cmark_node *document, writer_format writer,
     break;
   case FORMAT_COMMONMARK:
     result = cmark_render_commonmark_with_mem(document, options, width, mem);
+    break;
+  case FORMAT_PLAINTEXT:
+    result = cmark_render_plaintext_with_mem(document, options, width, mem);
     break;
   case FORMAT_LATEX:
     result = cmark_render_latex_with_mem(document, options, width, mem);
@@ -131,12 +135,14 @@ int main(int argc, char *argv[]) {
       options |= CMARK_OPT_NOBREAKS;
     } else if (strcmp(argv[i], "--smart") == 0) {
       options |= CMARK_OPT_SMART;
+    } else if (strcmp(argv[i], "--github-pre-lang") == 0) {
+      options |= CMARK_OPT_GITHUB_PRE_LANG;
     } else if (strcmp(argv[i], "--safe") == 0) {
       options |= CMARK_OPT_SAFE;
-    } else if (strcmp(argv[i], "--normalize") == 0) {
-      options |= CMARK_OPT_NORMALIZE;
     } else if (strcmp(argv[i], "--validate-utf8") == 0) {
       options |= CMARK_OPT_VALIDATE_UTF8;
+    } else if (strcmp(argv[i], "--liberal-html-tag") == 0) {
+      options |= CMARK_OPT_LIBERAL_HTML_TAG;
     } else if ((strcmp(argv[i], "--help") == 0) ||
                (strcmp(argv[i], "-h") == 0)) {
       print_usage();
@@ -165,6 +171,8 @@ int main(int argc, char *argv[]) {
           writer = FORMAT_XML;
         } else if (strcmp(argv[i], "commonmark") == 0) {
           writer = FORMAT_COMMONMARK;
+        } else if (strcmp(argv[i], "plaintext") == 0) {
+          writer = FORMAT_PLAINTEXT;
         } else if (strcmp(argv[i], "latex") == 0) {
           writer = FORMAT_LATEX;
         } else {

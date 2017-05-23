@@ -691,6 +691,50 @@ static void render_commonmark(test_batch_runner *runner) {
   cmark_node_free(doc);
 }
 
+static void render_plaintext(test_batch_runner *runner) {
+  char *plaintext;
+
+  static const char markdown[] = "> \\- foo *bar* \\*bar\\*\n"
+                                 "\n"
+                                 "- Lorem ipsum dolor sit amet,\n"
+                                 "  consectetur adipiscing elit,\n"
+                                 "- sed do eiusmod tempor incididunt\n"
+                                 "  ut labore et dolore magna aliqua.\n";
+  cmark_node *doc =
+      cmark_parse_document(markdown, sizeof(markdown) - 1, CMARK_OPT_DEFAULT);
+
+  plaintext = cmark_render_plaintext(doc, CMARK_OPT_DEFAULT, 26);
+  STR_EQ(runner, plaintext, "- foo bar *bar*\n"
+                             "\n"
+                             "  - Lorem ipsum dolor sit\n"
+                             "    amet, consectetur\n"
+                             "    adipiscing elit,\n"
+                             "  - sed do eiusmod tempor\n"
+                             "    incididunt ut labore\n"
+                             "    et dolore magna\n"
+                             "    aliqua.\n",
+         "render document with wrapping");
+  free(plaintext);
+  plaintext = cmark_render_plaintext(doc, CMARK_OPT_DEFAULT, 0);
+  STR_EQ(runner, plaintext, "- foo bar *bar*\n"
+                             "\n"
+                             "  - Lorem ipsum dolor sit amet,\n"
+                             "    consectetur adipiscing elit,\n"
+                             "  - sed do eiusmod tempor incididunt\n"
+                             "    ut labore et dolore magna aliqua.\n",
+         "render document without wrapping");
+  free(plaintext);
+
+  cmark_node *text = cmark_node_new(CMARK_NODE_TEXT);
+  cmark_node_set_literal(text, "Hi");
+  plaintext = cmark_render_plaintext(text, CMARK_OPT_DEFAULT, 0);
+  STR_EQ(runner, plaintext, "Hi\n", "render single inline node");
+  free(plaintext);
+
+  cmark_node_free(text);
+  cmark_node_free(doc);
+}
+
 static void utf8(test_batch_runner *runner) {
   // Ranges
   test_char(runner, 1, "\x01", "valid utf8 01");
@@ -738,6 +782,13 @@ static void utf8(test_batch_runner *runner) {
       string_with_nul_lf, sizeof(string_with_nul_lf) - 1, CMARK_OPT_DEFAULT);
   STR_EQ(runner, html, "<pre><code>\xef\xbf\xbd\n</code></pre>\n",
          "utf8 with \\0\\n");
+  free(html);
+
+  // Test byte-order marker
+  static const char string_with_bom[] = "\xef\xbb\xbf# Hello\n";
+  html = cmark_markdown_to_html(
+      string_with_bom, sizeof(string_with_bom) - 1, CMARK_OPT_DEFAULT);
+  STR_EQ(runner, html, "<h1>Hello</h1>\n", "utf8 with BOM");
   free(html);
 }
 
@@ -901,6 +952,7 @@ int main() {
   render_man(runner);
   render_latex(runner);
   render_commonmark(runner);
+  render_plaintext(runner);
   utf8(runner);
   line_endings(runner);
   numeric_entities(runner);

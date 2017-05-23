@@ -15,18 +15,18 @@ BENCHSAMPLES=$(wildcard $(BENCHDIR)/samples/*.md)
 BENCHFILE=$(BENCHDIR)/benchinput.md
 ALLTESTS=alltests.md
 NUMRUNS?=20
-CMARK=$(BUILDDIR)/src/cmark
+CMARK=$(BUILDDIR)/src/cmark-gfm
 PROG?=$(CMARK)
 VERSION?=$(SPECVERSION)
 RELEASE?=CommonMark-$(VERSION)
 INSTALL_PREFIX?=/usr/local
 CLANG_CHECK?=clang-check
-CLANG_FORMAT=clang-format -style llvm -sort-includes=0 -i
+CLANG_FORMAT=clang-format-3.5 -style llvm -sort-includes=0 -i
 AFL_PATH?=/usr/local/bin
 
-.PHONY: all cmake_build leakcheck clean fuzztest test debug ubsan asan mingw archive newbench bench format update-spec afl clang-check
+.PHONY: all cmake_build leakcheck clean fuzztest test debug ubsan asan mingw archive newbench bench format update-spec afl clang-check docker
 
-all: cmake_build man/man3/cmark.3
+all: cmake_build man/man3/cmark-gfm.3
 
 $(CMARK): cmake_build
 
@@ -80,6 +80,7 @@ afl:
 	    -i test/afl_test_cases \
 	    -o test/afl_results \
 	    -x test/afl_dictionary \
+	    $(AFL_OPTIONS) \
 	    -t 100 \
 	    $(CMARK) -e table -e strikethrough -e autolink -e tagfilter $(CMARK_OPTS)
 
@@ -92,7 +93,7 @@ mingw:
 	cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchain-mingw32.cmake -DCMAKE_INSTALL_PREFIX=$(MINGW_INSTALLDIR) ;\
 	$(MAKE) && $(MAKE) install
 
-man/man3/cmark.3: src/cmark.h | $(CMARK)
+man/man3/cmark-gfm.3: src/cmark.h | $(CMARK)
 	python man/make_man_page.py $< > $@ \
 
 archive:
@@ -131,7 +132,7 @@ $(EXTDIR)/ext_scanners.c: $(EXTDIR)/ext_scanners.re
 	esac
 	re2c --case-insensitive -b -i --no-generation-date -8 \
 		--encoding-policy substitute -o $@ $<
-	clang-format -style llvm -i $@
+	clang-format-3.5 -style llvm -i $@
 
 # We include entities.inc in the repository, so normally this
 # doesn't need to be regenerated:
@@ -155,10 +156,10 @@ $(ALLTESTS): $(SPEC) $(EXTENSIONS_SPEC)
 
 leakcheck: $(ALLTESTS)
 	for format in html man xml latex commonmark; do \
-	  for opts in "" "--smart" "--normalize"; do \
-	     echo "cmark -t $$format -e table -e strikethrough -e autolink -e tagfilter $$opts" ; \
+	  for opts in "" "--smart"; do \
+	     echo "cmark-gfm -t $$format -e table -e strikethrough -e autolink -e tagfilter $$opts" ; \
 	     valgrind -q --leak-check=full --dsymutil=yes --suppressions=suppressions --error-exitcode=1 $(PROG) -t $$format -e table -e strikethrough -e autolink -e tagfilter $$opts $(ALLTESTS) >/dev/null || exit 1;\
-	  done; \
+          done; \
 	done;
 
 fuzztest:
@@ -202,7 +203,7 @@ format:
 	$(CLANG_FORMAT) src/*.c src/*.h api_test/*.c api_test/*.h
 
 format-extensions:
-	clang-format -style llvm -i extensions/*.c extensions/*.h
+	clang-format-3.5 -style llvm -i extensions/*.c extensions/*.h
 
 operf: $(CMARK)
 	operf $< < $(BENCHFILE) > /dev/null
@@ -211,3 +212,7 @@ distclean: clean
 	-rm -rf *.dSYM
 	-rm -f README.html
 	-rm -rf $(BENCHFILE) $(ALLTESTS) progit
+
+docker:
+	docker build -t cmark $(CURDIR)/tools
+	docker run --privileged -t -i -v $(CURDIR):/src/cmark -w /src/cmark cmark /bin/bash

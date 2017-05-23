@@ -36,9 +36,9 @@ add_library(directcmr STATIC
     table_element.h
     text_element.h
     utils.cpp utils.h image_element.h paragraph_state.cpp thematic_break_element.h link_element.h linebreak_element.h style_sheet.cpp style_sheet.h)
-get_target_property(CMARK_SOURCE libcmark SOURCE_DIR)
-get_target_property(CMARK_LOCATION libcmark BINARY_DIR)
-target_link_libraries(directcmr libcmark_static libcmarkextensions_static)
+get_target_property(CMARK_SOURCE libcmark-gfm SOURCE_DIR)
+get_target_property(CMARK_LOCATION libcmark-gfm BINARY_DIR)
+target_link_libraries(directcmr libcmark-gfm_static libcmark-gfmextensions_static)
 
 # set compile definitions for static linkage of cmark
 target_compile_definitions(directcmr PRIVATE CMARK_STATIC_DEFINE CMARKEXTENSIONS_STATIC_DEFINE)

@@ -23,7 +23,7 @@ add_executable(directcmr_test
     element_test.cpp
     table_element_test.cpp image_element_test.cpp code_element_test.cpp thematic_break_element_test.cpp link_element_test.cpp linebreak_element_test.cpp utf8_test.cpp)
 
-target_link_libraries(directcmr_test gtest_main directcmr libcmark_static libcmarkextensions_static)
+target_link_libraries(directcmr_test gtest_main directcmr libcmark-gfm_static libcmark-gfmextensions_static)
 target_include_directories(directcmr_test PRIVATE ${directcmr_SOURCE_DIR}/src)
 
 if (WITH_COVERAGE)
