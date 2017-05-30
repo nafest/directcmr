@@ -30,7 +30,7 @@ install:
 before_script:
   - mkdir build
   - cd build
-  - cmake -DCMAKE_BUILD_TYPE=Debug -DWITH_SKIA_CMARK=Off ..
+  - cmake -DCMAKE_BUILD_TYPE=Release -DWITH_SKIA_CMARK=Off ..
 
 script:
   - make
