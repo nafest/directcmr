@@ -14,7 +14,8 @@ class style {
   public:
     style()
         : m_heading_level(0), m_emph(false), m_strong(false), m_code(false),
-          m_blockquote(false), m_link(false), m_visited(false) {}
+          m_inline_code(false), m_blockquote(false), m_link(false),
+          m_visited(false) {}
     ~style() = default;
 
     void set_emph(bool emph) noexcept { m_emph = emph; }
