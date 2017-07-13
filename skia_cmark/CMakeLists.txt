@@ -14,7 +14,7 @@ add_executable(skia_cmark
     skia_backend.h)
 
 target_include_directories(skia_cmark PRIVATE
-    ${cmark_renderer_SOURCE_DIR}/src)
+    ${directcmr_SOURCE_DIR}/src)
 
 if(APPLE)
     target_compile_definitions(skia_cmark PUBLIC SK_BUILD_FOR_MAC)
@@ -33,7 +33,7 @@ if(WIN32)
 endif()
 
 target_link_libraries(skia_cmark
-    directcmr skia)
+    directcmr  skia)
 
 if (WITH_COVERAGE)
     set_property(TARGET skia_cmark

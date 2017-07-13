@@ -191,3 +191,76 @@ TEST(table_cell_preferred_width, renders_too_wide_table_correctly) {
     EXPECT_EQ(dcmr::vec2(119.5f, 0.f), fbcknd.m_draw_line_calls[5].m_from);
     EXPECT_EQ(dcmr::vec2(119.5f, third_line), fbcknd.m_draw_line_calls[5].m_to);
 }
+
+// test table column alignments
+TEST(table_cell_alignment, left_alignment_renders_correctly) {
+    fake_backend fbcknd;
+    auto &ss = fbcknd.get_style_sheet();
+    ss.set_float_param("margin_top", 0.f);
+    ss.set_float_param("margin_bottom", 0.f);
+    ss.set_float_param("document.margin", 0.f);
+    ss.set_float_param("table_cell.margin", 2.0);
+
+    // create a 1x2 table, where the header is larger
+    // than the first row
+    auto doc = dcmr::document::from_string("| Header |\n| :--- |\n| foo |\n");
+
+    doc.set_backend(&fbcknd);
+    auto height = doc.layout(500);
+    doc.render(dcmr::vec2(), 500);
+
+    EXPECT_EQ(2, fbcknd.m_draw_string_calls.size());
+
+    EXPECT_EQ(3, fbcknd.m_draw_string_calls[0].m_pos.x());
+    EXPECT_EQ(3, fbcknd.m_draw_string_calls[1].m_pos.x());
+}
+
+TEST(table_cell_alignment, center_alignment_renders_correctly) {
+    fake_backend fbcknd;
+    auto &ss = fbcknd.get_style_sheet();
+    ss.set_float_param("margin_top", 0.f);
+    ss.set_float_param("margin_bottom", 0.f);
+    ss.set_float_param("document.margin", 0.f);
+    ss.set_float_param("table_cell.margin", 2.0);
+
+    // create a 1x2 table, where the header is larger
+    // than the first row
+    auto doc = dcmr::document::from_string("| Header |\n| :---: |\n| foo |\n");
+
+    doc.set_backend(&fbcknd);
+    auto height = doc.layout(500);
+    doc.render(dcmr::vec2(), 500);
+
+    EXPECT_EQ(2, fbcknd.m_draw_string_calls.size());
+
+    EXPECT_EQ(3, fbcknd.m_draw_string_calls[0].m_pos.x());
+
+    // width of Header is 60, width of foo is 30
+    // => offset should be 15
+    EXPECT_EQ(3 + 15, fbcknd.m_draw_string_calls[1].m_pos.x());
+}
+
+TEST(table_cell_alignment, right_alignment_renders_correctly) {
+    fake_backend fbcknd;
+    auto &ss = fbcknd.get_style_sheet();
+    ss.set_float_param("margin_top", 0.f);
+    ss.set_float_param("margin_bottom", 0.f);
+    ss.set_float_param("document.margin", 0.f);
+    ss.set_float_param("table_cell.margin", 2.0);
+
+    // create a 1x2 table, where the header is larger
+    // than the first row
+    auto doc = dcmr::document::from_string("| Header |\n| ---: |\n| foo |\n");
+
+    doc.set_backend(&fbcknd);
+    auto height = doc.layout(500);
+    doc.render(dcmr::vec2(), 500);
+
+    EXPECT_EQ(2, fbcknd.m_draw_string_calls.size());
+
+    EXPECT_EQ(3, fbcknd.m_draw_string_calls[0].m_pos.x());
+
+    // width of Header is 60, width of foo is 30
+    // => offset should be 30
+    EXPECT_EQ(3 + 30, fbcknd.m_draw_string_calls[1].m_pos.x());
+}

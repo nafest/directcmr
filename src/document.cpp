@@ -35,7 +35,7 @@
 #include <vector>
 
 std::vector<dcmr::element *> transform_children(cmark_node *node,
-                                               bool be_verbose) {
+                                                bool be_verbose) {
     std::vector<dcmr::element *> child_elements;
     auto child = cmark_node_first_child(node);
     bool softbreak_discarded = false;
@@ -133,7 +133,26 @@ std::vector<dcmr::element *> transform_children(cmark_node *node,
             // cannot be identified with a type constant, we
             // have to use the type string here
             if (!strcmp(type_string, "table")) {
-                elem = new dcmr::table_element();
+                auto num_column = cmarkextensions_get_table_columns(child);
+                auto alig = cmarkextensions_get_table_alignments(child);
+                std::vector<dcmr::vertical_alignment> alignments;
+                for (int i = 0; i < num_column; i++) {
+                    switch (alig[i]) {
+                    case 'c':
+                        alignments.push_back(
+                            dcmr::vertical_alignment::center);
+                        break;
+                    case 'r':
+                        alignments.push_back(
+                            dcmr::vertical_alignment::right);
+                        break;
+                    default:
+                        alignments.push_back(
+                            dcmr::vertical_alignment::left);
+                        break;
+                    }
+                }
+                elem = new dcmr::table_element(num_column, alignments);
             } else if (!strcmp(type_string, "table_header")) {
                 elem = new dcmr::table_header_element();
             } else if (!strcmp(type_string, "table_row")) {
@@ -194,7 +213,7 @@ void destroy_parser(cmark_parser *parser) {
 }
 
 dcmr::document dcmr::document::from_string(const std::string &string,
-                                         bool be_verbose) {
+                                           bool be_verbose) {
     auto parser = init_parser();
 
     cmark_parser_feed(parser, string.c_str(), string.length());
@@ -212,7 +231,7 @@ dcmr::document dcmr::document::from_string(const std::string &string,
 }
 
 dcmr::document dcmr::document::from_file(const std::string &file_name,
-                                       bool be_verbose) {
+                                         bool be_verbose) {
     std::ifstream in_file(file_name);
 
     if (!in_file) {

@@ -10,6 +10,8 @@
 
 namespace dcmr {
 
+enum class vertical_alignment { left, center, right };
+
 class style {
   public:
     style()

@@ -15,6 +15,8 @@ namespace dcmr {
 
 class leaf_block_element : public element {
   public:
+    leaf_block_element() : m_alignment(vertical_alignment::left) {}
+
     virtual float preferred_width(backend *bcknd) override {
         auto space_extents = get_font(bcknd)->get_space_width();
         auto margin = bcknd->get_style_sheet().get_margin(get_type());
@@ -39,7 +41,7 @@ class leaf_block_element : public element {
         // also keep track of the height of the current line
         paragraph_state pstate(width, get_font(bcknd)->get_line_height(),
                                get_font(bcknd)->get_ascent(), margin.top,
-                               margin.left);
+                               margin.left, m_alignment);
         // to use the correct space widths, add the spaces around
         // child elements in this element, e.g. otherwise there would be
         // a too wide space after an inline code span
@@ -55,5 +57,12 @@ class leaf_block_element : public element {
         // one word has been added to the last line
         return pstate.get_posy() + pstate.get_line_height() + margin.bottom;
     }
+
+    void set_vertical_alignment(vertical_alignment alignment) {
+        m_alignment = alignment;
+    }
+
+  private:
+    vertical_alignment m_alignment;
 };
 }

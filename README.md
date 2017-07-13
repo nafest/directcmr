@@ -41,7 +41,6 @@ the contents of an element.
 - common base class for tests with styling resets
 - document and cleanup the backend API
 - it should be possible to provide an external canvas
-- extend GitHubs cmark extensions to get the alignment of the table rows
 - add support for more of GitHub's extensions
 - read styling form a CSS-like file
 - add additional line spacing (configurable), such that the rectangle of inline code spans
