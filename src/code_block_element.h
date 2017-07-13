@@ -47,7 +47,7 @@ class code_block_element : public leaf_block_element {
             ss.get_string_param("code_block.background_color");
         if (background_color != ss.get_string_param("background_color")) {
             auto radius = ss.get_float_param("code_block.border_radius");
-            bcknd->draw_rounded_rect(m_rect, radius, color(background_color));
+            bcknd->draw_rounded_rect(m_rect + pos, radius, color(background_color));
         }
         auto fnt = get_font(bcknd);
         auto current_pos = pos + m_rect.top_left();

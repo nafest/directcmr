@@ -54,6 +54,11 @@ class rect {
     rect(float top, float left, float bottom, float right)
         : m_top_left({top, left}), m_bottom_right({bottom, right}) {}
 
+    // move a rectangle with a vec2
+    rect operator+(const vec2 &rhs) {
+        return rect(m_top_left + rhs, m_bottom_right + rhs);
+    }
+
     float width() const noexcept { return m_bottom_right.x() - m_top_left.x(); }
     float height() const noexcept {
         return m_bottom_right.y() - m_top_left.y();
