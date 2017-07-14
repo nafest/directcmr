@@ -64,8 +64,9 @@ class list_element : public element {
                                  child_pos.y() +
                                      ss.get_margin(child->get_type()).top);
             vec2 marker_bottom_right(
-                child_pos.x(),
-                child_pos.y() + child->get_font(bcknd)->get_line_height());
+                child_pos.x(), child_pos.y() +
+                                   ss.get_margin(child->get_type()).top +
+                                   child->get_font(bcknd)->get_line_height());
 
             rect marker_rect(marker_top_left, marker_bottom_right);
             if (m_type == list_element_type::unordered)
