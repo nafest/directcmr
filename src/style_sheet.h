@@ -8,38 +8,39 @@
 
 #pragma once
 
-#include <string>
 #include <map>
+#include <string>
 
 namespace dcmr {
 
 // struct for margins (left, top, right, bottom)
 struct elem_margin {
-  elem_margin(float _left, float _top, float _right, float _bottom)
-      : top(_top), left(_left), right(_right), bottom(_bottom) {}
-  float vertical_margin() const { return top + bottom; }
-  float horizontal_margin() const { return left + right; }
-  float top, left, bottom, right;
+    elem_margin(float _left, float _top, float _right, float _bottom)
+        : top(_top), left(_left), right(_right), bottom(_bottom) {}
+    float vertical_margin() const { return top + bottom; }
+    float horizontal_margin() const { return left + right; }
+    float top, left, bottom, right;
 };
 
 class style_sheet {
   public:
     style_sheet();
 
-    virtual float get_float_param(const std::string &param_name) const
-    noexcept;
+    virtual float get_float_param(const std::string &param_name) const noexcept;
 
     virtual void set_float_param(const std::string &param_name,
                                  float value) noexcept;
 
     virtual std::string get_string_param(const std::string &param_name) const
-    noexcept;
+        noexcept;
 
     virtual void set_string_param(const std::string &param_name,
                                   const std::string &value) noexcept;
 
     virtual elem_margin get_margin(const std::string &element_name) const
-    noexcept;
+        noexcept;
+
+    void set_params(const std::string &par_value_list) noexcept;
 
   private:
     float get_side_margin(const std::string &element_name,
@@ -47,6 +48,8 @@ class style_sheet {
 
     std::map<std::string, float> m_float_params;
     std::map<std::string, std::string> m_string_params;
-
 };
+
+std::pair<std::string, std::string>
+split_key_value(const std::string &key_val_string);
 }

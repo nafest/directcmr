@@ -7,6 +7,7 @@
 // License: MIT License (for full license see LICENSE)
 
 #include "style_sheet.h"
+#include "utils.h"
 
 dcmr::style_sheet::style_sheet() {
     // set some default parameters
@@ -61,7 +62,7 @@ float dcmr::style_sheet::get_float_param(const std::string &param_name) const
 }
 
 void dcmr::style_sheet::set_float_param(const std::string &param_name,
-                                       float value) noexcept {
+                                        float value) noexcept {
     m_float_params[param_name] = value;
 }
 
@@ -80,12 +81,13 @@ dcmr::style_sheet::get_string_param(const std::string &param_name) const
 }
 
 void dcmr::style_sheet::set_string_param(const std::string &param_name,
-                                        const std::string &value) noexcept {
+                                         const std::string &value) noexcept {
     m_string_params[param_name] = value;
 }
 
 float dcmr::style_sheet::get_side_margin(const std::string &element_name,
-                                        const std::string side) const noexcept {
+                                         const std::string side) const
+    noexcept {
     float mrgn = 0.f;
 
     // use them
@@ -112,4 +114,60 @@ dcmr::style_sheet::get_margin(const std::string &element_name) const noexcept {
     mrgn.bottom = get_side_margin(element_name, "bottom");
 
     return mrgn;
+}
+
+std::string trim(const std::string &in) {
+    // remove space at the front and the end of the input
+    // string
+    size_t start = 0;
+    auto len = in.size();
+    // first at the front
+    while (start < len && in[start] == ' ')
+        start++;
+    auto end = in.find(' ', start + 1);
+
+    if (end == std::string::npos) {
+        if (in[len - 1] == '\n') {
+            return in.substr(start, len - start - 1);
+        }
+        return in.substr(start);
+    } else {
+        if (in[end] == '\n')
+            end--;
+        return in.substr(start, end - start);
+    }
+}
+
+std::pair<std::string, std::string>
+dcmr::split_key_value(const std::string &key_val_string) {
+    auto colon_pos = key_val_string.find(':');
+
+    if (colon_pos == std::string::npos)
+        return std::make_pair<std::string, std::string>("", "");
+
+    std::pair<std::string, std::string> out_pair;
+    out_pair.first = trim(key_val_string.substr(0, colon_pos));
+    out_pair.second =
+        trim(key_val_string.substr(colon_pos + 1, std::string::npos));
+
+    return out_pair;
+};
+
+// an easier way to set a lot of styling parameters
+//
+// pass a string with a key value pair in every line
+// code_block.font: Consolas\n
+// code_block.color: #a9b7c6ff\n
+// code_block.margin: 2.f\n
+void dcmr::style_sheet::set_params(const std::string &par_value_list) noexcept {
+    for (auto &line : line_splitter(par_value_list)) {
+        auto kv = dcmr::split_key_value(line);
+
+        try {
+            auto param = std::stof(kv.second);
+            set_float_param(kv.first, param);
+        } catch (std::invalid_argument) {
+            set_string_param(kv.first, kv.second);
+        }
+    }
 }
