@@ -51,8 +51,10 @@ class list_element : public element {
     void render(backend *bcknd, vec2 pos) override {
         auto ss = bcknd->get_style_sheet();
         int cnt = 1;
-        auto num_char =
-            static_cast<float>(std::ceil(std::log10(m_children.size())));
+        float num_char = 1.f;
+        if (m_children.size() > 1)
+            num_char =
+                static_cast<float>(std::ceil(std::log10(m_children.size())));
         for (auto child : m_children) {
             auto child_pos = child->get_position();
             child_pos = child_pos + pos + m_rect.top_left();
