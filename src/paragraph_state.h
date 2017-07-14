@@ -16,13 +16,16 @@ class element;
 
 class paragraph_state {
   public:
-    paragraph_state() : m_posx(0), m_posy(0), m_line_height(0), m_width(0) {}
+    paragraph_state()
+        : m_posx(0), m_posy(0), m_line_height(0), m_width(0),
+          m_alignment(vertical_alignment::left) {}
 
     paragraph_state(float paragraph_width, float line_height, float ascent,
-                    float top_offset = 0.f, float left_offset = 0.f)
+                    float top_offset = 0.f, float left_offset = 0.f,
+                    vertical_alignment alignment = vertical_alignment::left)
         : m_posx(left_offset), m_posy(top_offset), m_line_height(line_height),
           m_width(paragraph_width), m_left_offset(left_offset),
-          m_ascent(ascent) {}
+          m_ascent(ascent), m_alignment(alignment), m_space_at_end(0.f) {}
 
     bool advance(vec2 text_extents, element *elem) noexcept {
         if (text_extents.x() + m_posx - m_left_offset <= m_width ||
@@ -31,6 +34,7 @@ class paragraph_state {
             m_posx == m_left_offset) {
             // fits in the current line
             m_posx += text_extents.x();
+            m_space_at_end = 0.f;
 
             if (elem != nullptr)
                 m_line_elements.push_back(elem);
@@ -41,6 +45,7 @@ class paragraph_state {
             // advance to the next line
             m_posy += m_line_height;
             m_posx = text_extents.x() + m_left_offset;
+            m_space_at_end = 0.f;
 
             m_line_elements.clear();
             if (elem != nullptr)
@@ -53,12 +58,14 @@ class paragraph_state {
         set_base_line();
         m_posy += m_line_height;
         m_posx = m_left_offset;
+        m_space_at_end = false;
         m_line_elements.clear();
     }
 
     void add_space(float space_width) noexcept {
         if (m_posx > m_left_offset)
             m_posx += space_width;
+        m_space_at_end = space_width;
     }
     void set_base_line();
 
@@ -81,6 +88,8 @@ class paragraph_state {
     float m_width;
     float m_left_offset;
     float m_ascent;
+    float m_space_at_end;
+    vertical_alignment m_alignment;
 
     std::vector<element *>
         m_line_elements; // keep track of all elements in a line, such

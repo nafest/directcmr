@@ -20,18 +20,19 @@ namespace dcmr {
 //   respected if possible
 // - spacing between the columns/cells should be added
 
-class table_element : public element {
-  private:
-    int num_column() const {
-        // get the first child, which should either be a table_header or
-        // a table_row;
-        if (m_children.size() == 0)
-            return 0;
-        return static_cast<int>(m_children[0]->children().size());
-    }
+class table_header_element : public element {};
+class table_row_element : public element {};
+class table_cell_element : public leaf_block_element {};
 
+class table_element : public element {
+  public:
+    table_element(int num_column,
+                  const std::vector<vertical_alignment> &column_alignments)
+        : m_num_column(num_column), m_column_alignments(column_alignments) {}
+
+  private:
     std::vector<float> min_col_widths(backend *bcknd) const {
-        std::vector<float> col_widths(num_column(), 0.f);
+        std::vector<float> col_widths(m_num_column, 0.f);
 
         for (auto child : m_children) {
             for (int i = 0; i < child->children().size(); i++) {
@@ -44,7 +45,7 @@ class table_element : public element {
     }
 
     std::vector<float> preferred_col_widths(backend *bcknd) const {
-        std::vector<float> col_widths(num_column(), 0.f);
+        std::vector<float> col_widths(m_num_column, 0.f);
 
         for (auto child : m_children) {
             for (int i = 0; i < child->children().size(); i++) {
@@ -77,8 +78,7 @@ class table_element : public element {
         // styling options required for layouting the table
         auto border_width = ss.get_float_param("table.border_width");
 
-        auto num_col = num_column();
-        float spacing_width = (num_col + 1) * border_width;
+        float spacing_width = (m_num_column + 1) * border_width;
 
         // estimate the width used to render the table. If the sum of the
         // preferred widths is smaller than width use this value, otherwise
@@ -87,20 +87,20 @@ class table_element : public element {
         float preferred_table_width =
             spacing_width + std::accumulate(preferred_widths.begin(),
                                             preferred_widths.end(), 0.f);
-        std::vector<float> column_widths(num_col);
+        std::vector<float> column_widths(m_num_column);
         if (preferred_table_width < width) {
             width = preferred_table_width;
             column_widths = preferred_widths;
         } else {
-            column_widths = distribute_width(width - spacing_width, num_col,
-                                             min_col_widths(bcknd));
+            column_widths = distribute_width(
+                width - spacing_width, m_num_column, min_col_widths(bcknd));
         }
 
         // given the column widths it is now possible to layout all rows
         // pre-compute the horizontal offset of all columns;
-        m_grid_col.resize(num_col + 1);
+        m_grid_col.resize(m_num_column + 1);
         m_grid_col[0] = 0.5f * border_width;
-        for (int i = 1; i < num_col + 1; i++)
+        for (int i = 1; i < m_num_column + 1; i++)
             m_grid_col[i] =
                 border_width + column_widths[i - 1] + m_grid_col[i - 1];
 
@@ -108,8 +108,10 @@ class table_element : public element {
         m_grid_row.push_back(height - 0.5f * border_width);
         for (auto row : m_children) {
             float row_height = 0.f;
-            for (int i = 0; i < num_col; i++) {
+            for (int i = 0; i < m_num_column; i++) {
                 auto col = row->children()[i];
+                static_cast<table_cell_element *>(col)->set_vertical_alignment(
+                    m_column_alignments[i]);
                 col->set_position(
                     vec2(m_grid_col[i] + 0.5f * border_width, height));
                 row_height = std::max<float>(
@@ -123,7 +125,6 @@ class table_element : public element {
     }
 
     virtual void render(backend *bcknd, vec2 pos = {0, 0}) {
-        auto num_col = num_column();
         auto border_width =
             bcknd->get_style_sheet().get_float_param("table.border_width");
 
@@ -144,7 +145,7 @@ class table_element : public element {
                              color(0, 0, 0, 255), border_width);
 
         for (auto row : m_children) {
-            for (int i = 0; i < num_col; i++) {
+            for (int i = 0; i < m_num_column; i++) {
                 auto cell = row->children()[i];
                 cell->render(bcknd, pos + m_rect.top_left());
             }
@@ -156,9 +157,7 @@ class table_element : public element {
     // in render()
     std::vector<float> m_grid_col;
     std::vector<float> m_grid_row;
+    int m_num_column;
+    std::vector<vertical_alignment> m_column_alignments;
 };
-
-class table_header_element : public element {};
-class table_row_element : public element {};
-class table_cell_element : public leaf_block_element {};
 }

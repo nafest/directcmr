@@ -12,4 +12,4 @@
 | Header 1 | Header 2 | Header 3 |
 | :---     |  :---:   |     ---: |
 | foo      | bar      | foobar   |
-| lorem    | ipsum dolor sit amet. lorem ipsum dolor sit amet. lorem ipsum dolor sit amet.  | amet    |
+| lorem    | ipsum dolor sit amet. lorem ipsum dolores sit amet. lorem ipsum dolor sit amet. lorem  | amet    |
