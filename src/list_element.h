@@ -29,8 +29,10 @@ class list_element : public element {
         if (m_type == list_element_type::unordered)
             return ss.get_margin("list").left;
         else {
-            auto num_char =
-                static_cast<float>(std::ceil(std::log10(m_children.size())));
+            float num_char = 1.f;
+            if (m_children.size() > 1)
+                num_char = static_cast<float>(
+                    std::ceil(std::log10(m_children.size())));
             return std::max<float>(ss.get_margin("list").left,
                                    get_font(bcknd)->get_x_width() *
                                        (num_char + 1.f));
