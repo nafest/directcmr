@@ -170,6 +170,10 @@ class fake_backend : public dcmr::backend {
                m_visited_links.end();
     }
 
+    void set_clip_rect(const dcmr::rect &rectangle) override {}
+    void save() override {}
+    void restore() override {}
+
     std::map<std::string, std::pair<int, int>> m_image_extents;
     std::vector<draw_image_action> m_draw_image_calls;
     std::vector<draw_string_action> m_draw_string_calls;

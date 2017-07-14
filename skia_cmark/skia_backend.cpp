@@ -1,7 +1,9 @@
 #include "skia_backend.h"
+#include "../cmake-build-debug/thirdparty/libskia-prefix/src/libskia/include/core/SkRegion.h"
 #include "../cmake-build-release/thirdparty/libskia-prefix/src/libskia/include/core/SkPaint.h"
 #include "SkImage.h"
 #include "SkImageDeserializer.h"
+#include "SkRegion.h"
 #include "SkStream.h"
 #include "SkTypeface.h"
 
@@ -97,14 +99,15 @@ dcmr::vec2 skia_backend::string_extents(const dcmr::font *fnt,
 }
 
 void skia_backend::draw_string(const std::string &text, const dcmr::vec2 &pos,
-                                dcmr::font *fnt_in, const dcmr::color &col) {
+                               dcmr::font *fnt_in, const dcmr::color &col) {
     skia_font *fnt = static_cast<skia_font *>(fnt_in);
     fnt->paint().setColor(SkColorSetARGBMacro(col.a, col.r, col.g, col.b));
     m_canvas->drawText(text.c_str(), text.size(), pos.x(), pos.y(),
                        fnt->paint());
 }
 
-void skia_backend::draw_list_marker(const dcmr::rect &marker_rect, const dcmr::color &col) {
+void skia_backend::draw_list_marker(const dcmr::rect &marker_rect,
+                                    const dcmr::color &col) {
     float cx = marker_rect.top_left().x() + 0.5 * marker_rect.width();
     float cy = marker_rect.top_left().y() + 0.5 * marker_rect.height();
     float radius = 0.2 * std::min(marker_rect.width(), marker_rect.height());
@@ -116,7 +119,7 @@ void skia_backend::draw_list_marker(const dcmr::rect &marker_rect, const dcmr::c
 }
 
 void skia_backend::draw_rounded_rect(const dcmr::rect &rectangle, float radius,
-                                      const dcmr::color &col, bool fill) {
+                                     const dcmr::color &col, bool fill) {
     SkPaint paint;
     paint.setColor(SkColorSetARGBMacro(col.a, col.r, col.g, col.b));
     paint.setAntiAlias(true);
@@ -135,7 +138,7 @@ void skia_backend::draw_rounded_rect(const dcmr::rect &rectangle, float radius,
 }
 
 void skia_backend::draw_line(const dcmr::vec2 &from, const dcmr::vec2 &to,
-                              const dcmr::color &col, float line_width) {
+                             const dcmr::color &col, float line_width) {
     SkPaint paint;
     paint.setColor(SkColorSetARGBMacro(col.a, col.r, col.g, col.b));
     paint.setStrokeWidth(line_width);
@@ -147,13 +150,13 @@ dcmr::vec2 skia_backend::get_image_extents(const std::string &src) {
     auto image = SkImage::MakeFromEncoded(data);
 
     dcmr::vec2 extents{static_cast<float>(image->width()),
-                      static_cast<float>(image->height())};
+                       static_cast<float>(image->height())};
 
     return extents;
 }
 
 void skia_backend::draw_image(const std::string &src, const dcmr::vec2 &pos,
-                               int width, int height) {
+                              int width, int height) {
     auto data = SkData::MakeFromFileName(src.c_str());
     auto image = SkImage::MakeFromEncoded(data);
     SkPaint paint;
@@ -164,3 +167,15 @@ void skia_backend::draw_image(const std::string &src, const dcmr::vec2 &pos,
 }
 
 bool skia_backend::is_visited_uri(const std::string &uri) { return false; }
+
+void skia_backend::set_clip_rect(const dcmr::rect &rectangle) {
+    SkRect clip_rect = SkRect::MakeLTRB(
+        rectangle.top_left().x(), rectangle.top_left().y(),
+        rectangle.bottom_right().x(), rectangle.bottom_right().y());
+
+    m_canvas->clipRect(clip_rect, SkRegion::kReplace_Op);
+}
+
+void skia_backend::save() { m_canvas->save(); }
+
+void skia_backend::restore() { m_canvas->restore(); }

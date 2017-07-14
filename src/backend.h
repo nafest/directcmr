@@ -143,6 +143,17 @@ class backend {
     // and link.visited_color
     virtual bool is_visited_uri(const std::string &uri) = 0;
 
+    // set the current clipping rectangle
+    //
+    // rectangle - drawing should be restricted to this rectangle
+    virtual void set_clip_rect(const rect &rectangle) = 0;
+
+    // save the current state (clipping rect)
+    virtual void save() = 0;
+
+    // restore the last state (clipping rect);
+    virtual void restore() = 0;
+
     // return a reference to the style sheet
     style_sheet &get_style_sheet() { return m_style_sheet; }
 

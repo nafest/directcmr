@@ -34,8 +34,8 @@ class code_block_element : public leaf_block_element {
 
         m_rect.bottom_right().x() = width;
         m_rect.bottom_right().y() = line_height * num_lines(m_literal) +
-            m_rect.top_left().y() +
-            margin.vertical_margin();
+                                    m_rect.top_left().y() +
+                                    margin.vertical_margin();
         return line_height * num_lines(m_literal) + margin.top + margin.bottom;
     }
 
@@ -47,17 +47,23 @@ class code_block_element : public leaf_block_element {
             ss.get_string_param("code_block.background_color");
         if (background_color != ss.get_string_param("background_color")) {
             auto radius = ss.get_float_param("code_block.border_radius");
-            bcknd->draw_rounded_rect(m_rect + pos, radius, color(background_color));
+            bcknd->draw_rounded_rect(m_rect + pos, radius,
+                                     color(background_color));
         }
         auto fnt = get_font(bcknd);
         auto current_pos = pos + m_rect.top_left();
         current_pos.x() += ss.get_margin("code_block").left;
         current_pos.y() += ss.get_margin("code_block").top;
+
+        bcknd->save();
+        bcknd->set_clip_rect(m_rect + pos);
         for (auto &line : line_splitter(m_literal)) {
             std::string ln = line;
-            bcknd->draw_string(ln, current_pos + vec2(0.f, fnt->get_ascent()), fnt, get_color(bcknd));
+            bcknd->draw_string(ln, current_pos + vec2(0.f, fnt->get_ascent()),
+                               fnt, get_color(bcknd));
             current_pos.y() += fnt->get_line_height();
         }
+        bcknd->restore();
     }
 };
 }
