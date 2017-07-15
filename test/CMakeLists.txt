@@ -28,7 +28,7 @@ add_executable(directcmr_test
     link_element_test.cpp
     linebreak_element_test.cpp
     utf8_test.cpp
-    style_sheet_test.cpp)
+    style_sheet_test.cpp list_element_test.cpp)
 
 target_link_libraries(directcmr_test gtest_main directcmr libcmark-gfm_static libcmark-gfmextensions_static)
 target_include_directories(directcmr_test PRIVATE ${directcmr_SOURCE_DIR}/src)

@@ -60,9 +60,18 @@ class list_element : public element {
         for (auto child : m_children) {
             auto child_pos = child->get_position();
             child_pos = child_pos + pos + m_rect.top_left();
+
+            // take the margin of the first drawn element into account
+            // this should span to levels:
+            // list -> item -> paragraph
+            float first_elem_margin_top = 0.f;
+            if (child->children().size() > 0)
+                first_elem_margin_top =
+                    ss.get_margin(child->get_type()).top +
+                    ss.get_margin(child->children()[0]->get_type()).top;
+
             vec2 marker_top_left(child_pos.x() - ss.get_margin("list").left,
-                                 child_pos.y() +
-                                     ss.get_margin(child->get_type()).top);
+                                 child_pos.y() + first_elem_margin_top);
             vec2 marker_bottom_right(
                 child_pos.x(), child_pos.y() +
                                    ss.get_margin(child->get_type()).top +
@@ -77,7 +86,7 @@ class list_element : public element {
                 // to be taken into account
                 marker_top_left.y() = child_pos.y() +
                                       child->get_font(bcknd)->get_ascent() +
-                                      ss.get_margin(child->get_type()).top;
+                                      first_elem_margin_top;
                 marker_top_left.x() =
                     child_pos.x() -
                     (num_char + 0.5f) * child->get_font(bcknd)->get_x_width();
