@@ -73,8 +73,7 @@ class list_element : public element {
             vec2 marker_top_left(child_pos.x() - ss.get_margin("list").left,
                                  child_pos.y() + first_elem_margin_top);
             vec2 marker_bottom_right(
-                child_pos.x(), child_pos.y() +
-                                   ss.get_margin(child->get_type()).top +
+                child_pos.x(), child_pos.y() + first_elem_margin_top +
                                    child->get_font(bcknd)->get_line_height());
 
             rect marker_rect(marker_top_left, marker_bottom_right);
