@@ -39,7 +39,7 @@ std::vector<dcmr::element *> transform_children(cmark_node *node,
     std::vector<dcmr::element *> child_elements;
     auto child = cmark_node_first_child(node);
     bool softbreak_discarded = false;
-    while (child) {
+    while (child != nullptr) {
         dcmr::element *elem;
         switch (cmark_node_get_type(child)) {
         case CMARK_NODE_PARAGRAPH:
@@ -48,7 +48,7 @@ std::vector<dcmr::element *> transform_children(cmark_node *node,
         case CMARK_NODE_TEXT:
             // do not separate subsequent text elements (because cmark returns
             // multiple text elements if a word contains an underscore, e.g.)
-            if (child_elements.size() > 0 &&
+            if (!child_elements.empty() &&
                 child_elements.back()->get_type() == "text" &&
                 !softbreak_discarded) {
                 // if the previously added element was already a text element
@@ -85,7 +85,7 @@ std::vector<dcmr::element *> transform_children(cmark_node *node,
             break;
         case CMARK_NODE_CODE:
             elem = new dcmr::code_element();
-            if (cmark_node_get_literal(child)) {
+            if (cmark_node_get_literal(child) != nullptr) {
                 elem->children().push_back(
                     new dcmr::text_element(cmark_node_get_literal(child)));
             }
@@ -132,7 +132,7 @@ std::vector<dcmr::element *> transform_children(cmark_node *node,
             // elements created by cmark extensions such as tables
             // cannot be identified with a type constant, we
             // have to use the type string here
-            if (!strcmp(type_string, "table")) {
+            if (strcmp(type_string, "table") == 0) {
                 auto num_column = cmarkextensions_get_table_columns(child);
                 auto alig = cmarkextensions_get_table_alignments(child);
                 std::vector<dcmr::vertical_alignment> alignments;
@@ -153,11 +153,11 @@ std::vector<dcmr::element *> transform_children(cmark_node *node,
                     }
                 }
                 elem = new dcmr::table_element(num_column, alignments);
-            } else if (!strcmp(type_string, "table_header")) {
+            } else if (strcmp(type_string, "table_header") == 0) {
                 elem = new dcmr::table_header_element();
-            } else if (!strcmp(type_string, "table_row")) {
+            } else if (strcmp(type_string, "table_row") == 0) {
                 elem = new dcmr::table_row_element();
-            } else if (!strcmp(type_string, "table_cell")) {
+            } else if (strcmp(type_string, "table_cell") == 0) {
                 elem = new dcmr::table_cell_element();
             } else {
                 elem = new dcmr::element();
@@ -168,11 +168,11 @@ std::vector<dcmr::element *> transform_children(cmark_node *node,
         }
         if (be_verbose) {
             std::cout << "add: " << cmark_node_get_type_string(child);
-            if (cmark_node_get_literal(child))
+            if (cmark_node_get_literal(child) != nullptr)
                 std::cout << " " << cmark_node_get_literal(child);
             std::cout << std::endl;
         }
-        if (elem) {
+        if (elem != nullptr) {
             child_elements.push_back(elem);
             elem->append_children(transform_children(child, be_verbose));
             elem->set_type(cmark_node_get_type_string(child));
@@ -193,7 +193,7 @@ cmark_parser *init_parser() {
         cmark_parser_new_with_mem(options, cmark_get_arena_mem_allocator());
 #endif
     auto syntax_extension = cmark_find_syntax_extension("table");
-    if (!syntax_extension) {
+    if (syntax_extension == nullptr) {
         fprintf(stderr, "Unknown extension table\n");
     }
     cmark_parser_attach_syntax_extension(parser, syntax_extension);
@@ -201,7 +201,7 @@ cmark_parser *init_parser() {
     return parser;
 }
 
-void destroy_parser(cmark_parser *parser) {
+void destroy_parser(cmark_parser * /*parser*/) {
 #if DEBUG
     cmark_parser_free(parser);
 
