@@ -17,7 +17,7 @@ namespace dcmr {
 struct color;
 color string_to_color(const std::string &str);
 
-int num_lines(const std::string &text);
+int num_lines(const std::string &in);
 
 class line {
   public:

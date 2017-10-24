@@ -14,7 +14,7 @@ dcmr::font *dcmr::backend::font_for_style(const dcmr::style &st) {
     if (search != m_cached_fonts.end())
         return search->second;
 
-    std::string style_str = "";
+    std::string style_str;
     if (st.get_strong())
         style_str += "Bold";
     if (st.get_emph())

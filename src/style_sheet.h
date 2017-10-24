@@ -44,7 +44,7 @@ class style_sheet {
 
   private:
     float get_side_margin(const std::string &element_name,
-                          const std::string side) const noexcept;
+                          const std::string& side) const noexcept;
 
     std::map<std::string, float> m_float_params;
     std::map<std::string, std::string> m_string_params;
